@@ -1,0 +1,9 @@
+../Core/Src/secure_nsc.c:54:20:SECURE_RegisterCallback	16	static
+../Core/Src/secure_nsc.c:75:20:SECURE_RunCallback	8	static
+../Core/Src/secure_nsc.c:80:20:SECURE_Initialize_CFA_engine	8	static
+../Core/Src/secure_nsc.c:85:20:SECURE_Initialize_Attestation	8	static
+../Core/Src/secure_nsc.c:90:42:SECURE_log_ret	0	static,ignoring_inline_asm
+../Core/Src/secure_nsc.c:142:42:SECURE_log_call	0	static,ignoring_inline_asm
+../Core/Src/secure_nsc.c:190:42:SECURE_log_cond_br	0	static,ignoring_inline_asm
+../Core/Src/secure_nsc.c:243:21:SECURE_run_attestation_wait_mode	8	static
+../Core/Src/secure_nsc.c:248:20:SECURE_record_output_data	16	static

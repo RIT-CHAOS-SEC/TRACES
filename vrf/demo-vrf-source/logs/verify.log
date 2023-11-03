@@ -1,0 +1,99 @@
+Current node
+start_addr: 0x804040c
+end_addr: 0x8040426
+type: call
+instrs: 12
+instr_addrs: 0x804040c
+successors: ['0x8040238']
+adj_instr: 0x804042a
+cflog_startaddr: 0x804040c
+log_node.dest_addr: 0x804040c
+ 
+Current node
+start_addr: 0x804040c
+end_addr: 0x8040426
+type: call
+instrs: 12
+instr_addrs: 0x804040c
+successors: ['0x8040238']
+adj_instr: 0x804042a
+cflog_startaddr: 0x804040c
+log_node.dest_addr: 0x8040238
+ 
+Current node
+start_addr: 0x8040238
+end_addr: 0x804024e
+type: call
+instrs: 10
+instr_addrs: 0x8040238
+successors: ['0x80402a4']
+adj_instr: 0x8040252
+cflog_startaddr: 0x804040c
+log_node.dest_addr: 0x80402a4
+ 
+Current node
+start_addr: 0x80402a4
+end_addr: 0x80402b8
+type: uncond
+instrs: 9
+instr_addrs: 0x80402a4
+successors: ['0x80402d8']
+adj_instr: 0x80402ba
+cflog_startaddr: 0x804040c
+log_node.dest_addr: 0x80402ba
+ 
+Current node
+start_addr: 0x80402ba
+end_addr: 0x80402e2
+type: cond
+instrs: 19
+instr_addrs: 0x80402ba
+successors: ['0x80402ba']
+adj_instr: 0x80402e4
+cflog_startaddr: 0x804040c
+log_node.dest_addr: 0x80402e4
+ 
+Current node
+start_addr: 0x80402e4
+end_addr: 0x80402f2
+type: ret
+instrs: 5
+instr_addrs: 0x80402e4
+successors: ['0x8040252']
+adj_instr: None
+cflog_startaddr: 0x804040c
+log_node.dest_addr: 0x8040252
+ 
+Current node
+start_addr: 0x8040252
+end_addr: 0x804025e
+type: uncond
+instrs: 6
+instr_addrs: 0x8040252
+successors: ['0x8040288']
+adj_instr: 0x8040260
+cflog_startaddr: 0x804040c
+log_node.dest_addr: 0x8040260
+ 
+Current node
+start_addr: 0x8040260
+end_addr: 0x804028c
+type: cond
+instrs: 21
+instr_addrs: 0x8040260
+successors: ['0x8040260']
+adj_instr: 0x804028e
+cflog_startaddr: 0x804040c
+log_node.dest_addr: 0x804028e
+ 
+Current node
+start_addr: 0x804028e
+end_addr: 0x804029e
+type: ret
+instrs: 7
+instr_addrs: 0x804028e
+successors: ['0x804042a']
+adj_instr: None
+cflog_startaddr: 0x804040c
+log_node.dest_addr: 0x804045c
+ 
