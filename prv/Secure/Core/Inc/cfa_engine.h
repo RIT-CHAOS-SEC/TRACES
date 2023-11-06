@@ -2,6 +2,7 @@
  * cfa_engine.h
  *
  *  Created on: Dec 4, 2022
+ *      Author: nneto
  */
 
 #ifndef INC_CFA_ENGINE_H_
@@ -30,7 +31,7 @@ typedef funcptr funcptr_NS;
 //#define TOTAL_KB			7936
 //#define KBYTE				1024
 
-#define MAX_LOG_SIZE_BYTES	256
+#define MAX_LOG_SIZE_BYTES	8192
 #define MAX_CF_LOG_SIZE 	(uint16_t)(MAX_LOG_SIZE_BYTES/4) //32 bits (4 bytes) per index
 
 // GENERAL
@@ -111,7 +112,7 @@ typedef funcptr funcptr_NS;
 
 #define CFLOG_RAM 1
 #define CFLOG_FLASH 2
-#define CFLOG_TYPE CFLOG_RAM
+#define CFLOG_TYPE CFLOG_FLASH
 
 // TYPEDEFs
 typedef long unsigned int hash;
@@ -156,10 +157,7 @@ void CFA_ENGINE_start();
 void CFA_time_interrupt_handler();
 void _run_application();
 void _send_report_message();
-void record_output_data(uint32_t);
-void speccfa_detect_paths(uint32_t);
-void speccfa_speculate(uint32_t);
+void record_output_data(uint32_t value);
 
 // GLOBAL VARIABLES
-
 #endif /* INC_CFA_ENGINE_H_ */

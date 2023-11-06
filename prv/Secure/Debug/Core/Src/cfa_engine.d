@@ -34,9 +34,10 @@ Core/Src/cfa_engine.o: ../Core/Src/cfa_engine.c ../Core/Inc/cfa_engine.h \
  ../../Drivers/STM32L5xx_HAL_Driver/Inc/stm32l5xx_hal_uart.h \
  ../../Drivers/STM32L5xx_HAL_Driver/Inc/stm32l5xx_hal_uart_ex.h \
  ../../Drivers/CMSIS/Include/cmsis_gcc.h ../Core/Inc/main.h \
- ../Core/Inc/usart.h ../Core/Inc/uECC.h ../Core/Inc/Hacl_SHA2_256.h \
- ../Core/Inc/kremlib.h ../Core/Inc/kremlib_base.h \
- ../Core/Inc/test_application.h
+ ../Core/Inc/usart.h ../Core/Inc/serial_messages.h ../Core/Inc/usart.h \
+ ../Core/Inc/auc.h ../Core/Inc/tim.h ../Core/Inc/uECC.h \
+ ../Core/Inc/Hacl_SHA2_256.h ../Core/Inc/kremlib.h \
+ ../Core/Inc/kremlib_base.h
 ../Core/Inc/cfa_engine.h:
 ../../Secure_nsclib/secure_nsc.h:
 ../../Drivers/CMSIS/Device/ST/STM32L5xx/Include/stm32l5xx.h:
@@ -75,8 +76,11 @@ Core/Src/cfa_engine.o: ../Core/Src/cfa_engine.c ../Core/Inc/cfa_engine.h \
 ../../Drivers/CMSIS/Include/cmsis_gcc.h:
 ../Core/Inc/main.h:
 ../Core/Inc/usart.h:
+../Core/Inc/serial_messages.h:
+../Core/Inc/usart.h:
+../Core/Inc/auc.h:
+../Core/Inc/tim.h:
 ../Core/Inc/uECC.h:
 ../Core/Inc/Hacl_SHA2_256.h:
 ../Core/Inc/kremlib.h:
 ../Core/Inc/kremlib_base.h:
-../Core/Inc/test_application.h:

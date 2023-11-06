@@ -34,7 +34,7 @@ def open_serial():
         dev = scan_for_STM32_device()
     elif (os.name == 'posix'):
         dev = dev = '/dev/ttyACM0'
-    baud = 38400
+    baud = 921600
     ser = serial.Serial(dev, baud, timeout=10000000)
     return ser
 

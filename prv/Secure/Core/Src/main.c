@@ -17,16 +17,17 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
 #include "main.h"
 #include "gtzc.h"
 #include "usart.h"
+#include "tim.h"
 #include "gpio.h"
 #include "cfa_engine.h"
 #include "stm32l5xx_hal_flash.h"
-#include "stm32l552xx.h"
-#include "stm32l5xx_hal_cortex.h"
+#include "partition_stm32l552xx.h"
+#include "stm32l5xx_hal.h"
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
 #include <stdio.h>
 /* USER CODE END Includes */
 
@@ -65,6 +66,11 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+//void SecureTogglePin(void)
+//{
+//  HAL_GPIO_TogglePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin);
+//}
+
 /* USER CODE END 0 */
 
 /**
@@ -93,10 +99,6 @@ int main(void)
 
   /* Configure the system clock */
   SystemClock_Config();
-
-  //init mpu configs
-  MPU_init();
-
   /* GTZC initialisation */
   MX_GTZC_S_Init();
 
@@ -106,14 +108,17 @@ int main(void)
   __HAL_RCC_FLASH_CLK_ENABLE();
 
   /* USER CODE END SysInit */
-
+ 
+  // Configure SAU and NVIC
+  TZ_SAU_Setup();
+ 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_LPUART1_UART_Init();
-//  MX_TIM3_Init();
-//  MX_TIM4_Init();
+  MX_TIM3_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-  FPU_Init();
+
   CFA_ENGINE_initialize();
 
   //turn on secure LEDs
@@ -137,8 +142,6 @@ int main(void)
   }
   /* USER CODE END 3 */
 }
-
-
 
 /**
   * @brief  Non-secure call function
@@ -212,67 +215,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
-
-void MPU_init(){
-	// from "AN4838: Introduction to memory protection unit management on STM32 MCUs"
-
-	MPU_Region_InitTypeDef MPU_InitStruct;
-//	  uint8_t                Enable;                /*!< Specifies the status of the region.
-//	                                                     This parameter can be a value of @ref CORTEX_MPU_Region_Enable                 */
-//	  uint8_t                Number;                /*!< Specifies the number of the region to protect.
-//	                                                     This parameter can be a value of @ref CORTEX_MPU_Region_Number                 */
-//	  uint32_t               BaseAddress;           /*!< Specifies the base address of the region to protect.                           */
-//	  uint32_t               LimitAddress;          /*!< Specifies the limit address of the region to protect.                          */
-//	  uint8_t                AttributesIndex;       /*!< Specifies the memory attributes index.
-//	                                                     This parameter can be a value of @ref CORTEX_MPU_Attributes_Number             */
-//	  uint8_t                AccessPermission;      /*!< Specifies the region access permission type.
-//	                                                     This parameter can be a value of @ref CORTEX_MPU_Region_Permission_Attributes  */
-//	  uint8_t                DisableExec;           /*!< Specifies the instruction access status.
-//	                                                     This parameter can be a value of @ref CORTEX_MPU_Instruction_Access            */
-//	  uint8_t                IsShareable;           /*!< Specifies the shareability status of the protected region.
-//	                                                     This parameter can be a value of @ref CORTEX_MPU_Access_Shareable              */
-
-	/* Disable MPU */
-	HAL_MPU_Disable();
-
-	/* Configure NS-RAM region as Region N°0 as R/W region */
-	MPU_InitStruct.Enable = MPU_REGION_ENABLE;
-	MPU_InitStruct.BaseAddress = 0x20000000;
-	MPU_InitStruct.LimitAddress = 0x20040000;
-	MPU_InitStruct.AccessPermission = MPU_REGION_ALL_RW;
-	MPU_InitStruct.Number = MPU_REGION_NUMBER0;
-	MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE;
-	HAL_MPU_ConfigRegion(&MPU_InitStruct);
-
-	/* Configure NS-FLASH region as REGION N°1 as R/X region */
-	MPU_InitStruct.BaseAddress = 0x08000000;
-	MPU_InitStruct.LimitAddress = 0x08080000;
-	MPU_InitStruct.AccessPermission = MPU_REGION_ALL_RO;
-	MPU_InitStruct.Number = MPU_REGION_NUMBER1;
-	MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
-	HAL_MPU_ConfigRegion(&MPU_InitStruct);
-
-	/* Enable MPU */
-	HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
-}
-
-void FPU_Init(void) {
-    // FPU access is controlled by the CPACR register
-    // The CPACR is an ARMv8-M system control register (SCTLR)
-
-    // Access the SCTLR register
-    volatile uint32_t* cpacr = (volatile uint32_t*)0xE000ED88;
-
-    // Enable full access to the FPU for both secure and non-secure worlds
-    *cpacr |= (0xF << 20);  // Set bits 20-23 to 1111 to enable full FPU access
-
-    // DSB (Data Synchronization Barrier) to ensure the register write completes
-    __asm volatile ("dsb");
-
-    // ISB (Instruction Synchronization Barrier) to flush the pipeline
-    __asm volatile ("isb");
-}
 
 /* USER CODE END 4 */
 

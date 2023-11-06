@@ -33,9 +33,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../../Drivers/STM32L5xx_HAL_Driver/Inc/stm32l5xx_hal_uart.h \
  ../../Drivers/STM32L5xx_HAL_Driver/Inc/stm32l5xx_hal_uart_ex.h \
  ../Core/Inc/gtzc.h ../Core/Inc/main.h ../Core/Inc/usart.h \
- ../Core/Inc/gpio.h ../Core/Inc/cfa_engine.h \
+ ../Core/Inc/tim.h ../Core/Inc/gpio.h ../Core/Inc/cfa_engine.h \
  ../../Secure_nsclib/secure_nsc.h ../../Drivers/CMSIS/Include/cmsis_gcc.h \
- ../../Drivers/CMSIS/Device/ST/STM32L5xx/Include/stm32l552xx.h
+ ../Core/Inc/partition_stm32l552xx.h
 ../Core/Inc/main.h:
 ../../Drivers/STM32L5xx_HAL_Driver/Inc/stm32l5xx_hal.h:
 ../Core/Inc/stm32l5xx_hal_conf.h:
@@ -73,8 +73,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/gtzc.h:
 ../Core/Inc/main.h:
 ../Core/Inc/usart.h:
+../Core/Inc/tim.h:
 ../Core/Inc/gpio.h:
 ../Core/Inc/cfa_engine.h:
 ../../Secure_nsclib/secure_nsc.h:
 ../../Drivers/CMSIS/Include/cmsis_gcc.h:
-../../Drivers/CMSIS/Device/ST/STM32L5xx/Include/stm32l552xx.h:
+../Core/Inc/partition_stm32l552xx.h:

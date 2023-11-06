@@ -1,12 +1,22 @@
+/*
+ * cfa_engine.c
+ *
+ *  Created on: Aug 25, 2022
+ *      Author: aj4775
+ */
+
 #ifndef __cfa_engine
 #define __cfa_engine
 
 #include "cfa_engine.h"
 #include <string.h>
 #include "usart.h"
+#include "serial_messages.h"
+#include "auc.h"
+#include "tim.h"
 #include "uECC.h"
 #include "Hacl_SHA2_256.h"
-#include "test_application.h"
+#include "stm32l5xx_hal.h"
 /*
     ---------------------------------------------------------------------------------
 	----------------------------- FUNCTION DEFINITIONS ------------------------------
@@ -19,6 +29,7 @@ void CFA_ENGINE_run_attestation();
 void CFA_ENGINE_initialize(); // Initial setup of attestation variables
 void CFA_ENGINE_register_callback(); // Register the function to be attested
 void CFA_ENGINE_wait_request();
+void CFA_time_interrupt_handler();
 
 // Private
 void _generate_partial_report(); // emptya
@@ -28,6 +39,8 @@ void _generate_final_report(); // empty
 void _send_final_report_to_vrf(); // empty
 void _send_partial_report_to_vrf(); // empty
 void _software_reset();
+void _activate_timeout_interrupt();
+void _deactivate_timer_interrupt();
 void _run_application();
 void _calculate_log_hash();
 void _recalculate_log_table();
@@ -93,11 +106,7 @@ const struct uECC_Curve_t * curve;
 
 uint32_t ticks_sign_report;
 uint32_t recv_verify_response_time;
-uint32_t app_exec_time = 0;
-uint32_t start;
-uint32_t end;
-
-
+uint32_t app_exec_time;
 /*
     ---------------------------------------------------------------------------------
 	----------------------------- SUPERVISOR  --------------------------------------------
@@ -119,6 +128,7 @@ void _update_challenge(uint8_t* chl){
 }
 
 void _clean(){
+	cfa_engine_conf.log_counter = 0;
 	report_secure.number_of_logs_sent = 0;
 	cfa_engine_conf.initialized = INITIALIZED;
 	cfa_engine_conf.attestation_status = INACTIVE;
@@ -130,6 +140,10 @@ void _clean(){
 	#endif
 }
 
+void _clean_partial(){
+	report_secure.num_CF_Log_size = 0;
+}
+
 void _run_application(){
 	//start app
 	if (cfa_engine_conf.iac.app_start_address != NULL){
@@ -139,9 +153,7 @@ void _run_application(){
 }
 
 uint32_t output_data = 0;
-volatile char valueChar;
 void record_output_data(uint32_t value){
-	valueChar = value;
 	output_data = value;
 }
 
@@ -157,6 +169,7 @@ void update_flash(uint32_t addr, uint64_t data){
 }
 #endif
 
+/* -------------  NON SECURE CALLABLES */
 
 void CFA_ENGINE_start(){
 	while(1){
@@ -175,7 +188,7 @@ void CFA_ENGINE_register_callback(){
 /* --------------- - STATE HANDLING --------------------- */
 
 
-uint8_t myFlag  = 0;
+
 int STATE_initialize_attestation(){
 	if (cfa_engine_conf.attestation_status == INACTIVE){
 
@@ -194,8 +207,6 @@ int STATE_initialize_attestation(){
 		// Send final report
 		_send_report();
 	}
-
-	myFlag ^= 1;
 	return CONTINUE_LOOP;
 }
 
@@ -221,6 +232,8 @@ int STATE_continue(){
 	_receive_challenge();
 
 	cfa_engine_conf.attestation_status = ACTIVE;
+
+	_initialize_timer_interrupt();
 
 	return EXIT_LOOP;
 }
@@ -292,6 +305,44 @@ void _read_serial_loop(){
 	}
 }
 
+/* ------------------------------ INTERRUPT OPERATIONS ----------------------------- */
+
+
+#define TIMER_PERIOD 65535-1
+
+void _initialize_timer_interrupt(){
+	__HAL_RCC_TIM3_CLK_DISABLE();
+	ti_syncDebbugTimer();
+//	ti_set_prescaler(TIMER_PERIOD,0);
+	ti_set_period(TIMER_INTERRUPT,TIMER_PERIOD);
+	ti_start_timer_interrupt(TIMER_INTERRUPT);
+	_activate_timeout_interrupt();
+	ti_reset_timer_counter(TIMER_INTERRUPT);
+	__HAL_RCC_TIM3_CLK_ENABLE();
+
+}
+
+void _activate_timeout_interrupt(){
+	HAL_TIM_Base_Start(&htim3);
+}
+
+
+void _deactivate_timer_interrupt(){
+	HAL_TIM_Base_Stop(&htim3);
+	__HAL_TIM_SET_COUNTER(&htim3, 0); // reset count
+}
+
+void CFA_time_interrupt_handler(){
+	__HAL_RCC_TIM3_CLK_DISABLE();
+	report_secure.isFinal = PARTIAL_REPORT;
+	_sign_report();
+	_send_report_message();
+	_clean_partial();
+	_read_serial_loop();
+	ti_reset_timer_counter(TIMER_INTERRUPT);
+	__HAL_RCC_TIM3_CLK_ENABLE();
+}
+
 /* -----------------------------  SENDING REPORT ------------------------------------ */
 uint32_t receive_resp_time;
 uint32_t verify_resp_time;
@@ -332,10 +383,11 @@ void _receive_request(int size,uint8_t* read_char){
 	SecureUartRx(read_char, size);
 	return;
 }
-uint32_t send_report_time = 0;
+uint32_t send_report_time;
 uint32_t send_report_start;
 uint32_t send_report_stop;
 void _send_report_message(){
+	send_report_start = HAL_GetTick();
 	uint8_t init_report[] = BEGGINING_OF_REPORT;
 	SecureUartTx(init_report, COMMAND_SIZE);
 	// Baseline End-to-end APP
@@ -343,16 +395,11 @@ void _send_report_message(){
 //	SecureUartTx(report_secure.signature, SIGNATURE_SIZE_BYTES);
 
 	// CFA or TRACES
-	report_secure.num_CF_Log_size++; //convert from last index to size
-	// 2 + 64 + 32 + 4*2048 + 2 bytes
-	send_report_start = HAL_GetTick();
-	int data_size = 2 + SIGNATURE_SIZE_BYTES + HASH_SIZE_BYTES + 2;// + 4*report_secure.num_CF_Log_size + 2;
+	int data_size = 2 + SIGNATURE_SIZE_BYTES + HASH_SIZE_BYTES + 2 + 4*report_secure.num_CF_Log_size + 2;
 	uint8_t * report_addr = (uint8_t*)(&report_secure);
 	SecureUartTx(report_addr, data_size);
-	data_size = 4*report_secure.num_CF_Log_size;
-	SecureUartTx((uint8_t *)(&report_secure.CFLog), data_size);
 	send_report_stop = HAL_GetTick();
-	send_report_time += send_report_stop - send_report_start;
+	send_report_time = send_report_stop - send_report_start;
 
 	// timing for debug
 	SecureUartTx((uint8_t *)(&send_report_time), 4);
@@ -361,6 +408,7 @@ uint32_t compute_send_report_time;
 uint32_t compute_send_report_start;
 uint32_t compute_send_report_stop;
 void _send_report(){
+	_deactivate_timer_interrupt();
 	report_secure.number_of_logs_sent ++;
 	if (cfa_engine_conf.attestation_status == COMPLETE){
 		report_secure.isFinal = FINAL_REPORT;
@@ -374,7 +422,7 @@ void _send_report(){
 		compute_send_report_start = HAL_GetTick();
 		_sign_report();
 		_send_report_message();
-		report_secure.num_CF_Log_size = 0;
+		_clean_partial();
 		compute_send_report_stop = HAL_GetTick();
 	}
 
@@ -401,10 +449,9 @@ void _attest_memory(){
 	time_hash_memory = time_hash_memory_end-time_hash_memory_start;
 }
 
-uint32_t time_sign_report = 0;
+uint32_t time_sign_report;
 uint32_t time_sign_report_start;
 uint32_t time_sign_report_end;
-uint8_t sign_report_iters = 0;
 void _sign_report(){
 	time_sign_report_start = HAL_GetTick();
 	// Copy from Flash to Report Struct
@@ -430,84 +477,83 @@ void _sign_report(){
     int t =  uECC_sign(private_key, report_hash, HASH_SIZE_BYTES, report_secure.signature, curve);
 
     time_sign_report_end = HAL_GetTick();
-	time_sign_report += time_sign_report_end-time_sign_report_start;
-	sign_report_iters++;
+	time_sign_report = time_sign_report_end-time_sign_report_start;
 }
-//uint32_t logging_time = 0;
-//uint32_t logging_start = 0;
-//uint32_t logging_end = 0;
+
 uint8_t loop_detect = 0;
-uint16_t loop_counter = 0;
-uint64_t prev_entry;
+uint16_t loop_counter = 1;
+uint32_t prev_entry;
+
+//void CFA_ENGINE_new_log_entry(CFA_ENTRY value){
 void CFA_ENGINE_new_log_entry(uint32_t value){
-	if(report_secure.num_CF_Log_size == MAX_CF_LOG_SIZE-1){
-	//		app_exec_time = htim3.Instance->CNT;
-			cfa_engine_conf.attestation_status = WAITING_PARTIAL;
-			end = HAL_GetTick();
-			app_exec_time += end - start;
-			_send_report();
+	if(cfa_engine_conf.log_counter % MAX_CF_LOG_SIZE == 0 && cfa_engine_conf.log_counter > 0){
+		app_exec_time = htim3.Instance->CNT;
+		cfa_engine_conf.attestation_status = WAITING_PARTIAL;
+		_send_report();
+
+		#if CFLOG_TYPE == CFLOG_RAM
+		report_secure.CFLog[report_secure.num_CF_Log_size] = value;
+		#else
+		uint32_t addr = (uint32_t)(&FLASH_CFLog[report_secure.num_CF_Log_size]);
+		uint64_t data = (prev_entry << 32) | value;
+		update_flash(addr, data);
+		#endif
+
+		report_secure.num_CF_Log_size++;
+		cfa_engine_conf.log_counter++;
+		_read_serial_loop();
+	}
+	else{
+		// compare current value to previous, if equal, replace with counter
+		#if CFLOG_TYPE == CFLOG_RAM
+		if(report_secure.num_CF_Log_size != 0 && report_secure.CFLog[report_secure.num_CF_Log_size - 1] == value){
+		#else
+		if(report_secure.num_CF_Log_size != 0 && FLASH_CFLog[report_secure.num_CF_Log_size - 1] == value){
+		#endif
+			if (loop_detect == 0){
+				// since first instance of repeat, set flag
+				loop_detect ^= 1;
+			} else if (loop_detect == 1){
+				// if more than one instance, increment counter
+				loop_counter++;
+			}
+		}
+		else{ // enter this block either because 1) not a loop or 2) loop exit
+			if(loop_detect == 1){
+				// if loop exit, clear flag and increment log size for next entry
+				#if CFLOG_TYPE == CFLOG_FLASH
+				uint32_t addr = (uint32_t)(&FLASH_CFLog[report_secure.num_CF_Log_size]);
+				uint64_t data = (prev_entry << 32) | (0xffff0000 + loop_counter);
+				prev_entry = (0xffff0000 + loop_counter);
+				update_flash(addr, data);
+				#else
+					report_secure.CFLog[report_secure.num_CF_Log_size] = (0xffff0000 + loop_counter);
+				#endif
+
+				loop_detect = 0;
+				cfa_engine_conf.log_counter++;
+				report_secure.num_CF_Log_size++;
+				loop_counter = 1;
+			}
+
 			#if CFLOG_TYPE == CFLOG_RAM
 			report_secure.CFLog[report_secure.num_CF_Log_size] = value;
 			#else
 			uint32_t addr = (uint32_t)(&FLASH_CFLog[report_secure.num_CF_Log_size]);
 			uint64_t data = (prev_entry << 32) | value;
 			update_flash(addr, data);
+			prev_entry = value;
 			#endif
 
-			report_secure.num_CF_Log_size++;
 			cfa_engine_conf.log_counter++;
-			_read_serial_loop();
-			start = HAL_GetTick();
+			report_secure.num_CF_Log_size++;
 		}
-		else{
-			// compare current value to previous, if equal, replace with counter
-			#if CFLOG_TYPE == CFLOG_RAM
-			if(report_secure.num_CF_Log_size != 0 && report_secure.CFLog[report_secure.num_CF_Log_size - 1] == value){
-			#else
-			if(report_secure.num_CF_Log_size != 0 && FLASH_CFLog[report_secure.num_CF_Log_size - 1] == value){
-			#endif
-				if (loop_detect == 0){
-					// since first instance of repeat, set flag
-					loop_detect ^= 1;
-				} else if (loop_detect == 1){
-					// if more than one instance, increment counter
-					loop_counter++;
-				}
-			}
-			else{ // enter this block either because 1) not a loop or 2) loop exit
-				if(loop_detect == 1){
-					// if loop exit, clear flag and increment log size for next entry
-					#if CFLOG_TYPE == CFLOG_FLASH
-					uint32_t addr = (uint32_t)(&FLASH_CFLog[report_secure.num_CF_Log_size]);
-					uint64_t data = (prev_entry << 32) | (0xffff0000 + loop_counter);
-					prev_entry = (0xffff0000 + loop_counter);
-					update_flash(addr, data);
-					#else
-						report_secure.CFLog[report_secure.num_CF_Log_size] = (0xffff0000 + loop_counter);
-					#endif
-
-					loop_detect = 0;
-					cfa_engine_conf.log_counter++;
-					report_secure.num_CF_Log_size++;
-					loop_counter = 1;
-				}
-
-				#if CFLOG_TYPE == CFLOG_RAM
-				report_secure.CFLog[report_secure.num_CF_Log_size] = value;
-				#else
-				uint32_t addr = (uint32_t)(&FLASH_CFLog[report_secure.num_CF_Log_size]);
-				uint64_t data = (prev_entry << 32) | value;
-				update_flash(addr, data);
-				prev_entry = value;
-				#endif
-
-				cfa_engine_conf.log_counter++;
-				report_secure.num_CF_Log_size++;
-			}
-		}
+	}
 	return;
 }
 
+uint32_t start;
+uint32_t end;
 void CFA_ENGINE_run_attestation(){
 	if (cfa_engine_conf.initialized != INITIALIZED){
 	//	*ERROR = ERROR_CFA_ENGINE_NOT_INITIALIZED;
@@ -516,14 +562,20 @@ void CFA_ENGINE_run_attestation(){
 
 	report_secure.num_CF_Log_size = 0;
 	cfa_engine_conf.attestation_status = ACTIVE;
+	cfa_engine_conf.log_counter = 0;
 	report_secure.number_of_logs_sent = 0;
+
+
+	_initialize_timer_interrupt();
 
 	// Call the application
 	start = HAL_GetTick();
 	_run_application();
-//	test_application();
 	end = HAL_GetTick();
-	app_exec_time += end - start;
+	app_exec_time = end - start;
+
+	_deactivate_timer_interrupt();
+
 	// Set Final report Flag
 	report_secure.isFinal = TRUE;
 	return;
@@ -553,9 +605,5 @@ void _heal_function(){
 	while(1);
 }
 
-///////////////////////////
-//#define TEST_DEMO
-#ifdef TEST_DEMO
-#endif
 
 #endif /* __cfa_engine */

@@ -10,7 +10,7 @@
 #define GPS				5
 #define MOUSE			6
 #define SORT			7
-#define APP_SEL 		SYRINGE
+#define APP_SEL 		ULT
 
 #include "stdint.h"
 
