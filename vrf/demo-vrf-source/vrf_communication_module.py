@@ -232,8 +232,7 @@ def verify_report():
         print_bytes_as_hex(exp_hmac)
         print("PRV HMAC: ")
         print_bytes_as_hex(cfa_report.signature[:32])
-        print("MEM HASH")
-        print_bytes_as_hex(pconfig.hash_memory)
+        
         # print("VALID SIGNATURE")
 
         '''
