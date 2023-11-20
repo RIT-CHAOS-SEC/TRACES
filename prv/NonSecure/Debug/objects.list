@@ -1,4 +1,3 @@
-"./Core/Src/applicaion.o"
 "./Core/Src/application.o"
 "./Core/Src/gpio.o"
 "./Core/Src/main.o"

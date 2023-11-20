@@ -59,7 +59,6 @@ typedef funcptr funcptr_NS;
 #define CONTINUE_CHAR 			'c'
 #define ACCEPT_REPORT_CHAR 		'v'
 
-
 // REPORT STRUCT IDENTIFIERS
 #define PARTIAL_REPORT      'P'
 #define FINAL_REPORT      	'F'
@@ -113,6 +112,11 @@ typedef funcptr funcptr_NS;
 #define CFLOG_RAM 1
 #define CFLOG_FLASH 2
 #define CFLOG_TYPE CFLOG_RAM
+
+#define SENSE_APP	0
+#define CFA			1
+#define AUD			2
+#define MODE		AUD
 
 // TYPEDEFs
 typedef long unsigned int hash;

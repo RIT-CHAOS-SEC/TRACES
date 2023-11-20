@@ -170,8 +170,6 @@ typedef struct __DMA_HandleTypeDef
 /** @defgroup DMA_Error_Code DMA Error Code
   * @{
   */
-
-
 #define HAL_DMA_ERROR_NONE                 0x00000000U    /*!< No error                                */
 #define HAL_DMA_ERROR_TE                   0x00000001U    /*!< Transfer error                          */
 #define HAL_DMA_ERROR_NO_XFER              0x00000004U    /*!< Abort requested with no Xfer ongoing    */

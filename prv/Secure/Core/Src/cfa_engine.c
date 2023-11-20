@@ -15,9 +15,12 @@
 #include "auc.h"
 #include "tim.h"
 #include "uECC.h"
+#include "hash.h"
 #include "Hacl_SHA2_256.h"
+#include "Hacl_HMAC_SHA2_256.h"
 #include "stm32l5xx_hal.h"
 #include <stm32l5xx.h>
+#include "hash.h"
 /*
     ---------------------------------------------------------------------------------
 	----------------------------- FUNCTION DEFINITIONS ------------------------------
@@ -101,7 +104,10 @@ uint8_t public_key[SIGNATURE_SIZE_BYTES] = {0x74, 0x2f, 0xbe, 0xaf, 0x4f, 0xf4, 
 										  0x1, 0x75, 0xd7, 0x38, 0xeb, 0x2b, 0x44, 0x1b};
 
 
+uint8_t * att_key = private_key;
+
 uint8_t report_hash[HASH_SIZE_BYTES]; //internal for signature
+uint8_t hash_output[HASH_SIZE_BYTES]; //internal for signature
 uint8_t ecdsa_signature[SIGNATURE_SIZE_BYTES];
 uint8_t response_hash[HASH_SIZE_BYTES]; // internal for vrf_signature
 const struct uECC_Curve_t * curve;
@@ -372,6 +378,18 @@ uint8_t  _receive_challenge(){
 //	SecureUartTx(init_chal, COMMAND_SIZE); // echo for debug
 //	SecureUartTx((uint8_t*)chl, 64);
 
+	// read verifier signature
+	SecureUartRx((uint8_t*)(&vrf_resp.signature), SIGNATURE_SIZE_BYTES);
+//	SecureUartTx((uint8_t*)(&vrf_resp.signature), SIGNATURE_SIZE_BYTES);
+
+
+	uint32_t stop = HAL_GetTick();
+	receive_resp_time = stop-start;
+
+	start = HAL_GetTick();
+
+	// Check chal is greater than prev chal
+	#if MODE == AUD
 	unsigned int i;
 	int valid_next_chal = 1;
 	for(i=0; i<CHAL_SIZE; i++){
@@ -380,18 +398,9 @@ uint8_t  _receive_challenge(){
 			break;
 		}
 	}
+	#endif
+
 	_update_challenge(chl);
-
-	// read verifier signature
-	SecureUartRx((uint8_t*)(&vrf_resp.signature), SIGNATURE_SIZE_BYTES);
-//	SecureUartTx((uint8_t*)(&vrf_resp.signature), SIGNATURE_SIZE_BYTES);
-
-	vrf_resp.verify_result = 1;
-	uint32_t stop = HAL_GetTick();
-	receive_resp_time = stop-start;
-
-	start = HAL_GetTick();
-	HASH_HandleTypeDef hhash;
 
 	// check verifier signature by sig = ECDSA(private_key, hash(report))
 	// 1) get SHA256 hash over report (excluding buffer that holds signature)
@@ -400,11 +409,14 @@ uint8_t  _receive_challenge(){
 	// 2) verify signature of hash
     curve = uECC_secp256r1();
     int valid_sig =  uECC_verify(public_key, response_hash, HASH_SIZE_BYTES, vrf_resp.signature, curve);
+
+    vrf_resp.verify_result = (valid_next_chal & valid_sig);
+
     stop = HAL_GetTick();
     verify_resp_time = stop-start;
-
     recv_verify_response_time = receive_resp_time + verify_resp_time;
-	return (valid_sig & valid_next_chal);
+
+	return vrf_resp.verify_result;
 }
 
 void _receive_request(int size,uint8_t* read_char){
@@ -424,8 +436,9 @@ void _send_report_message(){
 //	SecureUartTx(report_secure.signature, SIGNATURE_SIZE_BYTES);
 
 	// CFA or TRACES
-	int data_size = 2 + SIGNATURE_SIZE_BYTES + HASH_SIZE_BYTES + 2 + 4*report_secure.num_CF_Log_size + 2;
-	uint8_t * report_addr = (uint8_t*)(&report_secure);
+	SecureUartTx(report_secure.signature, SIGNATURE_SIZE_BYTES+2);
+	int data_size = 2 + 4*report_secure.num_CF_Log_size;
+	uint8_t * report_addr = (uint8_t*)(&(report_secure.num_CF_Log_size));
 	SecureUartTx(report_addr, data_size);
 	send_report_stop = HAL_GetTick();
 	send_report_time = send_report_stop - send_report_start;
@@ -500,11 +513,17 @@ void _sign_report(){
 
 	// CFA or TRACES
 	uint32_t report_size = 2 + HASH_SIZE_BYTES + 2 + 4*report_secure.num_CF_Log_size;
-	Hacl_SHA2_256_hash(report_hash, (uint8_t*)(&report_secure.isFinal), report_size);
+//	Hacl_SHA2_256_hash(report_hash, (uint8_t*)(&report_secure.isFinal), report_size);
 
-	// sign hash
-    curve = uECC_secp256r1();
-    int t =  uECC_sign(private_key, report_hash, HASH_SIZE_BYTES, report_secure.signature, curve);
+	hmac(report_secure.signature, att_key, 32, (uint8_t*)(&report_secure.isFinal), (uint32_t) report_size);
+
+//	if(HASH_SHA_265((uint8_t*)(&report_secure.isFinal), report_size, report_hash) != HAL_OK){
+//		Error_Handler();
+//	}
+//
+//	// sign hash
+//    curve = uECC_secp256r1();
+//    int t =  uECC_sign(private_key, report_hash, HASH_SIZE_BYTES, report_secure.signature, curve);
 
     time_sign_report_end = HAL_GetTick();
 	time_sign_report = time_sign_report_end-time_sign_report_start;
@@ -658,6 +677,7 @@ void TRACES_DMA_init(){
 }
 
 void CFA_ENGINE_initialize(){
+
 	if (cfa_engine_conf.initialized == INITIALIZED){
 		return; //ERROR_cfa_engine_ALREADY_INITIALIZED;;
 	}

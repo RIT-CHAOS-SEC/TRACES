@@ -10,6 +10,7 @@ import threading
 import serial.tools.list_ports as slp
 from ecdsa import SigningKey, NIST256p, VerifyingKey
 import hashlib
+import hmac
 from hashlib import sha256
 from ecdsa.util import sigencode_der
 from ecdsa.util import sigdecode_der
@@ -145,10 +146,6 @@ def print_protocol_config():
     printgreen('Serial Connection: ')
     print(str(pconfig.serial)+'\n\n')
 
-def infinity_serial_reading():
-    while(1):
-        print (str(pconfig.serial.read(20),'latin-1'),end='')
-
 def print_report():
     printgreen("CFA Log Size :",end='')
     print(str(cfa_report.CFA_Log_Size))
@@ -157,7 +154,7 @@ def print_report():
     printgreen("Memory Hash:")
     print(str(cfa_report.hash_memory))
     printgreen("Signature:")
-    print(str(cfa_report.Signature))
+    print(str(cfa_report.signature))
     printgreen("IsFinal:")
     print(str(cfa_report.IsFinal))
 
@@ -196,24 +193,6 @@ def generate_initial_data():
     pconfig.test_pmem = b''.join(pconfig.test_pmem)
 
 ### Crypto ##################
-def hash_op(chal = None, CFLog= None):
-    auth = blake2b(key=pconfig.symmetric_key)
-
-    auth.update(pconfig.hash_memory)
-
-    if chal is not None:
-        auth.update(pconfig.challenge)
-        printgreen("Hash Challange:")
-        print("auth (hex): "+str(auth.hexdigest()))
-        print("auth (ascii): "+str(auth.digest()))
-
-    if CFLog is not None:
-        auth.update(cfa_report.CFA_Log)  
-        printgreen("Hash Challange + CFLog:")
-        print("auth (hex): "+str(auth.hexdigest()))
-        print("auth (ascii): "+str(auth.digest()))
-
-    return auth
 
 def hash_memory():
     # blake_hash = blake2b(key=pconfig.symmetric_key)
@@ -226,13 +205,6 @@ def hash_memory():
     print("ns_bytes: "+str(len(ns_bytes)))
     pconfig.hash_memory = sha256(ns_bytes).digest()
 
-def check_report_signature():
-    blake_hash = blake2b(key=pconfig.symmetric_key)
-    
-    blake_hash.update(cfa_report.hash_memory)
-    cfa_report.hash_memory = blake_hash.digest()
-
-
 ### Verifier ###################
 def verify_report():
     verify_time_start = time.perf_counter()
@@ -242,15 +214,27 @@ def verify_report():
     # h_report = sha256(cfa_report.report_bytes)
     # print("h_report "+str(len(h_report.digest()))+": "+str(h_report.digest()))
 
-    pk_str = b"t/\xbe\xafO\xf4\x1d'H\xadN#\x84y\xa4Bh\x8b\xe6\x18\x98E\x99\xf1\x10\x03N\xf6^\xe1\x1eOI\xd0\x8e\xe0S\xa0\xe2}\xb5\t\xf1\xfd.\xa5cp\xc0^ 1\xc5\xc0\xcbK\x01u\xd78\xeb+D\x1b"
-    pk = VerifyingKey.from_string(pk_str, curve=NIST256p, hashfunc=sha256)
-    print("Using pk "+str(type(pk))+" : "+str(pk.to_string()))
+    # pk_str = b"t/\xbe\xafO\xf4\x1d'H\xadN#\x84y\xa4Bh\x8b\xe6\x18\x98E\x99\xf1\x10\x03N\xf6^\xe1\x1eOI\xd0\x8e\xe0S\xa0\xe2}\xb5\t\xf1\xfd.\xa5cp\xc0^ 1\xc5\xc0\xcbK\x01u\xd78\xeb+D\x1b"
+    # pk = VerifyingKey.from_string(pk_str, curve=NIST256p, hashfunc=sha256)
+    # print("Using pk "+str(type(pk))+" : "+str(pk.to_string()))
 
-    print("Running pk.verify("+str(type(cfa_report.Signature))+", "+str(type(cfa_report.report_bytes))+")")
+    # print("Running pk.verify("+str(type(cfa_report.signature))+", "+str(type(cfa_report.report_bytes))+")")
     
     try:
-        result = pk.verify(cfa_report.Signature, cfa_report.report_bytes)
-        print("VALID SIGNATURE")
+
+        # result = pk.verify(cfa_report.signature, cfa_report.report_bytes)
+        sk = b'\x89\x8b\x0c\xde\xab\xb5\x86\x97<\r\xa9\x15\x8e\x01\x84\xe7C\xf7|5\xb9\xc2\xb8\xf7\x93b\x92\x87\xcaY\x8b\xb2'
+        key = sk[:32]
+        print(key)
+        print(len(key))
+        exp_hmac = hmac.new(key, msg=cfa_report.report_bytes, digestmod=hashlib.sha256).digest()
+        print("EXPECTED HMAC: ")
+        print_bytes_as_hex(exp_hmac)
+        print("PRV HMAC: ")
+        print_bytes_as_hex(cfa_report.signature[:32])
+        print("MEM HASH")
+        print_bytes_as_hex(pconfig.hash_memory)
+        # print("VALID SIGNATURE")
 
         '''
         cflog = parse_cflog("../cflogs/"+str(pconfig.report_num)+".cflog")
@@ -383,9 +367,9 @@ def read_report():
     '''
 
     pconfig.serial.read_until(comm_protocol_messages.BEGGINING_OF_REPORT)
-    cfa_report.Signature = pconfig.serial.read(64)
-    # print("cfa_report.Signature: ")#+str(cfa_report.Signature))
-    # print_bytes_as_hex(cfa_report.Signature)
+    cfa_report.signature = pconfig.serial.read(64)
+    # print("cfa_report.signature: ")#+str(cfa_report.signature))
+    # print_bytes_as_hex(cfa_report.signature)
     # print(" ")
 
     ##### Baseline APP
@@ -400,15 +384,18 @@ def read_report():
     cfa_report.IsFinal = pconfig.serial.read(2)
     cfa_report.report_bytes = cfa_report.IsFinal
     cfa_report.IsFinal = chr(int.from_bytes(cfa_report.IsFinal, "little"))
-    # print("cfa_report.IsFinal: "+str(cfa_report.IsFinal))
+    print("cfa_report.IsFinal: "+str(cfa_report.IsFinal))
     # print(" ")
-    cfa_report.hash_memory = pconfig.serial.read(32)
-    cfa_report.report_bytes += cfa_report.hash_memory
+    
+    # cfa_report.hash_memory = pconfig.serial.read(32)
+    # cfa_report.report_bytes += cfa_report.hash_memory
+    cfa_report.report_bytes += pconfig.hash_memory
     # print("cfa_report.hash_memory: ")#+str(cfa_report.hash_memory))
     # print_bytes_as_hex(cfa_report.hash_memory)
     # print(" ")
     cfa_report.CFA_Log_Size = pconfig.serial.read(2)
     cfa_report.report_bytes += cfa_report.CFA_Log_Size
+    print_bytes_as_hex(cfa_report.CFA_Log_Size)
     cfa_report.CFA_Log_Size = int.from_bytes(cfa_report.CFA_Log_Size, "little") 
     print("cfa_report.CFA_Log_Size: "+str(cfa_report.CFA_Log_Size))
     print(" ")
@@ -417,15 +404,12 @@ def read_report():
     # print("cfa_report.CFA_Log: ")#+str(cfa_report.CFA_Log))
     # print_bytes_as_hex(cfa_report.CFA_Log)
     # print(" ")
-    cfa_report.log_number = int.from_bytes(pconfig.serial.read(2), "little") 
-    print("cfa_report.log_number: "+str(cfa_report.log_number))
-    print(" ")
     #'''
-
+    #
     # pconfig.prv_sign_rep_time = pconfig.serial.read(4)
     # print("pconfig.prv_sign_rep_time: "+str(pconfig.prv_sign_rep_time))
     # print(" ")
- 
+    #
     # print("cfa_report.report_bytes: ")#+str(cfa_report.report_bytes))
     # print_bytes_as_hex(cfa_report.report_bytes)
     # print(" ")
@@ -569,7 +553,6 @@ if __name__ == "__main__":
     for p in sys.path:
         path_str += p
     os.stat(str(p))
-    # infinity_serial_reading()
     init_global_variables()
     generate_initial_data()
     hash_memory()
