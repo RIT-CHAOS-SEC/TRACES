@@ -60,16 +60,73 @@
 static void NonSecure_Init(void);
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+void MPU_init(void);
+void FLASH_init(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-//void SecureTogglePin(void)
-//{
-//  HAL_GPIO_TogglePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin);
-//}
+void FLASH_init(){
+	__HAL_RCC_FLASH_CLK_ENABLE();
+
+	// set register to disable SRAM2 erase from software resets
+	FLASH->OPTR |= OB_SRAM2_RST_NOT_ERASE;
+}
+
+void MPU_init(){
+	// from "AN4838: Introduction to memory protection unit management on STM32 MCUs"
+
+	MPU_Region_InitTypeDef MPU_InitStruct;
+//	  uint8_t                Enable;                /*!< Specifies the status of the region.
+//	                                                     This parameter can be a value of @ref CORTEX_MPU_Region_Enable                 */
+//	  uint8_t                Number;                /*!< Specifies the number of the region to protect.
+//	                                                     This parameter can be a value of @ref CORTEX_MPU_Region_Number                 */
+//	  uint32_t               BaseAddress;           /*!< Specifies the base address of the region to protect.                           */
+//	  uint32_t               LimitAddress;          /*!< Specifies the limit address of the region to protect.                          */
+//	  uint8_t                AttributesIndex;       /*!< Specifies the memory attributes index.
+//	                                                     This parameter can be a value of @ref CORTEX_MPU_Attributes_Number             */
+//	  uint8_t                AccessPermission;      /*!< Specifies the region access permission type.
+//	                                                     This parameter can be a value of @ref CORTEX_MPU_Region_Permission_Attributes  */
+//	  uint8_t                DisableExec;           /*!< Specifies the instruction access status.
+//	                                                     This parameter can be a value of @ref CORTEX_MPU_Instruction_Access            */
+//	  uint8_t                IsShareable;           /*!< Specifies the shareability status of the protected region.
+//	                                                     This parameter can be a value of @ref CORTEX_MPU_Access_Shareable              */
+
+	/* Disable MPU */
+	HAL_MPU_Disable();
+
+	/* Configure NS-RAM region as Region 0 as R/W region */
+	MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+	MPU_InitStruct.BaseAddress = 0x20000000;
+	MPU_InitStruct.LimitAddress = 0x20040000;
+	MPU_InitStruct.AccessPermission = MPU_REGION_ALL_RW;
+	MPU_InitStruct.Number = MPU_REGION_NUMBER0;
+	MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE;
+	HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+	/* Configure NS-FLASH region as REGION 1 as R/X region */
+	MPU_InitStruct.BaseAddress = 0x08000000;
+	MPU_InitStruct.LimitAddress = 0x08080000;
+	MPU_InitStruct.AccessPermission = MPU_REGION_ALL_RO;
+	MPU_InitStruct.Number = MPU_REGION_NUMBER1;
+	MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+	HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+	/* Configure FLASH POTR region as REGION 2 as R only region */
+//	uint32_t flash_addr = (uint32_t)FLASH;
+//	flash_addr = &FLASH->PRIVCFGR;
+	MPU_InitStruct.BaseAddress = (uint32_t)FLASH;
+	MPU_InitStruct.LimitAddress = (uint32_t)(&FLASH->PRIVCFGR);
+	MPU_InitStruct.AccessPermission = MPU_REGION_ALL_RO;
+	MPU_InitStruct.Number = MPU_REGION_NUMBER2;
+	MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE;
+	HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+
+	/* Enable MPU */
+	HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+}
 
 /* USER CODE END 0 */
 
@@ -104,21 +161,19 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
 
-  // Enable flash controller clock
-  __HAL_RCC_FLASH_CLK_ENABLE();
-
   /* USER CODE END SysInit */
- 
-  // Configure SAU and NVIC
-  TZ_SAU_Setup();
  
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_LPUART1_UART_Init();
   MX_TIM3_Init();
   MX_TIM4_Init();
-  /* USER CODE BEGIN 2 */
 
+  /* USER CODE BEGIN 2 */
+  // Configure SAU and NVIC
+  TZ_SAU_Setup();
+  FLASH_init();
+  MPU_init();
   CFA_ENGINE_initialize();
 
   //turn on secure LEDs

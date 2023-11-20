@@ -35,11 +35,14 @@ sed -i '/SECURE_new_log_entry/c\' application.s
 if [ "$#" -lt 2 ]; then
 	# use uninstrumented app
 	cp $filename".s" $APP_SOURCE_PATH""$filename".s"
+	./countAssembly.sh $filename.s
 else
 	instrumented="$2"
 	# use instrumented app
 	python3 instrument.py --dir ./ --infile $filename.s --outfile $instrumented.s
 	cp $instrumented".s" $APP_SOURCE_PATH""$filename".s"
+	./countAssembly.sh $filename.s
+	./countAssembly.sh $instrumented.s
 fi
 
 # remove old CFlog files

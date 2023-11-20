@@ -224,24 +224,26 @@
 //   <e>Initialize SAU Region 6
 //   <i> Setup SAU Region 6 memory attributes
 */
-#define SAU_INIT_REGION6    0
+
+// from "AN4838: Introduction to memory protection unit management on STM32 MCUs" page 11
+#define SAU_INIT_REGION6    1
 
 /*
-//     <o>Start Address <0-0xFFFFFFE0>
+ Start of NS-MPU register addresses
 */
-#define SAU_INIT_START6     0x00000000      /* start address of SAU region 6 */
+#define SAU_INIT_START6     0xe002ed90    /* start address of SAU region 6 */
 
 /*
-//     <o>End Address <0x1F-0xFFFFFFFF>
+END of NS-MPU register addresses
 */
-#define SAU_INIT_END6       0x00000000      /* end address of SAU region 6 */
+#define SAU_INIT_END6       0xe002edc4      /* end address of SAU region 6 */
 
 /*
 //     <o>Region is
 //         <0=>Non-Secure
 //         <1=>Secure, Non-Secure Callable
 */
-#define SAU_INIT_NSC6       0
+#define SAU_INIT_NSC6       1
 /*
 //   </e>
 */

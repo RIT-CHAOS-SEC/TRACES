@@ -180,6 +180,14 @@ SECTIONS
     . = ALIGN(8);
   } >RAM
 
+   .cfa_data :
+   {
+    . = ALIGN(4);
+    *(.cfadata)         /* .rodata sections (constants, strings, etc.) */
+    *(.cfadata*)        /* .rodata* sections (constants, strings, etc.) */
+    . = ALIGN(4);
+   } > RAM2
+
   /* Remove information from the compiler libraries */
   /DISCARD/ :
   {

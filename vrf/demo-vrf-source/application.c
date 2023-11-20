@@ -45,7 +45,7 @@ int arr[100] = {54, 77, 91, 1, 50, 96, 93, 20, 87, 26, 23, 86, 83, 49, 64, 36, 6
 // int arr[100] = {37, 96, 2, 14, 40, 10, 32, 88, 44, 23, 21, 53, 42, 82, 70, 73, 70, 10, 66, 1, 80, 45, 17, 17, 93, 40, 99, 45, 19, 1, 10, 63, 41, 26, 19, 17, 41, 27, 33, 9, 50, 44, 19, 80, 98, 51, 37, 92, 21, 10, 2, 9, 14, 38, 16, 54, 71, 24, 100, 75, 30, 13, 98, 68, 27, 61, 94, 13, 35, 39, 60, 39, 53, 2, 97, 85, 10, 64, 25, 89, 85, 19, 96, 32, 74, 84, 24, 5, 97, 57, 81, 18, 72, 52, 26, 64, 11, 33, 41, 38};
 // int arr[100] = {83, 80, 20, 8, 43, 93, 3, 4, 59, 25, 16, 69, 13, 84, 12, 85, 23, 94, 58, 45, 15, 56, 22, 25, 70, 66, 12, 63, 53, 72, 96, 24, 59, 61, 58, 88, 90, 1, 74, 51, 51, 83, 46, 79, 49, 61, 36, 53, 50, 87, 92, 60, 54, 92, 90, 19, 23, 23, 26, 31, 3, 99, 93, 18, 79, 23, 41, 75, 61, 38, 14, 48, 49, 23, 55, 89, 85, 92, 12, 52, 94, 31, 21, 65, 14, 99, 3, 50, 85, 53, 27, 41, 50, 83, 47, 69, 58, 94, 79, 97};
 
-int n = 100;//sizeof(arr) / sizeof(arr[0]);
+int n = 100; //sizeof(arr) / sizeof(arr[0]);
 void application()
 {
     bubbleSort(arr, n);
@@ -879,11 +879,13 @@ int steps;
 
 extern TIM_HandleTypeDef htim1;
 void delay(uint32_t us){
-    htim1.Instance->CR1 |= TIM_CR1_CEN;
+    // htim1.Instance->CR1 |= TIM_CR1_CEN;
 
-    while (htim1.Instance->CNT < us);
+    // while (htim1.Instance->CNT < us);
 
-    htim1.Instance->CR1 &= ~TIM_CR1_CEN;
+    // htim1.Instance->CR1 &= ~TIM_CR1_CEN;
+    SECURE_new_log_entry();
+    for(int i=0; i<us; i++);
 }
 
 uint8_t maxinputpointer = 2;
@@ -1134,4 +1136,175 @@ void application(){
     SECURE_record_output_data(ult_vec);
 
 }
+#endif
+
+#if APP_SEL == DIJKSTRA
+
+#include <stdint.h>
+#define INF 0xffffffff
+#define MAX_NODES 100
+
+uint8_t dist[MAX_NODES]; // array to store the shortest distances
+uint8_t visited[MAX_NODES]; // array to track visited nodes
+uint8_t graph[MAX_NODES][MAX_NODES]; // adjacency matrix for the graph
+uint8_t n = MAX_NODES * MAX_NODES; // number of nodes in the graph
+
+void my_memset(uint8_t * buff, uint8_t value, uint8_t size){
+    unsigned int i = 0;
+    for(i=0; i < size; i++){
+        buff[i] = INF;
+        i++;
+    }
+    SECURE_new_log_entry();
+}
+
+uint8_t dijkstra(uint8_t start, uint8_t end) {
+    my_memset(dist, INF, MAX_NODES); // set all distances to infinity
+    my_memset(visited, 0, MAX_NODES); // mark all nodes as unvisited
+
+    dist[start] = 0; // set the distance to the starting node to 0
+    
+    for (unsigned int i = 0; i < n; i++) {
+        uint8_t u = -1;
+        for (uint8_t j = 0; j < n; j++) {
+            if (!visited[j] && (u == -1 || dist[j] < dist[u])) {
+                u = j;
+            }
+        }
+        if (dist[u] == INF) break; // all remaining nodes are inaccessible
+
+        visited[u] = 1;
+
+        for (unsigned int v = 0; v < n; v++) {
+            if (graph[u][v] != INF) {
+                uint8_t new_dist = dist[u] + graph[u][v];
+                if (new_dist < dist[v]) {
+                    dist[v] = new_dist;
+                }
+            }
+        }
+    }
+
+    return dist[end];
+}
+
+void application(){
+    // Setup arbitrary adjacency matrix
+    unsigned int j;
+    unsigned int i;
+    for(i=0; i<MAX_NODES; i++){
+        for(j=0; j<MAX_NODES; j++){
+            graph[i][j] = (i & 0x3);
+        }
+    }
+
+    uint8_t start = 2;
+    uint8_t end = 5;
+
+    uint8_t shortest = dijkstra(start, end);
+    SECURE_record_output_data(shortest);
+}
+#endif
+
+#if APP_SEL == HAMMING
+// Source: https://www.geeksforgeeks.org/hamming-code-implementation-in-c-cpp/
+// Modified to use faster ops
+ 
+#define N    128
+
+// Store input bits
+int input[N] = {1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0,
+                0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1,
+                0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0,
+                0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0};
+ 
+// Store hamming code
+int code[N];
+ 
+int ham_calc(int, int);
+void solve(int input[], int);
+ 
+// Function to calculate bit for
+// ith position
+int ham_calc(int position, int c_l)
+{
+    SECURE_new_log_entry();
+    int count = 0, i, j;
+    i = position - 1;
+ 
+    // Traverse to store Hamming Code
+    while (i < c_l) {
+ 
+        for (j = i; j < i + position; j++) {
+ 
+            // If current bit is 1
+            if (code[j] == 1)
+                count++;
+        }
+ 
+        // Update i
+        i = i + 2 * position;
+    }
+ 
+    return (count & 0x1);
+}
+ 
+// Function to calculate hamming code
+void solve(int input[], int n)
+{
+    SECURE_new_log_entry();
+    int i, p_n = 0, c_l, j, k;
+    i = 0;
+ 
+    // Find msg bits having set bit
+    // at x'th position of number
+    while (n > (1 << i) - (i + 1)) {
+        p_n++;
+        i++;
+    }
+ 
+    c_l = p_n + n;
+ 
+    j = k = 0;
+ 
+    // Traverse the msgBits
+    for (i = 0; i < c_l; i++) {
+ 
+        // Update the code
+        if (i == ((1 << k) - 1)) {
+            code[i] = 0;
+            k++;
+        }
+        // Update the code[i] to the
+        // input character at index j
+        else {
+            code[i] = input[j];
+            j++;
+        }
+    }
+ 
+    // Traverse and update the
+    // hamming code
+    for (i = 0; i < p_n; i++) {
+ 
+        // Find current position
+        int position = (1 << i);
+ 
+        // Find value at current position
+        int value = ham_calc(position, c_l);
+ 
+        // Update the code
+        code[position - 1] = value;
+    }
+}
+ 
+// Driver Code
+void application()
+{
+    SECURE_new_log_entry();
+ 
+    // Function Call
+    solve(input, N);
+}
+
 #endif

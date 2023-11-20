@@ -112,7 +112,7 @@ typedef funcptr funcptr_NS;
 
 #define CFLOG_RAM 1
 #define CFLOG_FLASH 2
-#define CFLOG_TYPE CFLOG_FLASH
+#define CFLOG_TYPE CFLOG_RAM
 
 // TYPEDEFs
 typedef long unsigned int hash;

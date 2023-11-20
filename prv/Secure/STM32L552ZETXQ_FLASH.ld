@@ -44,11 +44,11 @@ _Min_Stack_Size = 0x400 ;	/* required amount of stack */
 /* Memories definition */
 MEMORY
 {
-  RAM	(xrw)	: ORIGIN = 0x30000000,	LENGTH = 96K    /* Memory is divided. Actual start is 0x30000000 and actual length is 192K */
+  RAM	(xrw)	: ORIGIN = 0x30000000,	LENGTH = 64K    /* Memory is divided. Actual start is 0x30000000 and actual length is 192K */
   RAM2	(xrw)	: ORIGIN = 0x30030000,	LENGTH = 64K
-  FLASH	(rx)	: ORIGIN = 0x0C000000,	LENGTH = 248K   /* Memory is divided. Actual start is 0x0C000000 and actual length is 512K */
-  FLASH_NSC	(rx): ORIGIN = 0x0C03E000,	LENGTH = 8K     /* Non-Secure Call-able region */
-  CFA_REPORT(rw): ORIGIN = 0x0E002000,  LENGTH = 9K     /* persistant cfa report*/
+  FLASH	(rx)	: ORIGIN = 0x0C000000,	LENGTH = 64K   /* Memory is divided. Actual start is 0x0C000000 and actual length is 512K */
+  FLASH_NSC	(rx): ORIGIN = 0x0C03E000,	LENGTH = 1K     /* Non-Secure Call-able region */
+  /*CFA_REPORT(rw): ORIGIN = 0x30020000,  LENGTH = 8K    persistant cfa report*/
 }
 
 /* Sections */
@@ -131,13 +131,7 @@ SECTIONS
     . = ALIGN(4);
   } >FLASH
 
-   .cfa_data :
-   {
-    . = ALIGN(4);
-    *(.cfadata)         /* .rodata sections (constants, strings, etc.) */
-    *(.cfadata*)        /* .rodata* sections (constants, strings, etc.) */
-    . = ALIGN(4);
-   } > CFA_REPORT
+   
 
   /* Used by the startup to initialize data */
   _sidata = LOADADDR(.data);

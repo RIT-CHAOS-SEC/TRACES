@@ -10,6 +10,8 @@
 #define GPS				5
 #define MOUSE			6
 #define SORT			7
+#define DIJKSTRA		8
+#define HAMMING			9
 #define APP_SEL 		ULT
 
 #include "stdint.h"
@@ -40,6 +42,9 @@ uint32_t getUltrasonicReading(void);
 
 uint16_t sensor = 0xa5;
 
+#define false  0
+#define true   1
+
 // Syringe pump
 /* -- Constants -- */
 #define SYRINGE_VOLUME_ML 50.0
@@ -52,9 +57,6 @@ uint16_t sensor = 0xa5;
 #define SPEED_MICROSECONDS_DELAY 100
 #define TIME_BETWEEN_INJECTIONS  1000
 #define TOTAL_INJECTIONS		 3
-
-#define false  0
-#define true   1
 
 #define LED_OUT_PIN 0
 

@@ -49,28 +49,31 @@ def instrment_asm(directory, input_file, output_file):
 	lines = infile.readlines()
 	infile.close()
 
-	count = 0
-	for x in lines:
-		parsed  = x.split('\t')
-		if len(parsed) > 1:
-			inst = parsed[1]
-			if '.' not in inst:
-				if inst in ret_instrs:
-					print(inst)
-					count += 1
-				elif inst in call_instrs:
-					print(inst)
-					count += 1
-				elif inst in conditional_br_instrs:
-					print(inst)
-					count += 1
-				elif inst =='pop':
-					arg = parsed[2]
-					if 'pc' in arg:
-						print(inst+arg)
-						count += 1
-	print("Total branching instructions: "+str(count))
-
+	# count = 0
+	# instruction_count = 0
+	# for x in lines:
+	# 	parsed  = x.split('\t')
+	# 	if len(parsed) > 2:
+	# 		inst = parsed[1]
+	# 		if '.' not in inst:
+	# 			instruction_count += 1
+	# 			if inst in ret_instrs:
+	# 				print(inst)
+	# 				count += 1
+	# 			elif inst in call_instrs:
+	# 				print(inst)
+	# 				count += 1
+	# 			elif inst in conditional_br_instrs:
+	# 				print(inst)
+	# 				count += 1
+	# 			elif inst =='pop':
+	# 				arg = parsed[2]
+	# 				if 'pc' in arg:
+	# 					print(inst+arg)
+	# 					count += 1
+	# print("Total Instructions: "+str(instruction_count))
+	# print("Total branching instructions: "+str(count))
+	
 	outfile = open(outfile_name, "w")
 
 	lines = [x.replace('\n','') for x in lines if x != '\n']
@@ -80,6 +83,7 @@ def instrment_asm(directory, input_file, output_file):
 	i = 0
 	case = 0
 	# first pass -- instrument calls and returns, and cond.branch not taken
+	
 	while i < len(lines):
 		x = lines[i]
 		i += 1
@@ -99,6 +103,7 @@ def instrment_asm(directory, input_file, output_file):
 
 		# Assembly line is an instruction
 		elif len(parsed) > 2:
+			
 
 			inst = parsed[1]
 			args = parsed[2]

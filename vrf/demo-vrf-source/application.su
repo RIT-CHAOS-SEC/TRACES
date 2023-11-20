@@ -1,4 +1,4 @@
-application.c:1086:6:delay	24	static
-application.c:1093:10:pulseIn	16	static
-application.c:1104:10:getUltrasonicReading	16	static
-application.c:1125:6:application	16	static
+application.c:1088:6:delay	24	static
+application.c:1095:10:pulseIn	16	static
+application.c:1106:10:getUltrasonicReading	16	static
+application.c:1127:6:application	16	static
