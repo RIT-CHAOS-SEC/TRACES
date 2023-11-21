@@ -515,7 +515,9 @@ void _sign_report(){
 	uint32_t report_size = 2 + HASH_SIZE_BYTES + 2 + 4*report_secure.num_CF_Log_size;
 //	Hacl_SHA2_256_hash(report_hash, (uint8_t*)(&report_secure.isFinal), report_size);
 
-	hmac(report_secure.signature, att_key, 32, (uint8_t*)(&report_secure.isFinal), (uint32_t) report_size);
+//	hmac(report_secure.signature, att_key, 32, (uint8_t*)(&report_secure.isFinal), (uint32_t) report_size);
+
+	HMAC_SHA_265((uint8_t*)(&report_secure.isFinal), report_size, report_secure.signature);
 
 //	if(HASH_SHA_265((uint8_t*)(&report_secure.isFinal), report_size, report_hash) != HAL_OK){
 //		Error_Handler();
@@ -681,6 +683,9 @@ void CFA_ENGINE_initialize(){
 	if (cfa_engine_conf.initialized == INITIALIZED){
 		return; //ERROR_cfa_engine_ALREADY_INITIALIZED;;
 	}
+
+	set_hmac_key(att_key, 32);
+
 	_attest_memory();
 	_setup_data();
 	_clean();

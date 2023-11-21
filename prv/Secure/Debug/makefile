@@ -60,8 +60,8 @@ all: main-build
 main-build: TRACES_Secure.elf secondary-outputs
 
 # Tool invocations
-TRACES_Secure.elf TRACES_Secure.map: $(OBJS) $(USER_OBJS) /home/ac7717/Documents/TRACES/prv/Secure/STM32L552ZETXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "TRACES_Secure.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"/home/ac7717/Documents/TRACES/prv/Secure/STM32L552ZETXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="TRACES_Secure.map" -Wl,--gc-sections -static -Wl,--cmse-implib -Wl,--out-implib=./secure_nsclib.o --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+TRACES_Secure.elf TRACES_Secure.map: $(OBJS) $(USER_OBJS) C:\Users\adcau\Documents\TRACES\prv\Secure\STM32L552ZETXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "TRACES_Secure.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\Users\adcau\Documents\TRACES\prv\Secure\STM32L552ZETXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="TRACES_Secure.map" -Wl,--gc-sections -static -Wl,--cmse-implib -Wl,--out-implib=./secure_nsclib.o --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

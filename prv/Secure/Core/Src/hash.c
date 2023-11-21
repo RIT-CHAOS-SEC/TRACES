@@ -31,3 +31,12 @@ HAL_StatusTypeDef HASH_SHA_265(uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutB
 	//	(HASH_HandleTypeDef *hhash, uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer, uint32_t Timeout)
 	return HAL_HASHEx_SHA256_Start(&hhash, pInBuffer, Size, pOutBuffer, HASH_TIMEOUT);
 }
+
+HAL_StatusTypeDef HMAC_SHA_265(uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer){
+	return HAL_HMACEx_SHA256_Start(&hhash, pInBuffer, Size, pOutBuffer, HASH_TIMEOUT);
+}
+
+void set_hmac_key(uint8_t * att_key, uint32_t size){
+	hhash.Init.KeySize = size;
+	hhash.Init.pKey = att_key;
+}

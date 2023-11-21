@@ -12,5 +12,7 @@
 
 void MX_HASH_Init(void);
 HAL_StatusTypeDef HASH_SHA_265(uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer);
+HAL_StatusTypeDef HMAC_SHA_265(uint8_t *pInBuffer, uint32_t Size, uint8_t* pOutBuffer);
+void set_hmac_key(uint8_t * att_key, uint32_t size);
 
 #endif /* INC_HASH_H_ */
