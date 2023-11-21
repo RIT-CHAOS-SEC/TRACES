@@ -389,13 +389,12 @@ uint8_t  _receive_challenge(){
 	start = HAL_GetTick();
 
 	// Check chal is greater than prev chal
-	#if MODE == AUD
-	unsigned int i;
 	int valid_next_chal = 1;
+	unsigned int i;
+	#if MODE == AUD
 	for(i=0; i<CHAL_SIZE; i++){
 		if(chl[i] < cfa_engine_conf.challenge[i]){
 			valid_next_chal = 0;
-			break;
 		}
 	}
 	#endif
@@ -405,10 +404,19 @@ uint8_t  _receive_challenge(){
 	// check verifier signature by sig = ECDSA(private_key, hash(report))
 	// 1) get SHA256 hash over report (excluding buffer that holds signature)
 	uint32_t response_size = CHAL_SIZE + 1 + HASH_SIZE_BYTES;
-	Hacl_SHA2_256_hash(response_hash, (uint8_t*)(&vrf_resp), response_size);
+//	Hacl_SHA2_256_hash(response_hash, (uint8_t*)(&vrf_resp), response_size);
 	// 2) verify signature of hash
-    curve = uECC_secp256r1();
-    int valid_sig =  uECC_verify(public_key, response_hash, HASH_SIZE_BYTES, vrf_resp.signature, curve);
+//    curve = uECC_secp256r1();
+//    int valid_sig =  uECC_verify(public_key, response_hash, HASH_SIZE_BYTES, vrf_resp.signature, curve);
+
+    HMAC_SHA_265((uint8_t*)(&vrf_resp), response_size, hash_output);
+
+    int valid_sig = 1;
+    for(i=0; i<32; i++){
+    	if(hash_output[i] != vrf_resp.signature[i]){
+    		valid_sig = 0;
+    	}
+    }
 
     vrf_resp.verify_result = (valid_next_chal & valid_sig);
 
@@ -508,9 +516,11 @@ void _sign_report(){
 	// Compute ECDSA signature by sig = ECDSA(private_key, hash(report))
 
 	// Baseline End-to-end APP
-//	uint32_t report_size = 4; // in bytes
+	#if MODE == SENSE_APP
+	uint32_t report_size = 4; // in bytes
+	HMAC_SHA_265((uint8_t*)(&output_data), report_size, report_secure.signature);
 //	Hacl_SHA2_256_hash(report_hash, (uint8_t*)(&output_data), report_size);
-
+	#else
 	// CFA or TRACES
 	uint32_t report_size = 2 + HASH_SIZE_BYTES + 2 + 4*report_secure.num_CF_Log_size;
 //	Hacl_SHA2_256_hash(report_hash, (uint8_t*)(&report_secure.isFinal), report_size);
@@ -518,7 +528,7 @@ void _sign_report(){
 //	hmac(report_secure.signature, att_key, 32, (uint8_t*)(&report_secure.isFinal), (uint32_t) report_size);
 
 	HMAC_SHA_265((uint8_t*)(&report_secure.isFinal), report_size, report_secure.signature);
-
+	#endif
 //	if(HASH_SHA_265((uint8_t*)(&report_secure.isFinal), report_size, report_hash) != HAL_OK){
 //		Error_Handler();
 //	}

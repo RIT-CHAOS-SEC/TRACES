@@ -12,7 +12,7 @@
 #define SORT			7
 #define DIJKSTRA		8
 #define HAMMING			9
-#define APP_SEL 		DIJKSTRA
+#define APP_SEL 		HAMMING
 
 #include "stdint.h"
 
