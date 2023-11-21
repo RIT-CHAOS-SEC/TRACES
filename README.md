@@ -1,11 +1,11 @@
 # TRACES: TEE-based Runtime Auditing for Commodity Embedded Systems
 
+## Repository Description
+This is the public repository for the prototype of TRACES: TEE-based Runtime Auditing for Commodity Embedded Systems. The [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html) is used for development, and TRACES is deployed on an [STM32 Nucleo-144 development board](https://www.st.com/en/evaluation-tools/nucleo-l552ze-q.html#overview) with STM32L552ZE MCU
+
+
 ## Paper Abstract
 Control Flow Attestation (CFA) has become a vital technique to combat runtime attacks in low-cost embedded and IoT devices. CFA generates a trace (CFLog) containing the destination of all branching instructions executed. This allows a remote Verifier (Vrf) to inspect the execution control flow on a potentially compromised embedded device a Prover (Prv) – before trusting that a value/action was correctly produced/performed by Prv. While CFA can detect compromises that alter the control flow of Prv’s software, it cannot guarantee the eventual delivery of CFLog containing evidence of the compromise. For instance, a compromised Prv may refuse to send CFLog to prevent Vrf from identifying the exploit’s source and remediating the vulnerability. To address this challenge, we propose TRACES: TEE-based Runtime Auditing for Commodity Embedded Systems. In contrast with CFA, TRACES guarantees that Vrf always receives periodic runtime reports from Prv, even when Prv is compromised. This, in turn, enables secure runtime auditing, in addition to pure attestation. Furthermore, TRACES supports a “remediation” phase that Vrf can trigger upon compromise detection to patch the identified vulnerability and bring the compromised device to a healthy state. To the best of our knowledge, TRACES is the first system to provide this functionality on commodity devices (i.e., without requiring custom hardware modifications). To that end, TRACES leverages support from the ARM TrustZone-M Trusted Execution Environment (TEE). To demonstrate the practicality of this design, we implement and evaluate a fully functional prototype of TRACES atop the commodity ARM Cortex-M33 microcontroller unit.
-
-## Repository Description
-
-This is the public repository for the prototype of TRACES: TEE-based Runtime Auditing for Commodity Embedded Systems. The [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html) is used for development, and TRACES is deployed on an [STM32 Nucleo-144 development board](https://www.st.com/en/evaluation-tools/nucleo-l552ze-q.html#overview) with STM32L552ZE MCU
 
 ## Exploit detection Example
 
