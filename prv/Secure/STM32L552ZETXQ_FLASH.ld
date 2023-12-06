@@ -48,7 +48,6 @@ MEMORY
   RAM2	(xrw)	: ORIGIN = 0x30030000,	LENGTH = 64K
   FLASH	(rx)	: ORIGIN = 0x0C000000,	LENGTH = 64K   /* Memory is divided. Actual start is 0x0C000000 and actual length is 512K */
   FLASH_NSC	(rx): ORIGIN = 0x0C03E000,	LENGTH = 1K     /* Non-Secure Call-able region */
-  /*CFA_REPORT(rw): ORIGIN = 0x30020000,  LENGTH = 8K    persistant cfa report*/
 }
 
 /* Sections */

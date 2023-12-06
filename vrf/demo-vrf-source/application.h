@@ -12,30 +12,13 @@
 #define SORT			7
 #define DIJKSTRA		8
 #define HAMMING			9
-#define APP_SEL 		HAMMING
+#define ATTACK			10
+#define APP_SEL 		ATTACK
 
 #include "stdint.h"
 
 #if APP_SEL == BASIC
 void func();
-#endif
-
-#if APP_SEL == ATTACK
-
-#define ULT_PIN         0x02
-#define MAX_DURATION    1000
-
-#define P2OUT		sensor
-#define P2IN		sensor
-#define P2DIR		sensor
-#define TOTAL_READINGS  6
-#define cr              '\r'
-
-char waitForPassword();
-void read_data(char * entry);
-void delay(uint32_t us);
-uint32_t pulseIn(void);
-uint32_t getUltrasonicReading(void);
 #endif
 
 #if APP_SEL == SYRINGE
@@ -92,6 +75,20 @@ uint32_t pulseIn(void);
 uint32_t getUltrasonicReading(void);
 
 #endif//ult
+
+#if APP_SEL == ATTACK
+void delay(unsigned int);
+void read_data(void);
+uint16_t get_temperature(void);
+uint16_t get_humidity(void);
+uint32_t pulseIn(void);
+long getUltrasonicReading(void);
+long run_ultrasonic(int);
+long run_temperature(int);
+long run_humidity(int);
+void process_command(void);
+int record_output_data(char data);
+#endif
 
 void application();
 

@@ -295,7 +295,7 @@ def generate_response():
     sk = b'\x89\x8b\x0c\xde\xab\xb5\x86\x97<\r\xa9\x15\x8e\x01\x84\xe7C\xf7|5\xb9\xc2\xb8\xf7\x93b\x92\x87\xcaY\x8b\xb2'
     key = sk[:32]
     cfa_response.Signature = hmac.new(key, msg=cfa_response.response_bytes, digestmod=hashlib.sha256).digest()
-    cfa_response.Signature += cfa_response.Signature
+    # cfa_response.Signature += cfa_response.Signature
     print("cfa_response.Signature: "+str(cfa_response.Signature))
 
 

@@ -17,6 +17,7 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+//#include <arm_cmse.h>
 #include "main.h"
 #include "gtzc.h"
 #include "usart.h"
@@ -106,6 +107,7 @@ void MPU_init(){
 	HAL_MPU_ConfigRegion(&MPU_InitStruct);
 
 	/* Configure NS-FLASH region as REGION 1 as R/X region */
+	MPU_InitStruct.Enable = MPU_REGION_ENABLE;
 	MPU_InitStruct.BaseAddress = 0x08000000;
 	MPU_InitStruct.LimitAddress = 0x08080000;
 	MPU_InitStruct.AccessPermission = MPU_REGION_ALL_RO;
@@ -113,19 +115,13 @@ void MPU_init(){
 	MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
 	HAL_MPU_ConfigRegion(&MPU_InitStruct);
 
-	/* Configure FLASH POTR region as REGION 2 as R only region */
-//	uint32_t flash_addr = (uint32_t)FLASH;
-//	flash_addr = &FLASH->PRIVCFGR;
-	MPU_InitStruct.BaseAddress = (uint32_t)FLASH;
-	MPU_InitStruct.LimitAddress = (uint32_t)(&FLASH->PRIVCFGR);
-	MPU_InitStruct.AccessPermission = MPU_REGION_ALL_RO;
-	MPU_InitStruct.Number = MPU_REGION_NUMBER2;
-	MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE;
-	HAL_MPU_ConfigRegion(&MPU_InitStruct);
-
 
 	/* Enable MPU */
 	HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+
+	// Lock NS-MPU
+	SYSCFG->CNSLCKR |= 0x2;
+
 }
 
 /* USER CODE END 0 */
@@ -168,13 +164,13 @@ int main(void)
   MX_LPUART1_UART_Init();
   MX_TIM3_Init();
   MX_TIM4_Init();
-  MX_HASH_Init();
 
   /* USER CODE BEGIN 2 */
   // Configure SAU and NVIC
   TZ_SAU_Setup();
-  FLASH_init();
-  MPU_init();
+//  SAU->CTRL = 1; //enable SAU
+//  FLASH_init();
+//  MPU_init();
   CFA_ENGINE_initialize();
 
   //turn on secure LEDs

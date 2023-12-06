@@ -10,339 +10,319 @@
 	.eabi_attribute 30, 6
 	.eabi_attribute 34, 1
 	.eabi_attribute 18, 4
-	.text
 	.global	input
-	.section	.data.input,"aw"
+	.section	.data.input,"aw",%progbits
 	.align	2
 	.type	input, %object
-	.size	input, 512
+	.size	input, 33
 input:
-	.word	1
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	0
-	.word	1
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	1
-	.word	0
-	.word	1
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	0
-	.word	1
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	1
-	.word	0
-	.word	1
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	0
-	.word	1
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	1
-	.word	0
-	.word	1
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	0
-	.word	1
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	1
-	.word	1
-	.word	0
-	.word	1
-	.word	1
-	.word	1
-	.word	0
-	.word	0
-	.word	1
-	.word	0
-	.word	0
-	.comm	code,512,4
-	.section	.text.ham_calc,"ax",%progbits
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	-16
+	.byte	-1
+	.byte	3
+	.byte	32
+	.byte	-49
+	.byte	5
+	.byte	4
+	.byte	8
+	.byte	58
+	.global	data
+	.section	.bss.data,"aw",%nobits
+	.align	2
+	.type	data, %object
+	.size	data, 16
+data:
+	.space	16
+	.global	temp_data
+	.section	.bss.temp_data,"aw",%nobits
+	.align	2
+	.type	temp_data, %object
+	.size	temp_data, 5
+temp_data:
+	.space	5
+	.global	valid_reading
+	.section	.bss.valid_reading,"aw",%nobits
+	.type	valid_reading, %object
+	.size	valid_reading, 1
+valid_reading:
+	.space	1
+	.comm	ult_runs,4,4
+	.comm	temp_runs,4,4
+	.comm	hum_runs,4,4
+	.comm	seq_runs,4,4
+	.comm	runs,4,4
+	.section	.text.delay,"ax",%progbits
 	.align	1
-	.global	ham_calc
-	.arch armv8-m.main
-	.arch_extension dsp
+	.global	delay
 	.syntax unified
 	.thumb
 	.thumb_func
 	.fpu fpv5-sp-d16
-	.type	ham_calc, %function
-ham_calc:
-	@ args = 0, pretend = 0, frame = 24
+	.type	delay, %function
+delay:
+	@ args = 0, pretend = 0, frame = 16
 	@ frame_needed = 1, uses_anonymous_args = 0
 	push	{r7, lr}
-	sub	sp, sp, #24
+	sub	sp, sp, #16
 	add	r7, sp, #0
 	str	r0, [r7, #4]
-	str	r1, [r7]
 	movs	r3, #0
-	str	r3, [r7, #20]
-	ldr	r3, [r7, #4]
-	subs	r3, r3, #1
-	str	r3, [r7, #16]
+	str	r3, [r7, #12]
 	b	.L2
-.L6:
-	bl	SECURE_log_cond_br
-	ldr	r3, [r7, #16]
-	str	r3, [r7, #12]
-	b	.L3
-.L5:
-	bl	SECURE_log_cond_br
-	ldr	r2, .L8
-	ldr	r3, [r7, #12]
-	ldr	r3, [r2, r3, lsl #2]
-	cmp	r3, #1
-	bne	.L4
-	bl	SECURE_log_cond_br
-	ldr	r3, [r7, #20]
-	adds	r3, r3, #1
-	str	r3, [r7, #20]
-.L4:
-	bl	SECURE_log_cond_br
-	ldr	r3, [r7, #12]
-	adds	r3, r3, #1
-	str	r3, [r7, #12]
 .L3:
-	ldr	r2, [r7, #16]
-	ldr	r3, [r7, #4]
-	add	r3, r3, r2
-	ldr	r2, [r7, #12]
-	cmp	r2, r3
-	blt	.L5
 	bl	SECURE_log_cond_br
-	ldr	r3, [r7, #4]
-	lsls	r3, r3, #1
-	ldr	r2, [r7, #16]
-	add	r3, r3, r2
-	str	r3, [r7, #16]
+	ldr	r3, [r7, #12]
+	adds	r3, r3, #1
+	str	r3, [r7, #12]
 .L2:
-	ldr	r2, [r7, #16]
-	ldr	r3, [r7]
+	ldr	r2, [r7, #12]
+	ldr	r3, [r7, #4]
 	cmp	r2, r3
-	blt	.L6
+	bcc	.L3
 	bl	SECURE_log_cond_br
-	ldr	r3, [r7, #20]
-	and	r3, r3, #1
-	mov	r0, r3
-	adds	r7, r7, #24
+	adds	r7, r7, #16
 	mov	sp, r7
 	@ sp needed
 	pop	{r7, lr}
 	b	SECURE_log_ret
-.L9:
-	.align	2
-.L8:
-	.word	code
-	.size	ham_calc, .-ham_calc
-	.section	.text.solve,"ax",%progbits
+	.size	delay, .-delay
+	.section	.text.read_data,"ax",%progbits
 	.align	1
-	.global	solve
+	.global	read_data
 	.syntax unified
 	.thumb
 	.thumb_func
 	.fpu fpv5-sp-d16
-	.type	solve, %function
-solve:
-	@ args = 0, pretend = 0, frame = 40
+	.type	read_data, %function
+read_data:
+	@ args = 0, pretend = 0, frame = 8
 	@ frame_needed = 1, uses_anonymous_args = 0
 	push	{r7, lr}
-	sub	sp, sp, #40
+	sub	sp, sp, #8
 	add	r7, sp, #0
-	str	r0, [r7, #4]
-	str	r1, [r7]
 	movs	r3, #0
-	str	r3, [r7, #32]
+	strb	r3, [r7, #7]
 	movs	r3, #0
-	str	r3, [r7, #36]
-	b	.L11
+	strh	r3, [r7, #4]	@ movhi
+	ldr	r3, .L11
+	mov	r2, #256
+	str	r2, [r3, #40]
+	movs	r0, #250
+	bl	delay
+	ldr	r3, .L11
+	mov	r2, #256
+	str	r2, [r3, #24]
+	movs	r0, #20
+	bl	delay
+	ldr	r3, .L11
+	mov	r2, #256
+	str	r2, [r3, #40]
+	movs	r0, #40
+	bl	delay
+	movs	r3, #0
+	strh	r3, [r7, #2]	@ movhi
+	b	.L5
+.L8:
+	bl	SECURE_log_cond_br
+	ldr	r3, .L11
+	ldr	r3, [r3, #16]
+	lsrs	r3, r3, #8
+	and	r3, r3, #1
+	uxtb	r2, r3
+	ldrb	r3, [r7, #7]
+	add	r3, r3, r2
+	strb	r3, [r7, #7]
+	ldrh	r3, [r7, #2]
+	cmp	r3, #3
+	bls	.L6
+	bl	SECURE_log_cond_br
+	ldrh	r3, [r7, #2]
+	and	r3, r3, #1
+	cmp	r3, #0
+	bne	.L6
+	bl	SECURE_log_cond_br
+	ldrh	r3, [r7, #4]
+	lsrs	r3, r3, #3
+	uxth	r3, r3
+	mov	r2, r3
+	ldrh	r3, [r7, #4]
+	lsrs	r3, r3, #3
+	uxth	r3, r3
+	mov	r1, r3
+	ldr	r3, .L11+4
+	ldrb	r3, [r3, r1]	@ zero_extendqisi2
+	lsls	r3, r3, #1
+	uxtb	r1, r3
+	ldr	r3, .L11+4
+	strb	r1, [r3, r2]
+	ldrb	r3, [r7, #7]	@ zero_extendqisi2
+	cmp	r3, #6
+	bls	.L7
+	bl	SECURE_log_cond_br
+	ldrh	r3, [r7, #4]
+	lsrs	r3, r3, #3
+	uxth	r3, r3
+	mov	r1, r3
+	ldrh	r3, [r7, #4]
+	lsrs	r3, r3, #3
+	uxth	r3, r3
+	mov	r2, r3
+	ldr	r3, .L11+8
+	ldr	r3, [r3, r2, lsl #2]
+	orr	r3, r3, #1
+	ldr	r2, .L11+8
+	str	r3, [r2, r1, lsl #2]
+.L7:
+	bl	SECURE_log_cond_br
+	ldrh	r3, [r7, #4]
+	adds	r3, r3, #1
+	strh	r3, [r7, #4]	@ movhi
+.L6:
+	bl	SECURE_log_cond_br
+	ldrh	r3, [r7, #2]
+	adds	r3, r3, #1
+	strh	r3, [r7, #2]	@ movhi
+.L5:
+	ldrh	r3, [r7, #2]
+	cmp	r3, #82
+	bls	.L8
+	bl	SECURE_log_cond_br
+	ldrh	r3, [r7, #4]
+	cmp	r3, #39
+	bls	.L9
+	bl	SECURE_log_cond_br
+	ldr	r3, .L11+4
+	ldrb	r3, [r3, #4]	@ zero_extendqisi2
+	mov	r1, r3
+	ldr	r3, .L11+4
+	ldrb	r3, [r3]	@ zero_extendqisi2
+	mov	r2, r3
+	ldr	r3, .L11+4
+	ldrb	r3, [r3, #1]	@ zero_extendqisi2
+	add	r3, r3, r2
+	ldr	r2, .L11+4
+	ldrb	r2, [r2, #2]	@ zero_extendqisi2
+	add	r3, r3, r2
+	ldr	r2, .L11+4
+	ldrb	r2, [r2, #3]	@ zero_extendqisi2
+	add	r3, r3, r2
+	uxtb	r3, r3
+	cmp	r1, r3
+	bne	.L9
+	bl	SECURE_log_cond_br
+	ldr	r3, .L11+12
+	movs	r2, #1
+	strb	r2, [r3]
+	b	.L10
+.L9:
+	bl	SECURE_log_cond_br
+	ldr	r3, .L11+12
+	movs	r2, #0
+	strb	r2, [r3]
+.L10:
+	adds	r7, r7, #8
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, lr}
+	b	SECURE_log_ret
 .L12:
-	bl	SECURE_log_cond_br
-	ldr	r3, [r7, #32]
-	adds	r3, r3, #1
-	str	r3, [r7, #32]
-	ldr	r3, [r7, #36]
-	adds	r3, r3, #1
-	str	r3, [r7, #36]
+	.align	2
 .L11:
-	movs	r2, #1
-	ldr	r3, [r7, #36]
-	lsls	r2, r2, r3
-	ldr	r3, [r7, #36]
-	adds	r3, r3, #1
-	subs	r3, r2, r3
-	ldr	r2, [r7]
-	cmp	r2, r3
-	bgt	.L12
-	bl	SECURE_log_cond_br
-	ldr	r2, [r7, #32]
-	ldr	r3, [r7]
-	add	r3, r3, r2
-	str	r3, [r7, #20]
-	movs	r3, #0
-	str	r3, [r7, #24]
-	ldr	r3, [r7, #24]
-	str	r3, [r7, #28]
-	movs	r3, #0
-	str	r3, [r7, #36]
-	b	.L13
+	.word	1107427328
+	.word	temp_data
+	.word	data
+	.word	valid_reading
+	.size	read_data, .-read_data
+	.section	.text.get_temperature,"ax",%progbits
+	.align	1
+	.global	get_temperature
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	get_temperature, %function
+get_temperature:
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #8
+	add	r7, sp, #0
+	bl	read_data
+	ldr	r3, .L15
+	ldrb	r3, [r3, #2]	@ zero_extendqisi2
+	strh	r3, [r7, #6]	@ movhi
+	ldr	r3, .L15
+	ldrb	r3, [r3, #3]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	sxth	r2, r3
+	ldrsh	r3, [r7, #6]
+	orrs	r3, r3, r2
+	sxth	r3, r3
+	strh	r3, [r7, #6]	@ movhi
+	ldrh	r3, [r7, #6]
+	mov	r0, r3
+	adds	r7, r7, #8
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, lr}
+	b	SECURE_log_ret
 .L16:
-	bl	SECURE_log_cond_br
-	movs	r2, #1
-	ldr	r3, [r7, #24]
-	lsl	r3, r2, r3
-	subs	r3, r3, #1
-	ldr	r2, [r7, #36]
-	cmp	r2, r3
-	bne	.L14
-	bl	SECURE_log_cond_br
-	ldr	r2, .L19
-	ldr	r3, [r7, #36]
-	movs	r1, #0
-	str	r1, [r2, r3, lsl #2]
-	ldr	r3, [r7, #24]
-	adds	r3, r3, #1
-	str	r3, [r7, #24]
-	b	.L15
-.L14:
-	bl	SECURE_log_cond_br
-	ldr	r3, [r7, #28]
-	lsls	r3, r3, #2
-	ldr	r2, [r7, #4]
-	add	r3, r3, r2
-	ldr	r2, [r3]
-	ldr	r1, .L19
-	ldr	r3, [r7, #36]
-	str	r2, [r1, r3, lsl #2]
-	ldr	r3, [r7, #28]
-	adds	r3, r3, #1
-	str	r3, [r7, #28]
+	.align	2
 .L15:
-	ldr	r3, [r7, #36]
-	adds	r3, r3, #1
-	str	r3, [r7, #36]
-.L13:
-	ldr	r2, [r7, #36]
-	ldr	r3, [r7, #20]
-	cmp	r2, r3
-	blt	.L16
-	bl	SECURE_log_cond_br
-	movs	r3, #0
-	str	r3, [r7, #36]
-	b	.L17
-.L18:
-	bl	SECURE_log_cond_br
-	movs	r2, #1
-	ldr	r3, [r7, #36]
-	lsl	r3, r2, r3
-	str	r3, [r7, #16]
-	ldr	r1, [r7, #20]
-	ldr	r0, [r7, #16]
-	bl	ham_calc
-	str	r0, [r7, #12]
-	ldr	r3, [r7, #16]
-	subs	r3, r3, #1
-	ldr	r1, .L19
-	ldr	r2, [r7, #12]
-	str	r2, [r1, r3, lsl #2]
-	ldr	r3, [r7, #36]
-	adds	r3, r3, #1
-	str	r3, [r7, #36]
-.L17:
-	ldr	r2, [r7, #36]
-	ldr	r3, [r7, #32]
-	cmp	r2, r3
-	blt	.L18
-	bl	SECURE_log_cond_br
-	adds	r7, r7, #40
+	.word	temp_data
+	.size	get_temperature, .-get_temperature
+	.section	.text.get_humidity,"ax",%progbits
+	.align	1
+	.global	get_humidity
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	get_humidity, %function
+get_humidity:
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #8
+	add	r7, sp, #0
+	bl	read_data
+	ldr	r3, .L19
+	ldrb	r3, [r3]	@ zero_extendqisi2
+	strh	r3, [r7, #6]	@ movhi
+	ldr	r3, .L19
+	ldrb	r3, [r3, #1]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	sxth	r2, r3
+	ldrsh	r3, [r7, #6]
+	orrs	r3, r3, r2
+	sxth	r3, r3
+	strh	r3, [r7, #6]	@ movhi
+	ldrh	r3, [r7, #6]
+	mov	r0, r3
+	adds	r7, r7, #8
 	mov	sp, r7
 	@ sp needed
 	pop	{r7, lr}
@@ -350,8 +330,442 @@ solve:
 .L20:
 	.align	2
 .L19:
-	.word	code
-	.size	solve, .-solve
+	.word	temp_data
+	.size	get_humidity, .-get_humidity
+	.section	.text.pulseIn,"ax",%progbits
+	.align	1
+	.global	pulseIn
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	pulseIn, %function
+pulseIn:
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #8
+	add	r7, sp, #0
+	movs	r3, #0
+	str	r3, [r7, #4]
+	movs	r3, #0
+	str	r3, [r7]
+	b	.L22
+.L23:
+	bl	SECURE_log_cond_br
+	ldr	r3, .L25
+	ldr	r3, [r3, #16]
+	lsrs	r3, r3, #8
+	and	r3, r3, #2
+	ldr	r2, [r7, #4]
+	add	r3, r3, r2
+	str	r3, [r7, #4]
+	ldr	r3, [r7]
+	adds	r3, r3, #1
+	str	r3, [r7]
+.L22:
+	ldr	r3, [r7]
+	cmp	r3, #1000
+	blt	.L23
+	bl	SECURE_log_cond_br
+	ldr	r3, [r7, #4]
+	mov	r0, r3
+	adds	r7, r7, #8
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, lr}
+	b	SECURE_log_ret
+.L26:
+	.align	2
+.L25:
+	.word	1107427328
+	.size	pulseIn, .-pulseIn
+	.section	.text.getUltrasonicReading,"ax",%progbits
+	.align	1
+	.global	getUltrasonicReading
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	getUltrasonicReading, %function
+getUltrasonicReading:
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #8
+	add	r7, sp, #0
+	ldr	r3, .L29
+	mov	r2, #512
+	str	r2, [r3, #24]
+	movs	r0, #2
+	bl	delay
+	ldr	r3, .L29
+	mov	r2, #512
+	str	r2, [r3, #40]
+	movs	r0, #5
+	bl	delay
+	ldr	r3, .L29
+	mov	r2, #512
+	str	r2, [r3, #24]
+	bl	pulseIn
+	str	r0, [r7, #4]
+	ldr	r3, [r7, #4]
+	mov	r0, r3
+	adds	r7, r7, #8
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, lr}
+	b	SECURE_log_ret
+.L30:
+	.align	2
+.L29:
+	.word	1107427328
+	.size	getUltrasonicReading, .-getUltrasonicReading
+	.section	.text.run_ultrasonic,"ax",%progbits
+	.align	1
+	.global	run_ultrasonic
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	run_ultrasonic, %function
+run_ultrasonic:
+	@ args = 0, pretend = 0, frame = 16
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #16
+	add	r7, sp, #0
+	str	r0, [r7, #4]
+	movs	r3, #0
+	str	r3, [r7, #8]
+	movs	r3, #0
+	str	r3, [r7, #12]
+	b	.L32
+.L33:
+	bl	SECURE_log_cond_br
+	bl	getUltrasonicReading
+	mov	r2, r0
+	ldr	r3, [r7, #4]
+	sdiv	r3, r2, r3
+	ldr	r2, [r7, #8]
+	add	r3, r3, r2
+	str	r3, [r7, #8]
+	ldr	r3, [r7, #12]
+	adds	r3, r3, #1
+	str	r3, [r7, #12]
+.L32:
+	ldr	r2, [r7, #12]
+	ldr	r3, [r7, #4]
+	cmp	r2, r3
+	blt	.L33
+	bl	SECURE_log_cond_br
+	ldr	r3, [r7, #8]
+	mov	r0, r3
+	adds	r7, r7, #16
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, lr}
+	b	SECURE_log_ret
+	.size	run_ultrasonic, .-run_ultrasonic
+	.section	.text.run_temperature,"ax",%progbits
+	.align	1
+	.global	run_temperature
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	run_temperature, %function
+run_temperature:
+	@ args = 0, pretend = 0, frame = 16
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #16
+	add	r7, sp, #0
+	str	r0, [r7, #4]
+	movs	r3, #0
+	str	r3, [r7, #8]
+	movs	r3, #0
+	str	r3, [r7, #12]
+	b	.L36
+.L37:
+	bl	SECURE_log_cond_br
+	bl	get_temperature
+	mov	r3, r0
+	mov	r2, r3
+	ldr	r3, [r7, #4]
+	sdiv	r3, r2, r3
+	ldr	r2, [r7, #8]
+	add	r3, r3, r2
+	str	r3, [r7, #8]
+	ldr	r3, [r7, #12]
+	adds	r3, r3, #1
+	str	r3, [r7, #12]
+.L36:
+	ldr	r2, [r7, #12]
+	ldr	r3, [r7, #4]
+	cmp	r2, r3
+	blt	.L37
+	bl	SECURE_log_cond_br
+	ldr	r3, [r7, #8]
+	mov	r0, r3
+	adds	r7, r7, #16
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, lr}
+	b	SECURE_log_ret
+	.size	run_temperature, .-run_temperature
+	.section	.text.run_humidity,"ax",%progbits
+	.align	1
+	.global	run_humidity
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	run_humidity, %function
+run_humidity:
+	@ args = 0, pretend = 0, frame = 16
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #16
+	add	r7, sp, #0
+	str	r0, [r7, #4]
+	movs	r3, #0
+	str	r3, [r7, #8]
+	movs	r3, #0
+	str	r3, [r7, #12]
+	b	.L40
+.L41:
+	bl	SECURE_log_cond_br
+	bl	get_humidity
+	mov	r3, r0
+	mov	r2, r3
+	ldr	r3, [r7, #4]
+	sdiv	r3, r2, r3
+	ldr	r2, [r7, #8]
+	add	r3, r3, r2
+	str	r3, [r7, #8]
+	ldr	r3, [r7, #12]
+	adds	r3, r3, #1
+	str	r3, [r7, #12]
+.L40:
+	ldr	r2, [r7, #12]
+	ldr	r3, [r7, #4]
+	cmp	r2, r3
+	blt	.L41
+	bl	SECURE_log_cond_br
+	ldr	r3, [r7, #8]
+	mov	r0, r3
+	adds	r7, r7, #16
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, lr}
+	b	SECURE_log_ret
+	.size	run_humidity, .-run_humidity
+	.comm	send_data,4,4
+	.section	.text.read_command,"ax",%progbits
+	.align	1
+	.global	read_command
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	read_command, %function
+read_command:
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #8
+	add	r7, sp, #0
+	str	r0, [r7, #4]
+	str	r1, [r7]
+	b	.L44
+.L45:
+	bl	SECURE_log_cond_br
+	ldr	r3, [r7]
+	ldrb	r2, [r3]	@ zero_extendqisi2
+	ldr	r3, [r7, #4]
+	strb	r2, [r3]
+	ldr	r3, [r7, #4]
+	adds	r3, r3, #1
+	str	r3, [r7, #4]
+	ldr	r3, [r7]
+	adds	r3, r3, #1
+	str	r3, [r7]
+.L44:
+	ldr	r3, [r7]
+	ldrb	r3, [r3]	@ zero_extendqisi2
+	cmp	r3, #58
+	bne	.L45
+	bl	SECURE_log_cond_br
+	adds	r7, r7, #8
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, lr}
+	b	SECURE_log_ret
+	.size	read_command, .-read_command
+	.comm	cmd,1,1
+	.section	.rodata
+	.align	2
+.LC0:
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.section	.text.process_command,"ax",%progbits
+	.align	1
+	.global	process_command
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	process_command, %function
+process_command:
+	@ args = 0, pretend = 0, frame = 16
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r4, r7, lr}
+	sub	sp, sp, #20
+	add	r7, sp, #0
+	ldr	r3, .L53
+	mov	r4, r7
+	ldm	r3, {r0, r1, r2, r3}
+	stm	r4, {r0, r1, r2, r3}
+	mov	r3, r7
+	ldr	r1, .L53+4
+	mov	r0, r3
+	bl	read_command
+	ldrb	r3, [r7]	@ zero_extendqisi2
+	cmp	r3, #116
+	beq	.L48
+	bl	SECURE_log_cond_br
+	cmp	r3, #117
+	beq	.L49
+	bl	SECURE_log_cond_br
+	cmp	r3, #97
+	beq	.L50
+	bl	SECURE_log_cond_br
+	b	.L52
+.L49:
+	bl	SECURE_log_cond_br
+	ldrb	r3, [r7, #1]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #2]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L53+8
+	str	r3, [r2]
+	b	.L51
+.L48:
+	bl	SECURE_log_cond_br
+	ldrb	r3, [r7, #1]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #2]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L53+12
+	str	r3, [r2]
+	ldr	r3, .L53+12
+	ldr	r3, [r3]
+	mov	r0, r3
+	bl	SECURE_record_output_data
+	ldrb	r3, [r7, #4]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #5]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L53+16
+	str	r3, [r2]
+	ldr	r3, .L53+16
+	ldr	r3, [r3]
+	mov	r0, r3
+	bl	SECURE_record_output_data
+	b	.L51
+.L50:
+	bl	SECURE_log_cond_br
+	ldrb	r3, [r7, #1]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #2]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L53+20
+	str	r3, [r2]
+	ldrb	r3, [r7, #4]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #5]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L53+8
+	str	r3, [r2]
+	ldrb	r3, [r7, #7]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #8]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L53+12
+	str	r3, [r2]
+	ldrb	r3, [r7, #10]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #11]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L53+16
+	str	r3, [r2]
+.L52:
+.L51:
+	ldrb	r2, [r7]	@ zero_extendqisi2
+	ldr	r3, .L53+24
+	strb	r2, [r3]
+	ldr	r3, .L53+24
+	ldrb	r3, [r3]	@ zero_extendqisi2
+	mov	r0, r3
+	bl	SECURE_record_output_data
+	adds	r7, r7, #20
+	mov	sp, r7
+	@ sp needed
+	pop	{r4, r7, lr}
+	b	SECURE_log_ret
+.L54:
+	.align	2
+.L53:
+	.word	.LC0
+	.word	input
+	.word	ult_runs
+	.word	temp_runs
+	.word	hum_runs
+	.word	seq_runs
+	.word	cmd
+	.size	process_command, .-process_command
+	.comm	sensor_action,4,4
+	.section	.text.record_output_data,"ax",%progbits
+	.align	1
+	.global	record_output_data
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	record_output_data, %function
+record_output_data:
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #8
+	add	r7, sp, #0
+	mov	r3, r0
+	strb	r3, [r7, #7]
+	ldrb	r3, [r7, #7]
+	mvns	r3, r3
+	uxtb	r3, r3
+	mov	r0, r3
+	adds	r7, r7, #8
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, lr}
+	b	SECURE_log_ret
+	.size	record_output_data, .-record_output_data
 	.section	.text.application,"ax",%progbits
 	.align	1
 	.global	application
@@ -365,14 +779,85 @@ application:
 	@ frame_needed = 1, uses_anonymous_args = 0
 	push	{r7, lr}
 	add	r7, sp, #0
-	movs	r1, #128
-	ldr	r0, .L22
-	bl	solve
+	bl	process_command
+	ldr	r3, .L63
+	ldrb	r3, [r3]	@ zero_extendqisi2
+	cmp	r3, #116
+	beq	.L59
+	bl	SECURE_log_cond_br
+	cmp	r3, #117
+	beq	.L60
+	bl	SECURE_log_cond_br
+	cmp	r3, #97
+	beq	.L61
+	bl	SECURE_log_cond_br
+	b	.L62
+.L60:
+	bl	SECURE_log_cond_br
+	movs	r0, #117
+	bl	record_output_data
+	mov	r2, r0
+	ldr	r3, .L63+4
+	str	r2, [r3]
+	ldr	r3, .L63+8
+	ldr	r2, .L63+12
+	str	r2, [r3]
+	ldr	r3, .L63+16
+	ldr	r3, [r3]
+	ldr	r2, .L63+4
+	str	r3, [r2]
+	b	.L62
+.L59:
+	bl	SECURE_log_cond_br
+	movs	r0, #116
+	bl	record_output_data
+	mov	r2, r0
+	ldr	r3, .L63+4
+	str	r2, [r3]
+	ldr	r3, .L63+8
+	ldr	r2, .L63+20
+	str	r2, [r3]
+	ldr	r3, .L63+24
+	ldr	r3, [r3]
+	ldr	r2, .L63+4
+	str	r3, [r2]
+	b	.L62
+.L61:
+	bl	SECURE_log_cond_br
+	movs	r0, #97
+	bl	record_output_data
+	mov	r2, r0
+	ldr	r3, .L63+4
+	str	r2, [r3]
+	ldr	r3, .L63+8
+	ldr	r2, .L63+28
+	str	r2, [r3]
+	ldr	r3, .L63+32
+	ldr	r3, [r3]
+	ldr	r2, .L63+4
+	str	r3, [r2]
+.L62:
+	ldr	r3, .L63+8
+	ldr	r3, [r3]
+	ldr	r2, .L63+4
+	ldr	r2, [r2]
+	uxtb	r2, r2
+	mov	r0, r2
+	mov	r10, r3
+	bl	SECURE_log_call
 	pop	{r7, lr}
 	b	SECURE_log_ret
-.L23:
+.L64:
 	.align	2
-.L22:
-	.word	input
+.L63:
+	.word	cmd
+	.word	runs
+	.word	sensor_action
+	.word	run_ultrasonic
+	.word	ult_runs
+	.word	run_temperature
+	.word	temp_runs
+	.word	run_humidity
+	.word	hum_runs
 	.size	application, .-application
-	.ident	"GCC: (15:9-2019-q4-0ubuntu1) 9.2.1 20191025 (release) [ARM/arm-9-branch revision 277599]"
+	.ident	"GCC: (15:6.3.1+svn253039-1build1) 6.3.1 20170620"

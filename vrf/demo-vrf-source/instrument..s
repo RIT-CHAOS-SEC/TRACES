@@ -14,40 +14,20 @@
 	.section	.data.input,"aw",%progbits
 	.align	2
 	.type	input, %object
-	.size	input, 33
+	.size	input, 13
 input:
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	-16
-	.byte	-1
-	.byte	3
-	.byte	32
-	.byte	-49
-	.byte	5
-	.byte	4
-	.byte	8
+	.byte	97
+	.byte	0
+	.byte	1
+	.byte	117
+	.byte	0
+	.byte	16
+	.byte	116
+	.byte	0
+	.byte	2
+	.byte	104
+	.byte	0
+	.byte	2
 	.byte	58
 	.global	data
 	.section	.bss.data,"aw",%nobits
@@ -89,16 +69,22 @@ delay:
 	sub	sp, sp, #16
 	add	r7, sp, #0
 	str	r0, [r7, #4]
-	movs	r3, #0
+	ldr	r3, .L4
+	ldr	r3, [r3]
+	str	r3, [r7, #8]
+	ldr	r3, [r7, #8]
 	str	r3, [r7, #12]
 	b	.L2
 .L3:
 	bl	SECURE_log_cond_br
-	ldr	r3, [r7, #12]
-	adds	r3, r3, #1
+	ldr	r3, .L4
+	ldr	r3, [r3]
 	str	r3, [r7, #12]
 .L2:
-	ldr	r2, [r7, #12]
+	ldr	r3, .L4
+	ldr	r2, [r3]
+	ldr	r3, [r7, #12]
+	subs	r2, r2, r3
 	ldr	r3, [r7, #4]
 	cmp	r2, r3
 	bcc	.L3
@@ -108,6 +94,10 @@ delay:
 	@ sp needed
 	pop	{r7, lr}
 	b	SECURE_log_ret
+.L5:
+	.align	2
+.L4:
+	.word	uwTick
 	.size	delay, .-delay
 	.section	.text.read_data,"ax",%progbits
 	.align	1
@@ -127,27 +117,27 @@ read_data:
 	strb	r3, [r7, #7]
 	movs	r3, #0
 	strh	r3, [r7, #4]	@ movhi
-	ldr	r3, .L11
+	ldr	r3, .L13
 	mov	r2, #256
 	str	r2, [r3, #40]
 	movs	r0, #250
 	bl	delay
-	ldr	r3, .L11
+	ldr	r3, .L13
 	mov	r2, #256
 	str	r2, [r3, #24]
 	movs	r0, #20
 	bl	delay
-	ldr	r3, .L11
+	ldr	r3, .L13
 	mov	r2, #256
 	str	r2, [r3, #40]
 	movs	r0, #40
 	bl	delay
 	movs	r3, #0
 	strh	r3, [r7, #2]	@ movhi
-	b	.L5
-.L8:
+	b	.L7
+.L10:
 	bl	SECURE_log_cond_br
-	ldr	r3, .L11
+	ldr	r3, .L13
 	ldr	r3, [r3, #16]
 	lsrs	r3, r3, #8
 	and	r3, r3, #1
@@ -157,12 +147,12 @@ read_data:
 	strb	r3, [r7, #7]
 	ldrh	r3, [r7, #2]
 	cmp	r3, #3
-	bls	.L6
+	bls	.L8
 	bl	SECURE_log_cond_br
 	ldrh	r3, [r7, #2]
 	and	r3, r3, #1
 	cmp	r3, #0
-	bne	.L6
+	bne	.L8
 	bl	SECURE_log_cond_br
 	ldrh	r3, [r7, #4]
 	lsrs	r3, r3, #3
@@ -172,15 +162,15 @@ read_data:
 	lsrs	r3, r3, #3
 	uxth	r3, r3
 	mov	r1, r3
-	ldr	r3, .L11+4
+	ldr	r3, .L13+4
 	ldrb	r3, [r3, r1]	@ zero_extendqisi2
 	lsls	r3, r3, #1
 	uxtb	r1, r3
-	ldr	r3, .L11+4
+	ldr	r3, .L13+4
 	strb	r1, [r3, r2]
 	ldrb	r3, [r7, #7]	@ zero_extendqisi2
 	cmp	r3, #6
-	bls	.L7
+	bls	.L9
 	bl	SECURE_log_cond_br
 	ldrh	r3, [r7, #4]
 	lsrs	r3, r3, #3
@@ -190,67 +180,67 @@ read_data:
 	lsrs	r3, r3, #3
 	uxth	r3, r3
 	mov	r2, r3
-	ldr	r3, .L11+8
+	ldr	r3, .L13+8
 	ldr	r3, [r3, r2, lsl #2]
 	orr	r3, r3, #1
-	ldr	r2, .L11+8
+	ldr	r2, .L13+8
 	str	r3, [r2, r1, lsl #2]
-.L7:
+.L9:
 	bl	SECURE_log_cond_br
 	ldrh	r3, [r7, #4]
 	adds	r3, r3, #1
 	strh	r3, [r7, #4]	@ movhi
-.L6:
+.L8:
 	bl	SECURE_log_cond_br
 	ldrh	r3, [r7, #2]
 	adds	r3, r3, #1
 	strh	r3, [r7, #2]	@ movhi
-.L5:
+.L7:
 	ldrh	r3, [r7, #2]
 	cmp	r3, #82
-	bls	.L8
+	bls	.L10
 	bl	SECURE_log_cond_br
 	ldrh	r3, [r7, #4]
 	cmp	r3, #39
-	bls	.L9
+	bls	.L11
 	bl	SECURE_log_cond_br
-	ldr	r3, .L11+4
+	ldr	r3, .L13+4
 	ldrb	r3, [r3, #4]	@ zero_extendqisi2
 	mov	r1, r3
-	ldr	r3, .L11+4
+	ldr	r3, .L13+4
 	ldrb	r3, [r3]	@ zero_extendqisi2
 	mov	r2, r3
-	ldr	r3, .L11+4
+	ldr	r3, .L13+4
 	ldrb	r3, [r3, #1]	@ zero_extendqisi2
 	add	r3, r3, r2
-	ldr	r2, .L11+4
+	ldr	r2, .L13+4
 	ldrb	r2, [r2, #2]	@ zero_extendqisi2
 	add	r3, r3, r2
-	ldr	r2, .L11+4
+	ldr	r2, .L13+4
 	ldrb	r2, [r2, #3]	@ zero_extendqisi2
 	add	r3, r3, r2
 	uxtb	r3, r3
 	cmp	r1, r3
-	bne	.L9
+	bne	.L11
 	bl	SECURE_log_cond_br
-	ldr	r3, .L11+12
+	ldr	r3, .L13+12
 	movs	r2, #1
 	strb	r2, [r3]
-	b	.L10
-.L9:
+	b	.L12
+.L11:
 	bl	SECURE_log_cond_br
-	ldr	r3, .L11+12
+	ldr	r3, .L13+12
 	movs	r2, #0
 	strb	r2, [r3]
-.L10:
+.L12:
 	adds	r7, r7, #8
 	mov	sp, r7
 	@ sp needed
 	pop	{r7, lr}
 	b	SECURE_log_ret
-.L12:
+.L14:
 	.align	2
-.L11:
+.L13:
 	.word	1107427328
 	.word	temp_data
 	.word	data
@@ -271,10 +261,10 @@ get_temperature:
 	sub	sp, sp, #8
 	add	r7, sp, #0
 	bl	read_data
-	ldr	r3, .L15
+	ldr	r3, .L17
 	ldrb	r3, [r3, #2]	@ zero_extendqisi2
 	strh	r3, [r7, #6]	@ movhi
-	ldr	r3, .L15
+	ldr	r3, .L17
 	ldrb	r3, [r3, #3]	@ zero_extendqisi2
 	lsls	r3, r3, #8
 	sxth	r2, r3
@@ -289,9 +279,9 @@ get_temperature:
 	@ sp needed
 	pop	{r7, lr}
 	b	SECURE_log_ret
-.L16:
+.L18:
 	.align	2
-.L15:
+.L17:
 	.word	temp_data
 	.size	get_temperature, .-get_temperature
 	.section	.text.get_humidity,"ax",%progbits
@@ -309,10 +299,10 @@ get_humidity:
 	sub	sp, sp, #8
 	add	r7, sp, #0
 	bl	read_data
-	ldr	r3, .L19
+	ldr	r3, .L21
 	ldrb	r3, [r3]	@ zero_extendqisi2
 	strh	r3, [r7, #6]	@ movhi
-	ldr	r3, .L19
+	ldr	r3, .L21
 	ldrb	r3, [r3, #1]	@ zero_extendqisi2
 	lsls	r3, r3, #8
 	sxth	r2, r3
@@ -327,9 +317,9 @@ get_humidity:
 	@ sp needed
 	pop	{r7, lr}
 	b	SECURE_log_ret
-.L20:
+.L22:
 	.align	2
-.L19:
+.L21:
 	.word	temp_data
 	.size	get_humidity, .-get_humidity
 	.section	.text.pulseIn,"ax",%progbits
@@ -350,23 +340,21 @@ pulseIn:
 	str	r3, [r7, #4]
 	movs	r3, #0
 	str	r3, [r7]
-	b	.L22
-.L23:
+.L24:
 	bl	SECURE_log_cond_br
-	ldr	r3, .L25
+	ldr	r3, .L26
 	ldr	r3, [r3, #16]
 	lsrs	r3, r3, #8
-	and	r3, r3, #2
+	and	r3, r3, #1
 	ldr	r2, [r7, #4]
 	add	r3, r3, r2
 	str	r3, [r7, #4]
 	ldr	r3, [r7]
 	adds	r3, r3, #1
 	str	r3, [r7]
-.L22:
 	ldr	r3, [r7]
 	cmp	r3, #1000
-	blt	.L23
+	ble	.L24
 	bl	SECURE_log_cond_br
 	ldr	r3, [r7, #4]
 	mov	r0, r3
@@ -375,9 +363,9 @@ pulseIn:
 	@ sp needed
 	pop	{r7, lr}
 	b	SECURE_log_ret
-.L26:
+.L27:
 	.align	2
-.L25:
+.L26:
 	.word	1107427328
 	.size	pulseIn, .-pulseIn
 	.section	.text.getUltrasonicReading,"ax",%progbits
@@ -394,21 +382,22 @@ getUltrasonicReading:
 	push	{r7, lr}
 	sub	sp, sp, #8
 	add	r7, sp, #0
-	ldr	r3, .L29
+	ldr	r3, .L30
 	mov	r2, #512
 	str	r2, [r3, #24]
 	movs	r0, #2
 	bl	delay
-	ldr	r3, .L29
+	ldr	r3, .L30
 	mov	r2, #512
 	str	r2, [r3, #40]
 	movs	r0, #5
 	bl	delay
-	ldr	r3, .L29
+	ldr	r3, .L30
 	mov	r2, #512
 	str	r2, [r3, #24]
 	bl	pulseIn
-	str	r0, [r7, #4]
+	mov	r3, r0
+	str	r3, [r7, #4]
 	ldr	r3, [r7, #4]
 	mov	r0, r3
 	adds	r7, r7, #8
@@ -416,9 +405,9 @@ getUltrasonicReading:
 	@ sp needed
 	pop	{r7, lr}
 	b	SECURE_log_ret
-.L30:
+.L31:
 	.align	2
-.L29:
+.L30:
 	.word	1107427328
 	.size	getUltrasonicReading, .-getUltrasonicReading
 	.section	.text.run_ultrasonic,"ax",%progbits
@@ -440,8 +429,8 @@ run_ultrasonic:
 	str	r3, [r7, #8]
 	movs	r3, #0
 	str	r3, [r7, #12]
-	b	.L32
-.L33:
+	b	.L33
+.L34:
 	bl	SECURE_log_cond_br
 	bl	getUltrasonicReading
 	mov	r2, r0
@@ -453,11 +442,11 @@ run_ultrasonic:
 	ldr	r3, [r7, #12]
 	adds	r3, r3, #1
 	str	r3, [r7, #12]
-.L32:
+.L33:
 	ldr	r2, [r7, #12]
 	ldr	r3, [r7, #4]
 	cmp	r2, r3
-	blt	.L33
+	blt	.L34
 	bl	SECURE_log_cond_br
 	ldr	r3, [r7, #8]
 	mov	r0, r3
@@ -486,8 +475,8 @@ run_temperature:
 	str	r3, [r7, #8]
 	movs	r3, #0
 	str	r3, [r7, #12]
-	b	.L36
-.L37:
+	b	.L37
+.L38:
 	bl	SECURE_log_cond_br
 	bl	get_temperature
 	mov	r3, r0
@@ -500,11 +489,11 @@ run_temperature:
 	ldr	r3, [r7, #12]
 	adds	r3, r3, #1
 	str	r3, [r7, #12]
-.L36:
+.L37:
 	ldr	r2, [r7, #12]
 	ldr	r3, [r7, #4]
 	cmp	r2, r3
-	blt	.L37
+	blt	.L38
 	bl	SECURE_log_cond_br
 	ldr	r3, [r7, #8]
 	mov	r0, r3
@@ -533,8 +522,8 @@ run_humidity:
 	str	r3, [r7, #8]
 	movs	r3, #0
 	str	r3, [r7, #12]
-	b	.L40
-.L41:
+	b	.L41
+.L42:
 	bl	SECURE_log_cond_br
 	bl	get_humidity
 	mov	r3, r0
@@ -547,11 +536,11 @@ run_humidity:
 	ldr	r3, [r7, #12]
 	adds	r3, r3, #1
 	str	r3, [r7, #12]
-.L40:
+.L41:
 	ldr	r2, [r7, #12]
 	ldr	r3, [r7, #4]
 	cmp	r2, r3
-	blt	.L41
+	blt	.L42
 	bl	SECURE_log_cond_br
 	ldr	r3, [r7, #8]
 	mov	r0, r3
@@ -578,24 +567,32 @@ read_command:
 	add	r7, sp, #0
 	str	r0, [r7, #4]
 	str	r1, [r7]
-	b	.L44
-.L45:
+	b	.L45
+.L46:
 	bl	SECURE_log_cond_br
 	ldr	r3, [r7]
 	ldrb	r2, [r3]	@ zero_extendqisi2
 	ldr	r3, [r7, #4]
 	strb	r2, [r3]
+	ldr	r3, [r7]
+	ldrb	r3, [r3]	@ zero_extendqisi2
+	mov	r0, r3
+	bl	SECURE_record_output_data
+	ldr	r3, [r7, #4]
+	ldrb	r3, [r3]	@ zero_extendqisi2
+	mov	r0, r3
+	bl	SECURE_record_output_data
 	ldr	r3, [r7, #4]
 	adds	r3, r3, #1
 	str	r3, [r7, #4]
 	ldr	r3, [r7]
 	adds	r3, r3, #1
 	str	r3, [r7]
-.L44:
+.L45:
 	ldr	r3, [r7]
 	ldrb	r3, [r3]	@ zero_extendqisi2
 	cmp	r3, #58
-	bne	.L45
+	bne	.L46
 	bl	SECURE_log_cond_br
 	adds	r7, r7, #8
 	mov	sp, r7
@@ -637,24 +634,33 @@ process_command:
 	push	{r4, r7, lr}
 	sub	sp, sp, #20
 	add	r7, sp, #0
-	ldr	r3, .L53
+	ldr	r3, .L54
 	mov	r4, r7
 	ldm	r3, {r0, r1, r2, r3}
 	stm	r4, {r0, r1, r2, r3}
 	mov	r3, r7
-	ldr	r1, .L53+4
+	ldr	r1, .L54+4
 	mov	r0, r3
 	bl	read_command
 	ldrb	r3, [r7]	@ zero_extendqisi2
 	cmp	r3, #116
-	beq	.L48
-	bl	SECURE_log_cond_br
-	cmp	r3, #117
 	beq	.L49
 	bl	SECURE_log_cond_br
-	cmp	r3, #97
+	cmp	r3, #117
 	beq	.L50
 	bl	SECURE_log_cond_br
+	cmp	r3, #97
+	beq	.L51
+	bl	SECURE_log_cond_br
+	b	.L53
+.L50:
+	bl	SECURE_log_cond_br
+	ldrb	r3, [r7, #1]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #2]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L54+8
+	str	r3, [r2]
 	b	.L52
 .L49:
 	bl	SECURE_log_cond_br
@@ -662,75 +668,57 @@ process_command:
 	lsls	r3, r3, #8
 	ldrb	r2, [r7, #2]	@ zero_extendqisi2
 	orrs	r3, r3, r2
-	ldr	r2, .L53+8
-	str	r3, [r2]
-	b	.L51
-.L48:
-	bl	SECURE_log_cond_br
-	ldrb	r3, [r7, #1]	@ zero_extendqisi2
-	lsls	r3, r3, #8
-	ldrb	r2, [r7, #2]	@ zero_extendqisi2
-	orrs	r3, r3, r2
-	ldr	r2, .L53+12
-	str	r3, [r2]
-	ldr	r3, .L53+12
-	ldr	r3, [r3]
-	mov	r0, r3
-	bl	SECURE_record_output_data
-	ldrb	r3, [r7, #4]	@ zero_extendqisi2
-	lsls	r3, r3, #8
-	ldrb	r2, [r7, #5]	@ zero_extendqisi2
-	orrs	r3, r3, r2
-	ldr	r2, .L53+16
-	str	r3, [r2]
-	ldr	r3, .L53+16
-	ldr	r3, [r3]
-	mov	r0, r3
-	bl	SECURE_record_output_data
-	b	.L51
-.L50:
-	bl	SECURE_log_cond_br
-	ldrb	r3, [r7, #1]	@ zero_extendqisi2
-	lsls	r3, r3, #8
-	ldrb	r2, [r7, #2]	@ zero_extendqisi2
-	orrs	r3, r3, r2
-	ldr	r2, .L53+20
+	ldr	r2, .L54+12
 	str	r3, [r2]
 	ldrb	r3, [r7, #4]	@ zero_extendqisi2
 	lsls	r3, r3, #8
 	ldrb	r2, [r7, #5]	@ zero_extendqisi2
 	orrs	r3, r3, r2
-	ldr	r2, .L53+8
+	ldr	r2, .L54+16
+	str	r3, [r2]
+	b	.L52
+.L51:
+	bl	SECURE_log_cond_br
+	ldrb	r3, [r7, #1]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #2]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L54+20
+	str	r3, [r2]
+	ldrb	r3, [r7, #4]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #5]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L54+8
 	str	r3, [r2]
 	ldrb	r3, [r7, #7]	@ zero_extendqisi2
 	lsls	r3, r3, #8
 	ldrb	r2, [r7, #8]	@ zero_extendqisi2
 	orrs	r3, r3, r2
-	ldr	r2, .L53+12
+	ldr	r2, .L54+12
 	str	r3, [r2]
 	ldrb	r3, [r7, #10]	@ zero_extendqisi2
 	lsls	r3, r3, #8
 	ldrb	r2, [r7, #11]	@ zero_extendqisi2
 	orrs	r3, r3, r2
-	ldr	r2, .L53+16
+	ldr	r2, .L54+16
 	str	r3, [r2]
+.L53:
 .L52:
-.L51:
-	ldrb	r2, [r7]	@ zero_extendqisi2
-	ldr	r3, .L53+24
-	strb	r2, [r3]
-	ldr	r3, .L53+24
-	ldrb	r3, [r3]	@ zero_extendqisi2
+	ldrb	r3, [r7]	@ zero_extendqisi2
 	mov	r0, r3
 	bl	SECURE_record_output_data
+	ldrb	r2, [r7]	@ zero_extendqisi2
+	ldr	r3, .L54+24
+	strb	r2, [r3]
 	adds	r7, r7, #20
 	mov	sp, r7
 	@ sp needed
 	pop	{r4, r7, lr}
 	b	SECURE_log_ret
-.L54:
+.L55:
 	.align	2
-.L53:
+.L54:
 	.word	.LC0
 	.word	input
 	.word	ult_runs
@@ -780,66 +768,66 @@ application:
 	push	{r7, lr}
 	add	r7, sp, #0
 	bl	process_command
-	ldr	r3, .L63
+	ldr	r3, .L64
 	ldrb	r3, [r3]	@ zero_extendqisi2
 	cmp	r3, #116
-	beq	.L59
-	bl	SECURE_log_cond_br
-	cmp	r3, #117
 	beq	.L60
 	bl	SECURE_log_cond_br
-	cmp	r3, #97
+	cmp	r3, #117
 	beq	.L61
 	bl	SECURE_log_cond_br
-	b	.L62
-.L60:
+	cmp	r3, #97
+	beq	.L62
+	bl	SECURE_log_cond_br
+	b	.L63
+.L61:
 	bl	SECURE_log_cond_br
 	movs	r0, #117
 	bl	record_output_data
 	mov	r2, r0
-	ldr	r3, .L63+4
+	ldr	r3, .L64+4
 	str	r2, [r3]
-	ldr	r3, .L63+8
-	ldr	r2, .L63+12
+	ldr	r3, .L64+8
+	ldr	r2, .L64+12
 	str	r2, [r3]
-	ldr	r3, .L63+16
+	ldr	r3, .L64+16
 	ldr	r3, [r3]
-	ldr	r2, .L63+4
+	ldr	r2, .L64+4
 	str	r3, [r2]
-	b	.L62
-.L59:
+	b	.L63
+.L60:
 	bl	SECURE_log_cond_br
 	movs	r0, #116
 	bl	record_output_data
 	mov	r2, r0
-	ldr	r3, .L63+4
+	ldr	r3, .L64+4
 	str	r2, [r3]
-	ldr	r3, .L63+8
-	ldr	r2, .L63+20
+	ldr	r3, .L64+8
+	ldr	r2, .L64+20
 	str	r2, [r3]
-	ldr	r3, .L63+24
+	ldr	r3, .L64+24
 	ldr	r3, [r3]
-	ldr	r2, .L63+4
+	ldr	r2, .L64+4
 	str	r3, [r2]
-	b	.L62
-.L61:
+	b	.L63
+.L62:
 	bl	SECURE_log_cond_br
 	movs	r0, #97
 	bl	record_output_data
 	mov	r2, r0
-	ldr	r3, .L63+4
+	ldr	r3, .L64+4
 	str	r2, [r3]
-	ldr	r3, .L63+8
-	ldr	r2, .L63+28
+	ldr	r3, .L64+8
+	ldr	r2, .L64+28
 	str	r2, [r3]
-	ldr	r3, .L63+32
+	ldr	r3, .L64+32
 	ldr	r3, [r3]
-	ldr	r2, .L63+4
+	ldr	r2, .L64+4
 	str	r3, [r2]
-.L62:
-	ldr	r3, .L63+8
+.L63:
+	ldr	r3, .L64+8
 	ldr	r3, [r3]
-	ldr	r2, .L63+4
+	ldr	r2, .L64+4
 	ldr	r2, [r2]
 	uxtb	r2, r2
 	mov	r0, r2
@@ -847,9 +835,9 @@ application:
 	bl	SECURE_log_call
 	pop	{r7, lr}
 	b	SECURE_log_ret
-.L64:
+.L65:
 	.align	2
-.L63:
+.L64:
 	.word	cmd
 	.word	runs
 	.word	sensor_action

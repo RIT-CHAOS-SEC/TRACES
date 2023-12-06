@@ -31,8 +31,8 @@ typedef funcptr funcptr_NS;
 //#define TOTAL_KB			7936
 //#define KBYTE				1024
 
-#define MAX_LOG_SIZE_BYTES	8192
-#define MAX_CF_LOG_SIZE 	(uint16_t)(MAX_LOG_SIZE_BYTES/4) //32 bits (4 bytes) per index
+#define MAX_LOG_SIZE_BYTES	1024*1
+#define MAX_CF_LOG_SIZE 	(uint16_t)(MAX_LOG_SIZE_BYTES >> 2) //32 bits (4 bytes) per index
 
 // GENERAL
 #define CONTINUE_LOOP		1
@@ -99,7 +99,7 @@ typedef funcptr funcptr_NS;
 
 // Update by inspecting objdump output
 #define NONSECURE_FLASH_START			0x080401f8
-#define	NONSECURE_FLASH_END				0x08040c7c
+#define	NONSECURE_FLASH_END				0x08040bdc
 #define ENDS_IN_WORD					1
 #define	NONSECURE_FLASH_SIZE			NONSECURE_FLASH_END-NONSECURE_FLASH_START+2+ENDS_IN_WORD*2
 
@@ -117,6 +117,8 @@ typedef funcptr funcptr_NS;
 #define CFA			1
 #define AUD			2
 #define MODE		AUD
+
+//#define HASH_ENGINE
 
 // TYPEDEFs
 typedef long unsigned int hash;

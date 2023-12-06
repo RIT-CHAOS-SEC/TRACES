@@ -25,6 +25,8 @@
 #include <string.h>
 #include "gpio.h"
 #include "secure_nsc.h"
+#include "arm_cmse.h"
+#include "core_cm33.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -75,7 +77,6 @@ void SecureError_Callback(void)
   Error_Handler();
 }
 
-
 /* USER CODE END 0 */
 
 /**
@@ -85,7 +86,6 @@ void SecureError_Callback(void)
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -124,7 +124,6 @@ int main(void)
 }
 
 /* USER CODE BEGIN 4 */
-
 /* USER CODE END 4 */
 
 /**

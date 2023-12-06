@@ -226,17 +226,17 @@
 */
 
 // from "AN4838: Introduction to memory protection unit management on STM32 MCUs" page 11
-#define SAU_INIT_REGION6    1
+#define SAU_INIT_REGION6    0
 
 /*
  Start of NS-MPU register addresses
 */
-#define SAU_INIT_START6     0xe002ed90    /* start address of SAU region 6 */
+#define SAU_INIT_START6     0x40010000    /* start address of SAU region 6 */
 
 /*
 END of NS-MPU register addresses
 */
-#define SAU_INIT_END6       0xe002edc4      /* end address of SAU region 6 */
+#define SAU_INIT_END6       0x4001002F      /* end address of SAU region 6 */
 
 /*
 //     <o>Region is

@@ -60,11 +60,11 @@ all: main-build
 main-build: TRACES_NonSecure.elf secondary-outputs
 
 dependents:
-	-cd C:/Users/adcau/Documents/TRACES/prv/Secure/Debug && $(MAKE) clean all
+	-cd /home/ac7717/Documents/TRACES/prv/Secure/Debug && $(MAKE) all
 
 # Tool invocations
-TRACES_NonSecure.elf TRACES_NonSecure.map: $(OBJS) $(USER_OBJS) C:/Users/adcau/Documents/TRACES/prv/Secure/Debug/TRACES_Secure.elf C:\Users\adcau\Documents\TRACES\prv\NonSecure\STM32L552ZETXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "TRACES_NonSecure.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\Users\adcau\Documents\TRACES\prv\NonSecure\STM32L552ZETXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="TRACES_NonSecure.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+TRACES_NonSecure.elf TRACES_NonSecure.map: $(OBJS) $(USER_OBJS) /home/ac7717/Documents/TRACES/prv/Secure/Debug/TRACES_Secure.elf /home/ac7717/Documents/TRACES/prv/NonSecure/STM32L552ZETXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "TRACES_NonSecure.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"/home/ac7717/Documents/TRACES/prv/NonSecure/STM32L552ZETXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="TRACES_NonSecure.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -93,6 +93,6 @@ warn-no-linker-script-specified:
 	@echo 'Warning: No linker script specified. Check the linker settings in the build configuration.'
 
 .PHONY: all clean dependents main-build fail-specified-linker-script-missing warn-no-linker-script-specified
-C:/Users/adcau/Documents/TRACES/prv/Secure/Debug/TRACES_Secure.elf:
+/home/ac7717/Documents/TRACES/prv/Secure/Debug/TRACES_Secure.elf:
 
 -include ../makefile.targets
