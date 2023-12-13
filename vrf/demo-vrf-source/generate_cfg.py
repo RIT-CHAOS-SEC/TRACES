@@ -39,12 +39,6 @@ def main():
     # Create the CFG from the asm file
     cfg = create_cfg(arch, lines)
 
-    debugFile = open("logs/debug.log", "w")
-    for node in cfg.nodes.keys():
-        cfg.nodes[node].printNode(debugFile)
-        print("-------------------", file=debugFile)
-    debugFile.close()
-
     # Serialize cfg to output file
     dump_cfg(cfg,args.cfgfile)
 

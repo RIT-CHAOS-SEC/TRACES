@@ -64,7 +64,7 @@ class ProtocolConfig:
     comm_time = 0
     prv_sign_rep_time = 0
     prv_verify_resp_time = 0
-    app_start_addr = "0x804040c"
+    app_start_addr = "0x80406b4" #addr of application from NonSecure.list file
     @property
     def aermin():
         aux = [0xe0, 0x00] #aer_min = 0xe000
@@ -209,7 +209,7 @@ def hash_memory():
 def verify_report():
     verify_time_start = time.perf_counter()
 
-    print("------------- USE PUB KEY AND VERIFY ---------------")
+    print("------------- VERIFY ---------------")
     ## For debug
     # h_report = sha256(cfa_report.report_bytes)
     # print("h_report "+str(len(h_report.digest()))+": "+str(h_report.digest()))
@@ -220,50 +220,56 @@ def verify_report():
 
     # print("Running pk.verify("+str(type(cfa_report.signature))+", "+str(type(cfa_report.report_bytes))+")")
     
-    try:
+    # try:
 
-        # result = pk.verify(cfa_report.signature, cfa_report.report_bytes)
-        sk = b'\x89\x8b\x0c\xde\xab\xb5\x86\x97<\r\xa9\x15\x8e\x01\x84\xe7C\xf7|5\xb9\xc2\xb8\xf7\x93b\x92\x87\xcaY\x8b\xb2'
-        key = sk[:32]
-        print(key)
-        print(len(key))
-        exp_hmac = hmac.new(key, msg=cfa_report.report_bytes, digestmod=hashlib.sha256).digest()
-        print("EXPECTED HMAC: ")
-        print_bytes_as_hex(exp_hmac)
-        print("PRV HMAC: ")
-        print_bytes_as_hex(cfa_report.signature[:32])
-        
-        # print("VALID SIGNATURE")
+    # result = pk.verify(cfa_report.signature, cfa_report.report_bytes)
+    sk = b'\x89\x8b\x0c\xde\xab\xb5\x86\x97<\r\xa9\x15\x8e\x01\x84\xe7C\xf7|5\xb9\xc2\xb8\xf7\x93b\x92\x87\xcaY\x8b\xb2'
+    key = sk[:32]
+    # print(key)
+    # print(len(key))
+    exp_hmac = hmac.new(key, msg=cfa_report.report_bytes, digestmod=hashlib.sha256).digest()
+    prv_hmac = cfa_report.signature[:32]
+    # print("EXPECTED HMAC: ")
+    # print_bytes_as_hex(exp_hmac)
+    # print("PRV HMAC: ")
+    # print_bytes_as_hex(prv_hmac)
+    print("Validating MAC...")
+    valid_mac = True
+    for i in range(32):
+        if prv_hmac[i] != exp_hmac[i]:
+            valid_mac = False
 
-        '''
-        cflog = parse_cflog("../cflogs/"+str(pconfig.report_num)+".cflog")
-        
-        cfg = load_cfg("objects/cfg.pickle")
+    if valid_mac:
+        print("VALID MAC")
+    else:
+        print("INVALID MAC")
+    
+    ####################
+    print("Validating CFLog...")
 
-        cfg = set_cfg_head(cfg, pconfig.app_start_addr)
+    cflog = parse_cflog("../cflogs/"+str(pconfig.report_num)+".cflog")
+    
+    cfg = load_cfg("objects/cfg.pickle")
 
-        valid_cflog, current_node, offending_node, cflog_index = verify(cfg, cflog, pconfig.app_start_addr)
+    cfg = set_cfg_head(cfg, pconfig.app_start_addr)
 
-        if valid_cflog:
-            print("VALID CF-LOG")
+    valid_cflog, current_node, offending_node, cflog_index, shadow_stack_violation, shadow_stack_addr = verify(cfg, cflog, pconfig.app_start_addr)
+
+    if valid_cflog:
+        print("VALID CFLOG")
+    else:
+        print("INVALID CFLOG")
+        print("Offending CFLog entry: "+str(cflog_index))
+        print("Logged destination: "+str(offending_node.dest_addr))
+        if shadow_stack_violation:
+            print("Valid destination: "+str(shadow_stack_addr))
         else:
-            print("INVALID CF-LOG")
-            print("Offending CFLog entry: "+str(cflog_index))
             print("Valid destinations: "+str(current_node.successors))
-            print("Logged destination: "+str(offending_node.dest_addr))
-            return comm_protocol_messages.HEAL_DEVICE
+        return comm_protocol_messages.HEAL_DEVICE
 
-        if pconfig.hash_memory == cfa_report.hash_memory:
-            print("VALID NS-PMEM")
-        else:
-            print("INVALID NS-PMEM")
-            print("pconfig.hash_memory: \n"+str(pconfig.hash_memory))
-            print("cfa_report.hash_memory: \n"+str(cfa_report.hash_memory))
-            return comm_protocol_messages.HEAL_DEVICE
-        '''
-    except BadSignatureError:
-        print("FAILED VERIFICATION: invalid signature")
-        # return comm_protocol_messages.HEAL_DEVICE
+    # except BadSignatureError:
+    #     print("FAILED VERIFICATION: invalid signature")
+    #     # return comm_protocol_messages.HEAL_DEVICE
     
 
     verify_time_stop = time.perf_counter()
@@ -500,6 +506,7 @@ def start_protocol():
     send_challenge()
     isFinal = 1
     app_run_time = 0
+    verify_decision = 1
     while (receive_report()): # while receive partial reports
     # while (count != 1 and isFinal): # while receive partial reports
         # isFinal = receive_report()
@@ -519,14 +526,17 @@ def start_protocol():
         send_challenge()
         count = 1
 
- 
-    print(f"Total App runtime (ms) {app_run_time}")
-    printgreen("\nFinal Report Received ...\n")
-    
-    verify_decision = verify_report()
+        if verify_decision == comm_protocol_messages.HEAL_DEVICE:
+            break
 
-    ## Send continue request or heal command
-    send(verify_decision)
+    if verify_decision != comm_protocol_messages.HEAL_DEVICE:
+        print(f"Total App runtime (ms) {app_run_time}")
+        printgreen("\nFinal Report Received ...\n")
+        
+        verify_decision = verify_report()
+
+        ## Send continue request or heal command
+        send(verify_decision)
     
     return verify_decision
 
@@ -560,11 +570,11 @@ if __name__ == "__main__":
     generate_initial_data()
     hash_memory()
 
-    ## build cfg
-    # prv_file_path = "../prv/NonSecure/Debug/SpecCFA-TZ_NonSecure.list"
-    # asm_lines = read_file(prv_file_path)
-    # cfg = create_cfg(set_arch("armv8-m33"), asm_lines)
-    # dump_cfg(cfg, "objects/cfg.pickle")
+    # build cfg
+    prv_file_path = "../../prv/NonSecure/Debug/TRACES_NonSecure.list"
+    asm_lines = read_file(prv_file_path)
+    cfg = create_cfg(set_arch("armv8-m33"), asm_lines)
+    dump_cfg(cfg, "objects/cfg.pickle")
 
     in_cmd = ""
     global end_to_end_time

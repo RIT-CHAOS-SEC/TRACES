@@ -1,99 +1,114 @@
+ 
 Current node
-start_addr: 0x804040c
-end_addr: 0x8040426
+start_addr: 0x80406b4
+end_addr: 0x80406b8
 type: call
-instrs: 12
-instr_addrs: 0x804040c
-successors: ['0x8040238']
-adj_instr: 0x804042a
-cflog_startaddr: 0x804040c
-log_node.dest_addr: 0x804040c
+instrs: 3
+instruction: bl
+instruction arg: 80405b8 <process_command>
+successors: ['0x80405b8']
+log_node.dest_addr: 0x8040586
+PUSH to shadow stack: 0x80406bc
  
 Current node
-start_addr: 0x804040c
-end_addr: 0x8040426
+start_addr: 0x80405b8
+end_addr: 0x80405ce
 type: call
-instrs: 12
-instr_addrs: 0x804040c
-successors: ['0x8040238']
-adj_instr: 0x804042a
-cflog_startaddr: 0x804040c
-log_node.dest_addr: 0x8040238
+instrs: 11
+instruction: bl
+instruction arg: 804057a <read_command>
+successors: ['0x804057a']
+log_node.dest_addr: 0x8040586
+PUSH to shadow stack: 0x80405d2
  
 Current node
-start_addr: 0x8040238
-end_addr: 0x804024e
-type: call
-instrs: 10
-instr_addrs: 0x8040238
-successors: ['0x80402a4']
-adj_instr: 0x8040252
-cflog_startaddr: 0x804040c
-log_node.dest_addr: 0x80402a4
- 
-Current node
-start_addr: 0x80402a4
-end_addr: 0x80402b8
-type: uncond
-instrs: 9
-instr_addrs: 0x80402a4
-successors: ['0x80402d8']
-adj_instr: 0x80402ba
-cflog_startaddr: 0x804040c
-log_node.dest_addr: 0x80402ba
- 
-Current node
-start_addr: 0x80402ba
-end_addr: 0x80402e2
-type: cond
-instrs: 19
-instr_addrs: 0x80402ba
-successors: ['0x80402ba']
-adj_instr: 0x80402e4
-cflog_startaddr: 0x804040c
-log_node.dest_addr: 0x80402e4
- 
-Current node
-start_addr: 0x80402e4
-end_addr: 0x80402f2
-type: ret
-instrs: 5
-instr_addrs: 0x80402e4
-successors: ['0x8040252']
-adj_instr: None
-cflog_startaddr: 0x804040c
-log_node.dest_addr: 0x8040252
- 
-Current node
-start_addr: 0x8040252
-end_addr: 0x804025e
+start_addr: 0x804057a
+end_addr: 0x8040584
 type: uncond
 instrs: 6
-instr_addrs: 0x8040252
-successors: ['0x8040288']
-adj_instr: 0x8040260
-cflog_startaddr: 0x804040c
-log_node.dest_addr: 0x8040260
- 
-Current node
-start_addr: 0x8040260
-end_addr: 0x804028c
+instruction: b.n
+instruction arg: 804059e <read_command+0x24>
+successors: ['0x804059e']
+log_node.dest_addr: 0x8040586
+-----
+changed node
+start_addr: 0x804059e
+end_addr: 0x80405a4
 type: cond
-instrs: 21
-instr_addrs: 0x8040260
-successors: ['0x8040260']
-adj_instr: 0x804028e
-cflog_startaddr: 0x804040c
-log_node.dest_addr: 0x804028e
+instrs: 4
+instruction: bne.n
+instruction arg: 8040586 <read_command+0xc>
+successors: ['0x8040586']
+-----
  
 Current node
-start_addr: 0x804028e
-end_addr: 0x804029e
+start_addr: 0x8040586
+end_addr: 0x80405a4
+type: cond
+instrs: 15
+instruction: bne.n
+instruction arg: 8040586 <read_command+0xc>
+successors: ['0x8040586']
+log_node.dest_addr: 0x80405a6
+ 
+Current node
+start_addr: 0x80405a6
+end_addr: 0x80405b2
+type: ret
+instrs: 5
+instruction: b.w
+instruction arg: 8041000 <__SECURE_log_ret_veneer>
+successors: []
+log_node.dest_addr: 0x80405d2
+POP from shadow stack: 0x80405d2
+ 
+Current node
+start_addr: 0x80405d2
+end_addr: 0x80405d6
+type: cond
+instrs: 3
+instruction: beq.n
+instruction arg: 8040600 <process_command+0x48>
+successors: ['0x8040600']
+log_node.dest_addr: 0x80405d8
+ 
+Current node
+start_addr: 0x80405d8
+end_addr: 0x80405de
+type: cond
+instrs: 3
+instruction: beq.n
+instruction arg: 80405ee <process_command+0x36>
+successors: ['0x80405ee']
+log_node.dest_addr: 0x80405e0
+ 
+Current node
+start_addr: 0x80405e0
+end_addr: 0x80405e6
+type: cond
+instrs: 3
+instruction: beq.n
+instruction arg: 8040632 <process_command+0x7a>
+successors: ['0x8040632']
+log_node.dest_addr: 0x80405e8
+ 
+Current node
+start_addr: 0x80405e8
+end_addr: 0x80405ec
+type: uncond
+instrs: 2
+instruction: b.n
+instruction arg: 8040666 <process_command+0xae>
+successors: ['0x8040666']
+log_node.dest_addr: 0x80405b8
+-----
+changed node
+start_addr: 0x8040666
+end_addr: 0x8040674
 type: ret
 instrs: 7
-instr_addrs: 0x804028e
-successors: ['0x804042a']
-adj_instr: None
-cflog_startaddr: 0x804040c
-log_node.dest_addr: 0x804045c
- 
+instruction: b.w
+instruction arg: 8041000 <__SECURE_log_ret_veneer>
+successors: []
+-----
+POP from shadow stack: 0x80406bc

@@ -36,15 +36,15 @@ input:
 	.byte	98
 	.byte	98
 	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
-	.byte	98
+	.byte	-76
+	.byte	6
+	.byte	4
+	.byte	8
 	.byte	-16
 	.byte	-1
 	.byte	3
 	.byte	32
-	.byte	-49
+	.byte	-71
 	.byte	5
 	.byte	4
 	.byte	8
@@ -719,10 +719,6 @@ process_command:
 	ldrb	r2, [r7]	@ zero_extendqisi2
 	ldr	r3, .L53+24
 	strb	r2, [r3]
-	ldr	r3, .L53+24
-	ldrb	r3, [r3]	@ zero_extendqisi2
-	mov	r0, r3
-	bl	SECURE_record_output_data
 	adds	r7, r7, #20
 	mov	sp, r7
 	@ sp needed

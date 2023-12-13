@@ -82,9 +82,11 @@ class CFGNode:
         print("end_addr: "+str(self.end_addr), file=file)
         print("type: "+str(self.type), file=file)
         print("instrs: "+str(self.instrs), file=file)
-        print("instr_addrs: "+str(self.start_addr), file=file)
+        print("instruction: "+str(self.instr_addrs[-1].instr), file=file)
+        print("instruction arg: "+str(self.instr_addrs[-1].arg), file=file)
+        # print("instr_addrs: "+str(self.start_addr), file=file)
         print("successors: "+str(self.successors), file=file)
-        print("adj_instr: "+str(self.adj_instr), file=file)
+        # print("adj_instr: "+str(self.adj_instr), file=file)
 
 class CFG:
     def __init__(self):

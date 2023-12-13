@@ -4850,7 +4850,7 @@ void _attest_memory(){
  c00273c:	6013      	str	r3, [r2, #0]
 	// Compute sigle hash of non-secure memory
 	Hacl_SHA2_256_hash(report_secure.mem_hash, (uint8_t*)(NONSECURE_FLASH_START), NONSECURE_FLASH_SIZE);
- c00273e:	f640 12e8 	movw	r2, #2536	; 0x9e8
+ c00273e:	f640 6258 	movw	r2, #3672	; 0xe58
  c002742:	490a      	ldr	r1, [pc, #40]	; (c00276c <_attest_memory+0x3c>)
  c002744:	480a      	ldr	r0, [pc, #40]	; (c002770 <_attest_memory+0x40>)
  c002746:	f7ff fbfa 	bl	c001f3e <Hacl_SHA2_256_hash>

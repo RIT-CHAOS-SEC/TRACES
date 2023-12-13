@@ -140,18 +140,20 @@ def parse_nodes(arch,assembly_functions,cfg):
             #check for br instr, if found create node
 
             ret_via_pop = (func.instr_list[i].instr == "pop" and "pc" in func.instr_list[i].arg) # check for ret via pop
-            instrumented_call = (func.instr_list[i].instr in arch.call_instrs) and (arch.instrmentation_handle in func.instr_list[i].arg)
+            instrumented_call = (arch.instrmentation_handle in func.instr_list[i].arg) and  ("call" in func.instr_list[i].arg)            
+            secure_ret = (arch.instrmentation_handle in func.instr_list[i].arg) and ('ret' in func.instr_list[i].arg)
+            other_handlers = (arch.instrmentation_handle in func.instr_list[i].arg) and not ('call' in func.instr_list[i].arg) and not ('ret' in func.instr_list[i].arg)
 
-            if (ret_via_pop or func.instr_list[i].instr in br_instrs) and not instrumented_call:
+            if (secure_ret or (ret_via_pop or func.instr_list[i].instr in br_instrs) or instrumented_call) and not other_handlers:
                 node.end_addr = func.instr_list[i].addr
-                if func.instr_list[i].instr in arch.conditional_br_instrs:
+                if secure_ret or (func.instr_list[i].instr in arch.return_instrs) or ret_via_pop:
+                    node.type = 'ret'
+                elif func.instr_list[i].instr in arch.conditional_br_instrs:
                     node.type = 'cond'
                 elif func.instr_list[i].instr in arch.unconditional_br_instrs:
                     node.type = 'uncond'
                 elif (func.instr_list[i].instr in arch.call_instrs):
                     node.type = 'call'
-                elif (func.instr_list[i].instr in arch.return_instrs) or ret_via_pop:
-                    node.type = 'ret'
             
                 #add node to cfg dict
 
@@ -297,15 +299,15 @@ def create_cfg(arch, lines):
     # Parse nodes in each function
     cfg = parse_nodes(arch,assembly_functions,cfg)
 
+
+    print("------------- CFG Nodes ---------------")
+    for key in cfg.nodes.keys():
+        print("key = "+str(key))
+        # for inst in cfg.nodes[key].instr_addrs:
+        #     print("\t"+str(inst))
+
     #Update the successors of all generated nodes 
     cfg = update_successors(cfg, arch)
-
-    ##  print("------------- CFG Nodes ---------------")
-    ##  for key in cfg.nodes.keys():
-    ##      print("key = "+str(key))
-    ##      for inst in cfg.nodes[key].instr_addrs:
-    ##          print("\t"+str(inst))
-    ##  
 
     return cfg
     
