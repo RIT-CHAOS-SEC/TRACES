@@ -64,7 +64,7 @@ class ProtocolConfig:
     comm_time = 0
     prv_sign_rep_time = 0
     prv_verify_resp_time = 0
-    app_start_addr = "0x80406b4" #addr of application from NonSecure.list file
+    app_start_addr = ""
     @property
     def aermin():
         aux = [0xe0, 0x00] #aer_min = 0xe000
@@ -570,10 +570,12 @@ if __name__ == "__main__":
     generate_initial_data()
     hash_memory()
 
-    # build cfg
+    # # build cfg
     prv_file_path = "../../prv/NonSecure/Debug/TRACES_NonSecure.list"
     asm_lines = read_file(prv_file_path)
     cfg = create_cfg(set_arch("armv8-m33"), asm_lines)
+    pconfig.app_start_addr = cfg.label_addr_map['application']
+    print(f'Start_addr: { pconfig.app_start_addr}')
     dump_cfg(cfg, "objects/cfg.pickle")
 
     in_cmd = ""

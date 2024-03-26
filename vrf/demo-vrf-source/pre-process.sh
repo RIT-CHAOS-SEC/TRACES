@@ -5,9 +5,9 @@ filename="$1"
 # --------------- DEFINES ----------------------
 
 # --------------- PATH TO NonSecure directory within STM Project ----------------------
-# HOME=../../tmp/STM32L5_HAL_TRUSTZONE/NonSecure/ # adam windows
+# HOME=../../tmp/STM32L5_HAL_TRUSTZONE/NonSecure/ # windows
 PROJ=../../prv/
-HOME=$PROJ"NonSecure/" # adam ubuntu
+HOME=$PROJ"NonSecure/" # ubuntu
 
 APP_SOURCE_PATH=$HOME"Core/Src/"
 echo "APP_SOURCE_PATH=" $APP_SOURCE_PATH
@@ -45,5 +45,5 @@ else
 	./countAssembly.sh $instrumented.s
 fi
 
-# remove old CFlog files
+# # remove old CFlog files
 rm -f ../cflogs/*.cflog

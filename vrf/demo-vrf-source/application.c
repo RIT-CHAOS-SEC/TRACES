@@ -4,6 +4,9 @@
 #include "stm32l5xx_hal_tim.h"
 #include "core_cm33.h"
 
+// #if APP_SEL == 
+// #endif
+
 #if APP_SEL == SORT
 // Source: https://www.geeksforgeeks.org/bubble-sort/
 
@@ -100,7 +103,6 @@ uint8_t _buttons;
  */
 signed char limit_xy(int const xy)
 {
-  SECURE_new_log_entry();
   if     (xy < -127) return -127;
   else if(xy >  127) return 127;
   else               return xy;
@@ -108,17 +110,17 @@ signed char limit_xy(int const xy)
 
 void mouseBegin(void) 
 {
-      SECURE_new_log_entry();
+   
 }
 
 void mouseEnd(void) 
 {
-      SECURE_new_log_entry();
+   
 }
 
 void mouseMove(int x, int y, signed char wheel)
 {
-      SECURE_new_log_entry();
+   
     uint8_t m[4];
     m[0] = _buttons;
     m[1] = limit_xy(x);
@@ -129,7 +131,7 @@ void mouseMove(int x, int y, signed char wheel)
 
 void mouseClick(uint8_t b)
 {
-      SECURE_new_log_entry();
+   
     _buttons = b;
     mouseMove(0,0,0);
     _buttons = 0;
@@ -137,7 +139,7 @@ void mouseClick(uint8_t b)
 }
 void mouseButtons(uint8_t b)
 {
-      SECURE_new_log_entry();
+   
     if (b != _buttons)
     {
         _buttons = b;
@@ -147,19 +149,19 @@ void mouseButtons(uint8_t b)
 
 void mousePress(uint8_t b) 
 {
-      SECURE_new_log_entry();
+   
     mouseButtons(_buttons | b);
 }
 
 void mouseRelease(uint8_t b)
 {
-      SECURE_new_log_entry();
+   
     mouseButtons(_buttons & ~b);
 }
 
 bool mouseIsPressed(uint8_t b)
 {
-      SECURE_new_log_entry();
+   
     if ((b & _buttons) > 0) 
         return true;
     return false;
@@ -180,7 +182,7 @@ int mockReads[200] = {95, -39, -39, -10, -100, 119, 43, 15, 67, 129, 98, -30, 26
 }*/
 int indx = 0;
 int analogRead(char axis){
-      SECURE_new_log_entry();
+   
     int readings;
     if(axis == 'x'){
         readings = mockReads[indx];
@@ -192,12 +194,12 @@ int analogRead(char axis){
 }
 
 int map(int reading, int min, int max, int min_sen, int max_sen){
-      SECURE_new_log_entry();
+   
     return (reading - min) * (max_sen - min_sen) / (max - min) + min_sen;
 }
 
 void handleMouse() {
-      SECURE_new_log_entry();
+   
   int xReading = analogRead(MOUSE_X_AXIS_INPT);
   int yReading = analogRead(MOUSE_Y_AXIS_INPT);
 
@@ -213,7 +215,7 @@ void handleMouse() {
 }
 
 bool digitalRead(int button){
-      SECURE_new_log_entry();
+   
     return !lastSwitchState;
 }
 
@@ -224,7 +226,7 @@ bool digitalRead(int button){
  * 3. INPUT_CHANGED_MODE - return true when btn state changes from HIGH to LOW or from LOW to HIGH
  */
 bool readMouseButton(int button, bool lastState, unsigned char mode) {
-      SECURE_new_log_entry();
+   
   bool ret = false;
   bool state = digitalRead(button);
   if (state != lastState) {
@@ -237,7 +239,7 @@ bool readMouseButton(int button, bool lastState, unsigned char mode) {
 }
 
 void application() {
-      SECURE_new_log_entry();
+   
   for(int i=0; i<100; i++){
     // check if mouse in ON/OFF
     if (readMouseButton(MOUSE_SWITCH, lastSwitchState, INPUT_LOW_MODE)) {
@@ -306,7 +308,7 @@ int sentencesWithFixCount = 0;
 int failedChecksumCount = 0;
 
 int mystrcmp(char * s1, char * s2) {
-    SECURE_new_log_entry();
+ 
     int res = 0;
     int first = 1;
     for(int i = 0; i < _GPS_MAX_FIELD_SIZE; i++) {
@@ -324,12 +326,12 @@ int mystrcmp(char * s1, char * s2) {
 
 int isdigit(int c)
 {
-    SECURE_new_log_entry();
+ 
     return (unsigned)c - '0' < 10;
 }
 
 int fromHex(char a){
-    SECURE_new_log_entry();
+ 
     if (a >= 'A' && a <= 'F'){
         return a - 'A' + 10;
     }else if (a >= 'a' && a <= 'f'){
@@ -344,7 +346,7 @@ int validDate = 0;
 int upDate = 0;
 uint32_t dateValue = 0;
 void date_commit(){
-    SECURE_new_log_entry();
+ 
     validDate = 1;
     upDate = 1;
 }
@@ -353,7 +355,7 @@ int32_t timeVal = 0;
 int validTime = 0;
 int updateTime = 0;
 void time_commit(){
-    SECURE_new_log_entry();
+ 
     validTime = 1;
     updateTime = 1;
 }
@@ -366,7 +368,7 @@ int rawNewLongDataNegative = 0;
 int validLoc = 0;
 int updateLoc = 0;
 void location_commit(){
-    SECURE_new_log_entry();
+ 
     validLoc = 0;
     updateLoc = 0;
 }
@@ -375,7 +377,7 @@ float speedVal = 0;
 int validSpeed = 0;
 int updateSpeed = 0;
 void speed_commit(){
-    SECURE_new_log_entry();
+ 
     validSpeed = 1;
     updateSpeed = 1;
 }
@@ -384,7 +386,7 @@ float degrees = 0.0;
 int validDeg = 0;
 int updateDeg = 0;
 void course_commit(){
-    SECURE_new_log_entry();
+ 
     validDeg = 1;
     updateDeg = 1;
 }
@@ -393,7 +395,7 @@ float height = 0.0;
 int validAlt = 0;
 int updateAlt = 0;
 void altitude_commit(){
-    SECURE_new_log_entry();
+ 
     validAlt = 1;
     updateAlt = 1;
 }
@@ -402,7 +404,7 @@ int validSat = 0;
 int updateSat = 0;
 int satCount = 0;
 void satellites_commit(){
-    SECURE_new_log_entry();
+ 
     validSat = 1;
     updateSat = 1;
 }
@@ -411,14 +413,13 @@ float hdopVal = 0.0;
 int validHDop = 0;
 int updateHDop = 0;
 void hdop_commit(){
-    SECURE_new_log_entry();
+ 
     validHDop = 1;
     updateHDop = 1;
 }
 
 float parseDegrees(char *term)
 {
-  SECURE_new_log_entry();
   uint32_t leftOfDecimal = (uint32_t)atol(term);
   uint16_t minutes = (uint16_t)(leftOfDecimal % 100);
   uint32_t multiplier = 10000000UL;
@@ -441,7 +442,7 @@ float parseDegrees(char *term)
 }
 
 int32_t parseDecimal(char *term){
-    SECURE_new_log_entry();
+ 
     int negative = *term == '-';
     if (negative) ++term;
     int32_t ret = 100 * (int32_t)atol(term);
@@ -455,54 +456,54 @@ int32_t parseDecimal(char *term){
 }
 
 void time_setTime(char *term){
-    SECURE_new_log_entry();
+ 
     timeVal = parseDecimal(term);
 }
 
 void location_setLatitude(char *term)
 {
-    SECURE_new_log_entry();
+ 
    lat = parseDegrees(term);
 }
 
 void location_setLongitude(char *term)
 {
-    SECURE_new_log_entry();
+ 
    lng = parseDegrees(term);
 }
 
 void speed_set(char *term){
-    SECURE_new_log_entry();
+ 
     speedVal = parseDecimal(term);
 }
 
 void course_set(char *term){
-    SECURE_new_log_entry();
+ 
     degrees = parseDecimal(term);
 }
 
 void satellites_set(char *term){
-    SECURE_new_log_entry();
+ 
     satCount ++;
 }
 
 void date_setDate(char *term){
-    SECURE_new_log_entry();
+ 
     dateValue = atol(term);
 }
 
 void hdop_set(char *term){
-    SECURE_new_log_entry();
+ 
     hdopVal = parseDecimal(term);
 }
 
 void altitude_set(char *term){
-    SECURE_new_log_entry();
+ 
     height = parseDecimal(term);
 }
 
 int endOfTermHandler(){
-    SECURE_new_log_entry();
+ 
     if(isChecksumTerm){
         unsigned char checksum = 16 * fromHex(term[0]) + fromHex(term[1]);
         if (checksum == parity){
@@ -617,7 +618,7 @@ int endOfTermHandler(){
 
 
 int gps_encode(char c) {
-    SECURE_new_log_entry();
+ 
     SECURE_record_output_data(c);
     ++encodedCharCount;
 
@@ -665,13 +666,13 @@ int gps_encode(char c) {
 }
 
 void get_position(long *latitude, long *longitude){
-    SECURE_new_log_entry();
+ 
     if (latitude) *latitude = lat;
     if (longitude) *longitude = lng;
 }
 
 void f_get_position(float *flat, float *flng){
-    SECURE_new_log_entry();
+ 
     long tempLat, tempLong;
     get_position(&tempLat, &tempLong);
     *flat = tempLat == GPS_INVALID_ANGLE ? GPS_INVALID_F_ANGLE : (tempLat / 1000000.0f);
@@ -679,13 +680,13 @@ void f_get_position(float *flat, float *flng){
 }
 
 void get_datetime(unsigned long *date, unsigned long *time){
-    SECURE_new_log_entry();
+ 
     if(date) *date = dateValue;
     if(time) *time = timeVal;
 }
 
 void crack_datetime(int* year, unsigned char* month, unsigned char* day, unsigned char* hour, unsigned char* minute, unsigned char* second, unsigned char* hundredths){
-    SECURE_new_log_entry();
+ 
     unsigned long tempDate, tempTime;
     get_datetime(&tempDate, &tempTime);
     if (year) {
@@ -701,14 +702,13 @@ void crack_datetime(int* year, unsigned char* month, unsigned char* day, unsigne
 }
 
 void stats(unsigned long* chars, unsigned short* sentences, unsigned short* failed){
-    SECURE_new_log_entry();
+ 
     if (chars) *chars = encodedCharCount;
     if (sentences) *sentences = passedChecksumCount;
     if (failed) *failed = failedChecksumCount;
 } 
 
-// __attribute ((naked)) void my_aeabi_i2d(){
-//     SECURE_new_log_entry();
+// __attribute ((naked)) void my_aeabi_i2d()
 //     __asm__ volatile("teq   r0, #0");
 //     __asm__ volatile("itteq");
 //     __asm__ volatile("moveq r1, #0");
@@ -718,7 +718,6 @@ void stats(unsigned long* chars, unsigned short* sentences, unsigned short* fail
 
 void gpsdump()
 {
-  SECURE_new_log_entry();
 
   long lat, lon;
   float flat, flon;
@@ -748,7 +747,7 @@ volatile char m, da, h, mi, s, hu;
 volatile unsigned short se, f;
 
 void application(){
-    SECURE_new_log_entry();
+ 
     for (int buffer_index = 0; buffer_index < BUFFER_LEN; buffer_index++){
         gps_encode(input_buffer[buffer_index]);
     }
@@ -770,22 +769,22 @@ const uint8_t UNSTABLE_STATE = 0b00000010;
 const uint8_t CHANGED_STATE = 0b00000100;
 
 void setStateFlag(const uint8_t flag) {
-    SECURE_new_log_entry();
+ 
     bouncer_state |= flag;
 }
 
 void unsetStateFlag(const uint8_t flag) {
-    SECURE_new_log_entry();
+ 
     bouncer_state &= ~flag;
 }
 
 void toggleStateFlag(const uint8_t flag) {
-    SECURE_new_log_entry();
+ 
     bouncer_state ^= flag;
 }
 
 uint32_t getStateFlag(const uint8_t flag) {
-    SECURE_new_log_entry();
+ 
     return ((bouncer_state & flag) != 0);
 }  
 void changeState(){
@@ -794,24 +793,24 @@ void changeState(){
 }
 
 uint32_t digitalRead(){
-    SECURE_new_log_entry();
+ 
     uint32_t val = signals[sig_idx];
     sig_idx++;
     return val;
 }
 
 uint32_t changed() {
-    SECURE_new_log_entry();
+ 
     return getStateFlag(CHANGED_STATE);
 }
 
 uint32_t readCurrentState() {
-    SECURE_new_log_entry();
+ 
     return digitalRead();
 }
 
 void bouncer_begin(){
-    SECURE_new_log_entry();
+ 
    bouncer_state = 0;
    if (readCurrentState()){
       setStateFlag(DEBOUNCED_STATE | UNSTABLE_STATE);
@@ -819,7 +818,7 @@ void bouncer_begin(){
 }
 
 uint32_t bouncer_update(){
-    SECURE_new_log_entry();
+ 
    unsetStateFlag(CHANGED_STATE);
    
    uint32_t currentState = readCurrentState();
@@ -889,7 +888,7 @@ void delay(uint32_t us){
     // while (htim1.Instance->CNT < us);
 
     // htim1.Instance->CR1 &= ~TIM_CR1_CEN;
-    SECURE_new_log_entry();
+ 
     for(int i=0; i<us; i++);
 }
 
@@ -898,7 +897,7 @@ char input[2] = "+\n";
 
 char getserialinput(uint8_t inputserialpointer)
 {
-    SECURE_new_log_entry();
+ 
     if (inputserialpointer < maxinputpointer)
     {
         return input[inputserialpointer];
@@ -911,7 +910,7 @@ char getserialinput(uint8_t inputserialpointer)
 uint16_t mLBolus =  5;
 void run_syringe()
 {
-    //SECURE_new_log_entry();
+ 
     /* -- Global variables -- */
     // Input related variables
     volatile uint8_t inputserialpointer = -1;
@@ -979,7 +978,7 @@ void run_syringe()
 
 void application()
 {
-    //SECURE_new_log_entry();
+ 
     // for(int i=0; i<TOTAL_INJECTIONS; i++){
     run_syringe();
     // }
@@ -994,7 +993,7 @@ uint8_t valid_reading = 0;
 
 extern __IO uint32_t uwTick;
 void delay(uint32_t us){
-    SECURE_new_log_entry();
+ 
     // uint32_t start = uwTick;
     // while(uwTick - start < us);
     for(int i=0; i<us; i++);
@@ -1091,14 +1090,14 @@ void application(){
 extern __IO uint32_t uwTick;
 
 void delay(uint32_t us){
-    SECURE_new_log_entry();
+ 
     // uint32_t start = uwTick;
     // while(uwTick - start < us);
     for(int i=0; i<us; i++);
 }
 
 uint32_t pulseIn(void){
-    SECURE_new_log_entry();
+ 
     uint32_t duration = 0;
 
     for(int i=0; i < MAX_DURATION; i++){
@@ -1109,7 +1108,7 @@ uint32_t pulseIn(void){
  }
 
 uint32_t getUltrasonicReading(void){
-    //SECURE_new_log_entry();
+ 
     // Set as output and Set signal low for 2us
     GPIOA->BSRR = (uint32_t)GPIO_PIN_8;
     
@@ -1130,7 +1129,7 @@ uint32_t getUltrasonicReading(void){
 }
 
 void application(){
-    //SECURE_new_log_entry();
+ 
     uint32_t ult_vec = 0;
     // for(int i=0; i<MAX_READINGS; i++){
     //     ult_vec += getUltrasonicReading()/MAX_READINGS;
@@ -1139,7 +1138,7 @@ void application(){
     ult_vec = getUltrasonicReading();
 
     SECURE_record_output_data(ult_vec);
-    SECURE_record_output_data(read_val);
+    // SECURE_record_output_data(read_val);
 
 }
 #endif
@@ -1154,11 +1153,11 @@ void application(){
 #define cmd_all             'a'
 
 /** Benign: calls Ultrasonic only **/
-// char input[4] = {'u', 0, 16, ':'};
+char input[4] = {'u', 0, 16, ':'};
 //
 /** Attack: overwrites return address and stack pointer to cause infinite loop in process_command function **/
 //
-char input[33] = {'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',0xb4,0x06,0x04,0x08, 0xf0, 0xff, 0x03, 0x20, 0xb9, 0x05, 0x04, 0x08, ':'};
+// char input[33] = {'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',0xb4,0x06,0x04,0x08, 0xf0, 0xff, 0x03, 0x20, 0xb9, 0x05, 0x04, 0x08, ':'};
 //
 uint32_t data[4] = {0,0,0,0};
 uint8_t temp_data[5] = {0,0,0,0,0};
@@ -1173,14 +1172,14 @@ int runs;
 extern __IO uint32_t uwTick;
 
 void delay(unsigned int us){
-    SECURE_new_log_entry();
+ 
     // uint32_t start = uwTick;
     // while(uwTick - start < us);
     for(int i=0; i<us; i++);
 }
 
 void read_data(void){
-    SECURE_new_log_entry();
+ 
     uint8_t counter = 0;
     uint16_t j = 0, i;
 
@@ -1226,7 +1225,7 @@ void read_data(void){
 }
 
 uint16_t get_temperature(void){
-    SECURE_new_log_entry();
+ 
     read_data();
 
     uint16_t t = temp_data[2];
@@ -1235,7 +1234,7 @@ uint16_t get_temperature(void){
 }
 
 uint16_t get_humidity(void){
-    SECURE_new_log_entry();
+ 
     read_data();
 
     uint16_t h = temp_data[0];
@@ -1244,7 +1243,7 @@ uint16_t get_humidity(void){
 }
 
 uint32_t pulseIn(void){
-    SECURE_new_log_entry();
+ 
     uint32_t duration = 0;
 
     for(int i=0; i < MAX_DURATION; i++){
@@ -1255,7 +1254,7 @@ uint32_t pulseIn(void){
  }
 
 long getUltrasonicReading(){
-    SECURE_new_log_entry();
+ 
     // Set as output and Set signal low for 2us
     GPIOA->BSRR = (uint32_t)GPIO_PIN_9;
 
@@ -1276,7 +1275,7 @@ long getUltrasonicReading(){
 }
 
 long run_ultrasonic(int runs){
-    SECURE_new_log_entry();
+ 
     int i;
     long total = 0;
     for(i=0; i<runs; i++){
@@ -1286,7 +1285,7 @@ long run_ultrasonic(int runs){
 }
 
 long run_temperature(int runs){
-    SECURE_new_log_entry();
+ 
     int i;
     long total = 0;
     for(i=0; i<runs; i++){
@@ -1296,7 +1295,7 @@ long run_temperature(int runs){
 }
 
 long run_humidity(int runs){
-    SECURE_new_log_entry();
+ 
     int i;
     long total = 0;
     for(i=0; i<runs; i++){
@@ -1307,7 +1306,7 @@ long run_humidity(int runs){
 
 uint32_t send_data; ///2003ffc0
 void read_command(char * msg, char * input){
-    SECURE_new_log_entry();
+ 
     while(*input != ':'){
         *msg = *input;
         // SECURE_record_output_data(*input);
@@ -1348,7 +1347,7 @@ void process_command(){
 int (*sensor_action)(char);
 
 int record_output_data(char data){
-    SECURE_new_log_entry();
+ 
     return data^0xff;
 }
 
@@ -1388,71 +1387,228 @@ void application(void)
 #endif
 
 #if APP_SEL == DIJKSTRA
+// from https://github.com/mageec/beebs/blob/master/src/dijkstra/dijkstra_small.c
+#include <stdio.h>
+#include <stdlib.h>
 
-#include <stdint.h>
-#define INF 0xffffffff
-#define MAX_NODES 100
+/* This scale factor will be changed to equalise the runtime of the
+   benchmarks. */
+#define SCALE_FACTOR    (REPEAT_FACTOR >> 9)
 
-uint8_t dist[MAX_NODES]; // array to store the shortest distances
-uint8_t visited[MAX_NODES]; // array to track visited nodes
-uint8_t graph[MAX_NODES][MAX_NODES]; // adjacency matrix for the graph
-uint8_t n = MAX_NODES * MAX_NODES; // number of nodes in the graph
+#define NUM_NODES                          10
+#define NONE                               9999
 
-void my_memset(uint8_t * buff, uint8_t value, uint8_t size){
-    unsigned int i = 0;
-    for(i=0; i < size; i++){
-        buff[i] = INF;
-        i++;
+struct _NODE
+{
+   int iDist;
+   int iPrev;
+};
+typedef struct _NODE NODE;
+
+struct _QITEM
+{
+   int iNode;
+   int iDist;
+   int iPrev;
+   struct _QITEM *qNext;
+};
+typedef struct _QITEM QITEM;
+
+QITEM *qHead = NULL;
+
+int AdjMatrix[NUM_NODES][NUM_NODES] = {{32,  32,  54,  12,  52,  56,  8,   30,  44,  94},
+   {76,  54,  65,  14,  89,  69,  4,   16,  24,  47},
+   {38,  31,  75,  40,  61,  21,  84,  51,  86,  41},
+   {80,  16,  53,  14,  94,  29,  77,  99,  16,  29},
+   {59,  7,   14,  78,  79,  45,  54,  83,  8,   94},
+   {94,  41,  3,   61,  27,  19,  33,  35,  78,  38},
+   {3,   55,  41,  76,  49,  68,  83,  23,  67,  15},
+   {68,  28,  47,  12,  82,  6,   26,  96,  98,  75},
+   {7,   1,   46,  39,  12,  68,  41,  28,  31,  0},
+   {82,  97,  72,  61,  39,  48,  11,  99,  38,  49}};
+
+int g_qCount = 0;
+NODE rgnNodes[NUM_NODES];
+int ch;
+int iPrev, iNode;
+int i, iCost, iDist;
+
+
+/* BEEBS heap is just an array */
+
+#include <stddef.h>
+
+#define QHEAP_SIZE (8192 / sizeof (QITEM))
+static QITEM qheap[QHEAP_SIZE];
+static QITEM *qfree_list;
+
+/* Initialize the BEEBS heap.
+
+   Because we know the size of objects is always the same, we have a
+   specially hacked version of malloc */
+
+static void
+qinit_heap (void)
+{
+  qfree_list = NULL;
+  int  i;
+
+  for (i = 0; i < QHEAP_SIZE; i++)
+    {
+      qheap[i].qNext = qfree_list;
+      qfree_list = &(qheap[i]);
     }
-    SECURE_new_log_entry();
 }
 
-uint8_t dijkstra(uint8_t start, uint8_t end) {
-    my_memset(dist, INF, MAX_NODES); // set all distances to infinity
-    my_memset(visited, 0, MAX_NODES); // mark all nodes as unvisited
+/* BEEBS version of malloc.
 
-    dist[start] = 0; // set the distance to the starting node to 0
-    
-    for (unsigned int i = 0; i < n; i++) {
-        uint8_t u = -1;
-        for (uint8_t j = 0; j < n; j++) {
-            if (!visited[j] && (u == -1 || dist[j] < dist[u])) {
-                u = j;
+   This is primarily to reduce library and OS dependencies. This is unusual
+   for an embedded program in its dynamic use of malloc and free.  However we
+   know that malloc is always used with the same sized object, so we cheat. */
+
+static void *
+qmalloc_beebs (size_t size)
+{
+  if ((size != sizeof(QITEM)) || (0 == size))
+    return NULL;
+
+  QITEM *new_ptr = qfree_list;
+
+  if (new_ptr != NULL)
+    {
+      qfree_list = new_ptr->qNext;
+    }
+
+  return (void *) new_ptr;
+}
+
+/* BEEBS version of free.
+
+   Even our simplified version has to work correctly, or we'll run out of
+   memory. Assume we are given a valid pointer to a QITEM - there is no way
+   to check. */
+
+static void
+qfree_beebs (void *ptr)
+{
+  QITEM *qptr = (QITEM *) ptr;
+
+  qptr->qNext = qfree_list;
+  qfree_list = qptr;
+}
+
+
+void enqueue (int iNode, int iDist, int iPrev)
+{
+   QITEM *qNew = (QITEM *) qmalloc_beebs(sizeof(QITEM));
+   QITEM *qLast = qHead;
+
+   qNew->iNode = iNode;
+   qNew->iDist = iDist;
+   qNew->iPrev = iPrev;
+   qNew->qNext = NULL;
+
+   if (!qLast)
+   {
+      qHead = qNew;
+   }
+   else
+   {
+      while (qLast->qNext) qLast = qLast->qNext;
+      qLast->qNext = qNew;
+   }
+   g_qCount++;
+}
+
+
+QITEM* dequeue (int *piNode, int *piDist, int *piPrev)
+{
+   QITEM *qKill = qHead;
+
+   if (qHead != 0)
+   {
+      *piNode = qHead->iNode;
+      *piDist = qHead->iDist;
+      *piPrev = qHead->iPrev;
+      qHead = qHead->qNext;
+      g_qCount--;
+      return qKill;
+   }
+   return 0;
+}
+
+
+int qcount (void)
+{
+   return(g_qCount);
+}
+
+int dijkstra(int chStart, int chEnd)
+{
+   for (ch = 0; ch < NUM_NODES; ch++)
+   {
+      rgnNodes[ch].iDist = NONE;
+      rgnNodes[ch].iPrev = NONE;
+   }
+
+   if (chStart == chEnd)
+   {
+      return 0;
+   }
+   else
+   {
+      rgnNodes[chStart].iDist = 0;
+      rgnNodes[chStart].iPrev = NONE;
+
+      enqueue (chStart, 0, NONE);
+
+      while (qcount() > 0)
+      {
+         QITEM *tmp = dequeue (&iNode, &iDist, &iPrev);
+         if(tmp != 0)
+            qfree_beebs(tmp);
+         for (i = 0; i < NUM_NODES; i++)
+         {
+            iCost = AdjMatrix[iNode][i];
+            if (iCost != NONE)
+            {
+               if ((NONE == rgnNodes[i].iDist) ||
+                     (rgnNodes[i].iDist > (iCost + iDist)))
+               {
+                  rgnNodes[i].iDist = iDist + iCost;
+                  rgnNodes[i].iPrev = iNode;
+                  enqueue (i, iDist + iCost, iNode);
+               }
             }
-        }
-        if (dist[u] == INF) break; // all remaining nodes are inaccessible
+         }
+      }
+   }
 
-        visited[u] = 1;
-
-        for (unsigned int v = 0; v < n; v++) {
-            if (graph[u][v] != INF) {
-                uint8_t new_dist = dist[u] + graph[u][v];
-                if (new_dist < dist[v]) {
-                    dist[v] = new_dist;
-                }
-            }
-        }
-    }
-
-    return dist[end];
+   return rgnNodes[chEnd].iDist;
 }
 
-void application(){
-    // Setup arbitrary adjacency matrix
-    unsigned int j;
-    unsigned int i;
-    for(i=0; i<MAX_NODES; i++){
-        for(j=0; j<MAX_NODES; j++){
-            graph[i][j] = (i & 0x3);
-        }
-    }
+int output[NUM_NODES * NUM_NODES];
+int output_count = 0;
 
-    uint8_t start = 2;
-    uint8_t end = 5;
+void application() {
+   int i,j;
+   qinit_heap();
+   output_count = 0;
 
-    uint8_t shortest = dijkstra(start, end);
-    SECURE_record_output_data(shortest);
+   /* finds 10 shortest paths between nodes */
+   for(j = 0; j < NUM_NODES; j++) {
+      for (i=0; i < NUM_NODES; i++) {
+         output[output_count] = dijkstra(i,j);
+         output_count++;
+      }
+   }
+
+   // TRACES -- Send results
+   for(i=0; i<NUM_NODES*NUM_NODES; i++){
+      SECURE_record_output_data(output[output_count]);
+   }
 }
+
 #endif
 
 #if APP_SEL == HAMMING
@@ -1477,7 +1633,7 @@ void solve(int input[], int);
 // ith position
 int ham_calc(int position, int c_l)
 {
-    SECURE_new_log_entry();
+ 
     int count = 0, i, j;
     i = position - 1;
  
@@ -1501,7 +1657,7 @@ int ham_calc(int position, int c_l)
 // Function to calculate hamming code
 void solve(int input[], int n)
 {
-    SECURE_new_log_entry();
+ 
     int i, p_n = 0, c_l, j, k;
     i = 0;
  
@@ -1550,7 +1706,7 @@ void solve(int input[], int n)
 // Driver Code
 void application()
 {
-    SECURE_new_log_entry();
+ 
  
     // Function Call
     solve(input, N);

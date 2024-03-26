@@ -83,6 +83,9 @@ void SecureError_Callback(void)
   * @brief  The application entry point.
   * @retval int
   */
+
+extern char input[33];
+uint32_t c;
 int main(void)
 {
   /* USER CODE BEGIN 1 */

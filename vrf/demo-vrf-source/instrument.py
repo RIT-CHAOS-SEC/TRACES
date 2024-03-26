@@ -79,11 +79,8 @@ def instrment_asm(directory, input_file, output_file):
 	lines = [x.replace('\n','') for x in lines if x != '\n']
 
 	last_push = ""
-
 	i = 0
-	case = 0
-	# first pass -- instrument calls and returns, and cond.branch not taken
-	
+	#preliminary pass -- always push lr, change returns to pop
 	while i < len(lines):
 		x = lines[i]
 		i += 1
@@ -103,7 +100,63 @@ def instrment_asm(directory, input_file, output_file):
 
 		# Assembly line is an instruction
 		elif len(parsed) > 2:
-			
+			inst = parsed[1]
+			args = parsed[2]
+
+			if inst == 'push' and 'lr' not in args:
+				print(x.replace('}', ', lr}'), file=outfile)
+
+			elif inst == 'ldr' and 'sp' in args and 'r7' in args:
+				print('\tpop\t{r7, pc}', file=outfile)			
+				i += 1
+			elif inst == 'pop' and 'pc' not in args:
+				print(x.replace('}', ', pc}'), file=outfile)				
+			else:
+				print(x, file=outfile)
+		else:
+			print(x, file=outfile)
+	
+	outfile.close()
+
+	infile = open(outfile_name, "r")
+	lines = infile.readlines()
+	infile.close()
+
+	#'''
+	outfile = open(outfile_name, "w")
+	lines = [x.replace('\n','') for x in lines if x != '\n']
+	i = 0
+	case = 0
+	# first pass -- instrument calls and returns, and cond.branch not taken
+	
+	forward_cond_dests = []
+
+	while i < len(lines):
+		x = lines[i]
+		i += 1
+		parsed = x.split('\t')
+		if "test_application" in x:
+			x = x.replace("test_application", "application")
+
+		if "application.c" in x:
+			continue
+
+		# if '@' in x or ".file" in x:
+		# 	continue 
+
+		if trampoline in x:
+			print(x, file=outfile)
+			case = 1
+
+		if len(parsed) == 1 and '.' in parsed[0]:
+			label = parsed[0].replace(':', '')
+			print(x, file=outfile)
+			if label in conditional_dests:
+				print(label)
+				forward_cond_dests.append(label)
+
+		# Assembly line is an instruction
+		elif len(parsed) > 2:
 
 			inst = parsed[1]
 			args = parsed[2]
@@ -129,7 +182,7 @@ def instrment_asm(directory, input_file, output_file):
 				debug_print("------ instrument cond branch not taken ("+inst+") "+args, file=outfile)
 				conditional_dests.append(args)
 				print(x, file=outfile)
-				print("\tbl\t"+trampoline_cond_br, file=outfile)
+				print("\tbl\t"+trampoline_cond_br+'_not_taken', file=outfile)
 
 			# # 	debug_print("------ ", file=outfile)
 			elif detect_ret_via_pop:
@@ -167,20 +220,56 @@ def instrment_asm(directory, input_file, output_file):
 
 	i = 0
 	# second pass -- instrument cond.branch taken
+	bt = 0
+	ready = True
+	forward_conds = {}
+	for i in range(0, len(forward_cond_dests)):
+		forward_conds[forward_cond_dests[i]] = i
+
+	inst = ''
 	while i < len(lines):
 		x = lines[i]
-		i += 1
 		parsed = x.split('\t')
 		
 		if ".file" in x or 'nop' in x:
-			continue 
-		elif len(parsed) == 1 and parsed[0].split(":")[0] in conditional_dests:
-			debug_print("------ instrumenting cond branch dest ("+x+")", file=outfile)
-			print(x, file=outfile)
-			print("\tbl\t"+trampoline_cond_br, file=outfile)
+			inst = ''
+		elif len(parsed) > 2:
+			inst = ''
+			if (parsed[1] in conditional_br_instrs) and parsed[2] in forward_cond_dests:
+				inst = parsed[1]
+				args = parsed[2]
+				print(x.replace(args, 'BT'+str(forward_conds[args])), file=outfile)
+			else:
+				print(x, file=outfile)	
+		elif len(parsed) == 1:
+			inst = ''
+			label = parsed[0].split(":")[0]
+			if label in forward_cond_dests:
+				prev = lines[i-1].split('\t')
+				# dont need to add branch if prev. is a dir branch
+				print(f'prev: {prev}')
+				if len(prev) > 2:
+					inst = prev[1]
+					if 'b' != inst:
+						print(f'inst: {inst}')
+						print(f'\tb\t{label}', file=outfile)
+						# a = input()
+				print(f'BT{forward_conds[label]}:', file=outfile)
+				print(f'\tbl\t{trampoline_cond_br}_taken', file=outfile)
+				print(x, file=outfile)
+				bt += 1
+			elif label in conditional_dests:
+				label = parsed[0].split(":")[0]
+				debug_print("------ instrumenting cond branch dest ("+x+")", file=outfile)
+				print(x, file=outfile)
+				print("\tbl\t"+trampoline_cond_br+'_taken', file=outfile)
+			else:
+				print(x, file=outfile)	
 		else:
 			print(x, file=outfile)
+		i += 1
 	outfile.close()
+	#'''
 
 if __name__ == '__main__':
 	args = arg_parser()

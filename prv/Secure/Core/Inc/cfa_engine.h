@@ -155,7 +155,8 @@ typedef struct VRF_RESPONSE{
 }VRF_RESPONSE;
 
 // PUBLIC FUNCTIONS
-void CFA_ENGINE_new_log_entry(uint32_t value);
+void CFA_ENGINE_new_log_cond(uint32_t, uint32_t);
+void CFA_ENGINE_new_log_entry(uint32_t);
 void CFA_ENGINE_run_attestation();
 void CFA_ENGINE_initialize(); // Initial setup of attestation variables
 void CFA_ENGINE_register_callback(); // Register the function to be attested

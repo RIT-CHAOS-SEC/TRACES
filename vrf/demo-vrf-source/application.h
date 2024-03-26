@@ -13,7 +13,7 @@
 #define DIJKSTRA		8
 #define HAMMING			9
 #define ATTACK			10
-#define APP_SEL 		ATTACK
+#define APP_SEL 		TEMP
 
 #include "stdint.h"
 

@@ -299,7 +299,6 @@ def create_cfg(arch, lines):
     # Parse nodes in each function
     cfg = parse_nodes(arch,assembly_functions,cfg)
 
-
     print("------------- CFG Nodes ---------------")
     for key in cfg.nodes.keys():
         print("key = "+str(key))

@@ -161,6 +161,9 @@ void _clean(){
 	report_secure.num_CF_Log_size = 0;
 	cfa_engine_conf.challenge_renewed = FALSE;
 	report_secure.isFinal = FALSE;
+	for(int i=0; i<MAX_CF_LOG_SIZE; i++){
+		report_secure.CFLog[i] = 0;
+	}
 }
 
 void _clean_partial(){
@@ -283,7 +286,7 @@ int STATE_continue(){
 /* ---------------------------  PROTOCOL  ----------------------------------------- */
 
 
-char translate_command(int8_t command_received[]){
+char translate_command(uint8_t command_received[]){
 	command_received[COMMAND_SIZE] = '\0';
 	if (!strcmp(command_received,INIT_ATTESTATION))
 		return INIT_ATTESTATION_CHAR;
@@ -579,7 +582,8 @@ uint8_t loop_detect = 0;
 uint16_t loop_counter = 1;
 uint32_t prev_entry;
 
-//void CFA_ENGINE_new_log_entry(CFA_ENTRY value){
+// VERBATIM STYLE
+/**/
 void CFA_ENGINE_new_log_entry(uint32_t value){
 	if(report_secure.num_CF_Log_size >= MAX_CF_LOG_SIZE){
 		end = HAL_GetTick();
@@ -607,7 +611,8 @@ void CFA_ENGINE_new_log_entry(uint32_t value){
 
 		// compare current value to previous, if equal, replace with counter
 		#if CFLOG_TYPE == CFLOG_RAM
-		if(report_secure.num_CF_Log_size != 0 && report_secure.CFLog[report_secure.num_CF_Log_size - 1] == value){
+		prev_entry = report_secure.CFLog[report_secure.num_CF_Log_size - 1];
+		if(report_secure.num_CF_Log_size != 0 && prev_entry == value){
 		#else
 		prev_entry = FLASH_CFLog[report_secure.num_CF_Log_size - 1];
 		if(report_secure.num_CF_Log_size != 0 && prev_entry == value){
@@ -653,7 +658,107 @@ void CFA_ENGINE_new_log_entry(uint32_t value){
 	}
 	return;
 }
+/*
 
+
+// OAT Style (no hash chain)
+int bit_idx = 0;
+void log_single_bit(uint32_t value){
+	// value is a conditional bit for the bitstream
+	report_secure.CFLog[report_secure.num_CF_Log_size] = (report_secure.CFLog[report_secure.num_CF_Log_size] << 1) | value;
+	bit_idx += 1;
+	if (bit_idx == 32){
+		bit_idx = 0;
+		report_secure.num_CF_Log_size++;
+		cfa_engine_conf.log_counter++;
+	}
+}
+
+void log_32_bit_val(uint32_t value){
+//	int rem_bits = 32-bit_idx;
+//	uint32_t cur_val = report_secure.CFLog[report_secure.num_CF_Log_size];
+//	cur_val = cur_val << rem_bits;
+//
+//	uint32_t mask = 0;
+//
+//	for(int i=0; i<bit_idx; i++){
+//		mask = (mask << 1) | 1;
+//	}
+//
+//	uint32_t value_shf = value >> bit_idx;
+//
+//	uint32_t new_val = cur_val | value_shf;
+//
+//	value_shf = value & mask;
+//
+//	report_secure.CFLog[report_secure.num_CF_Log_size] = new_val;
+//	report_secure.num_CF_Log_size++;
+//	report_secure.CFLog[report_secure.num_CF_Log_size] = value_shf;
+//	cfa_engine_conf.log_counter++;
+	uint32_t bit_val = 0;
+	for(int i=0; i<32; i++){
+		bit_val = (value >> (31-i)) & 0x1;
+		log_single_bit(bit_val);
+	}
+}
+
+uint32_t prev_val = 0;
+void CFA_ENGINE_new_log_cond(uint32_t addr, uint32_t value){
+	if(addr == prev_val){
+		if(loop_detect == 0){
+			loop_detect = 1;
+		}
+		loop_counter++;
+	} else{
+		loop_detect = 0;
+		loop_counter = 1;
+		CFA_ENGINE_new_log_entry(value);
+		prev_val = addr;
+	}
+}
+
+void CFA_ENGINE_new_log_entry(uint32_t value){
+	if(report_secure.num_CF_Log_size >= MAX_CF_LOG_SIZE){
+		end = HAL_GetTick();
+		app_exec_time += end - start;
+		cfa_engine_conf.attestation_status = WAITING_PARTIAL;
+		_send_report();
+
+		#if CFLOG_TYPE == CFLOG_RAM
+		report_secure.CFLog[report_secure.num_CF_Log_size] = value;
+		#else
+		uint32_t addr = (uint32_t)(&FLASH_CFLog[report_secure.num_CF_Log_size]);
+//		update_flash(addr, value);
+		FLASH_CFLog[report_secure.num_CF_Log_size] = value;
+		#endif
+
+		report_secure.num_CF_Log_size++;
+		cfa_engine_conf.log_counter++;
+		_read_serial_loop();
+		start = HAL_GetTick();
+	}
+	else{
+		// loop exit
+		if(loop_detect == 1){
+			// log counter
+			log_32_bit_val(loop_counter);
+			//reset loop detect/counter
+			loop_counter = 1;
+			loop_detect = 0;
+			prev_val = 0;
+		}
+
+		if(value == 1 || value == 0){
+			log_single_bit(value);
+		} else {
+			// value is a full indr address
+			log_32_bit_val(value);
+		}
+
+	}
+	return;
+}
+*/
 
 void CFA_ENGINE_run_attestation(){
 	if (cfa_engine_conf.initialized != INITIALIZED){

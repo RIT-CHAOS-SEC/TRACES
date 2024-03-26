@@ -60,7 +60,7 @@ all: main-build
 main-build: TRACES_NonSecure.elf secondary-outputs
 
 dependents:
-	-cd /home/ac7717/Documents/TRACES/prv/Secure/Debug && $(MAKE) all
+	-cd /home/ac7717/Documents/TRACES/prv/Secure/Debug && $(MAKE) clean all
 
 # Tool invocations
 TRACES_NonSecure.elf TRACES_NonSecure.map: $(OBJS) $(USER_OBJS) /home/ac7717/Documents/TRACES/prv/Secure/Debug/TRACES_Secure.elf /home/ac7717/Documents/TRACES/prv/NonSecure/STM32L552ZETXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
