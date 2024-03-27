@@ -8,57 +8,77 @@
 // #endif
 
 #if APP_SEL == SORT
-// Source: https://www.geeksforgeeks.org/bubble-sort/
+#define SCALE_FACTOR    (REPEAT_FACTOR >> 4)
 
-#define true    1
-#define false   0
-#define bool    uint8_t
+#define WORSTCASE 1
+#define FALSE 0
+#define TRUE 1
+#define NUMELEMS 100
+#define MAXDIM   (NUMELEMS+1)
 
-void swap(int* xp, int* yp)
+// void Initialize(int Array []);
+void BubbleSort(int Array []);
+
+/* BUBBLESORT BENCHMARK PROGRAM:
+ * This program tests the basic loop constructs, integer comparisons,
+ * and simple array handling of compilers by sorting 10 arrays of
+ * randomly generated integers.
+ */
+
+int Array[100] = {99, 98, 97, 96, 95, 94, 93, 92,
+91, 90, 89, 88, 87, 86, 85, 84, 83, 82,
+81, 80, 79, 78, 77, 76, 75, 74, 73, 72,
+71, 70, 69, 68, 67, 66, 65, 64, 63, 62,
+61, 60, 59, 58, 57, 56, 55, 54, 53, 52,
+51, 50, 49, 48, 47, 46, 45, 44, 43, 42,
+41, 40, 39, 38, 37, 36, 35, 34, 33, 32,
+31, 30, 29, 28, 27, 26, 25, 24, 23, 22,
+21, 20, 19, 18, 17, 16, 15, 14, 13, 12,
+11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+
+int Seed;
+int factor;
+
+void BubbleSort(int Array[]);
+
+
+void BubbleSort(int Array[])
+/*
+ * Sorts an array of integers of size NUMELEMS in ascending order.
+ */
 {
-    int temp = *xp;
-    *xp = *yp;
-    *yp = temp;
-}
- 
-// An optimized version of Bubble Sort
-void bubbleSort(int arr[], int n)
-{
-    int i, j;
-    bool swapped;
-    for (i = 0; i < n - 1; i++) {
-        swapped = false;
-        for (j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                swap(&arr[j], &arr[j + 1]);
-                swapped = true;
-            }
-        }
- 
-        // If no two elements were swapped by inner loop,
-        // then break
-        if (swapped == false)
+   int Sorted = FALSE;
+   int Temp, Index, i;
+
+   for (i = 0; i < NUMELEMS; i++)
+   {
+      Sorted = TRUE;
+      for (Index = 0; Index < NUMELEMS; Index ++) {
+         if (Index >= NUMELEMS-i)
             break;
-    }
-}
- 
-// // Random lists for testing
-// int arr[100] = {54, 77, 91, 1, 50, 96, 93, 20, 87, 26, 23, 86, 83, 49, 64, 36, 65, 4, 74, 55, 30, 72, 9, 31, 13, 17, 3, 68, 70, 48, 63, 18, 85, 60, 71, 88, 41, 89, 25, 47, 12, 57, 43, 58, 81, 99, 6, 42, 95, 84, 29, 7, 14, 80, 24, 27, 11, 5, 37, 53, 78, 40, 62, 28, 59, 66, 32, 8, 69, 79, 52, 10, 2, 39, 21, 44, 38, 73, 46, 90, 76, 56, 16, 15, 34, 82, 100, 33, 35, 22, 98, 94, 45, 92, 51, 67, 75, 19, 97, 6};
-int arr[100] = {19, 53, 26, 88, 30, 28, 22, 76, 71, 83, 31, 16, 84, 73, 7, 93, 64, 31, 42, 82, 20, 37, 1, 1, 2, 3, 55, 36, 12, 17, 49, 36, 100, 93, 17, 82, 39, 9, 65, 1, 1, 52, 61, 11, 6, 53, 70, 21, 91, 19, 29, 28, 94, 89, 89, 54, 42, 49, 71, 19, 35, 3, 19, 6, 26, 29, 6, 57, 99, 79, 50, 63, 80, 33, 45, 46, 20, 57, 32, 5, 3, 23, 23, 72, 62, 73, 50, 26, 75, 24, 64, 31, 11, 6, 42, 57, 73, 5, 5, 54};
-// int arr[100] = {26, 54, 50, 41, 23, 20, 87, 1, 45, 30, 90, 43, 93, 16, 22, 30, 30, 48, 92, 73, 89, 33, 56, 18, 81, 19, 20, 20, 40, 53, 44, 94, 84, 2, 71, 92, 81, 76, 63, 62, 45, 54, 31, 60, 11, 27, 79, 18, 67, 60, 75, 69, 20, 90, 88, 7, 50, 17, 2, 31, 12, 27, 10, 100, 52, 51, 14, 54, 81, 23, 87, 83, 18, 96, 93, 11, 18, 41, 62, 20, 9, 8, 77, 85, 50, 41, 45, 55, 66, 7, 54, 92, 76, 74, 23, 45, 36, 65, 29, 38};
-// int arr[100] = {37, 96, 2, 14, 40, 10, 32, 88, 44, 23, 21, 53, 42, 82, 70, 73, 70, 10, 66, 1, 80, 45, 17, 17, 93, 40, 99, 45, 19, 1, 10, 63, 41, 26, 19, 17, 41, 27, 33, 9, 50, 44, 19, 80, 98, 51, 37, 92, 21, 10, 2, 9, 14, 38, 16, 54, 71, 24, 100, 75, 30, 13, 98, 68, 27, 61, 94, 13, 35, 39, 60, 39, 53, 2, 97, 85, 10, 64, 25, 89, 85, 19, 96, 32, 74, 84, 24, 5, 97, 57, 81, 18, 72, 52, 26, 64, 11, 33, 41, 38};
-// int arr[100] = {83, 80, 20, 8, 43, 93, 3, 4, 59, 25, 16, 69, 13, 84, 12, 85, 23, 94, 58, 45, 15, 56, 22, 25, 70, 66, 12, 63, 53, 72, 96, 24, 59, 61, 58, 88, 90, 1, 74, 51, 51, 83, 46, 79, 49, 61, 36, 53, 50, 87, 92, 60, 54, 92, 90, 19, 23, 23, 26, 31, 3, 99, 93, 18, 79, 23, 41, 75, 61, 38, 14, 48, 49, 23, 55, 89, 85, 92, 12, 52, 94, 31, 21, 65, 14, 99, 3, 50, 85, 53, 27, 41, 50, 83, 47, 69, 58, 94, 79, 97};
+         if (Array[Index] > Array[Index + 1])
+         {
+            Temp = Array[Index];
+            Array[Index] = Array[Index+1];
+            Array[Index+1] = Temp;
+            Sorted = FALSE;
+         }
+      }
 
-int n = 25; //sizeof(arr) / sizeof(arr[0]);
+      if (Sorted)
+         break;
+   }
+}
+
 void application()
 {
-    bubbleSort(arr, n);
+    BubbleSort(Array);
 
     // int i;
     // for(i=0; i<n; i++){
     //     SECURE_record_output_data(arr[i]);
     // }
-    SECURE_record_output_data(arr[0]);
+    SECURE_record_output_data(Array[0]);
 }
 #endif
 
@@ -857,20 +877,31 @@ void application() {
 #if APP_SEL == BASIC
 
 
-uint32_t test = 0;
+// int test = 0;
+int data = 0;
+// void (*fun)();
 
-void (*fun)();
+// void fun1() { test = 1; } 
+// void fun2() { test = 2; } 
 
-void fun1() { test = 1; } 
-void fun2() { test = 2; } 
+void evaluate(int value){
+  if ((value & 1) == 1){
+      if (value == 1){
+        data++;
+      }
+      data++;
+  } else{
+      // fun = fun2;
+      data = data + 2;
+  }
+  // fun();
+}
 
 void application(){
-    if (test == 1){
-        fun = fun1;    
-    } else{
-        fun = fun2;
-    }
-    fun();
+    for(int i=0; i<32; i++);
+    evaluate(1);
+    evaluate(2);
+    evaluate(3);
 }
 
 #endif
@@ -1603,10 +1634,10 @@ void application() {
       }
    }
 
-   // TRACES -- Send results
-   for(i=0; i<NUM_NODES*NUM_NODES; i++){
-      SECURE_record_output_data(output[output_count]);
-   }
+   // // TRACES -- Send results
+   // for(i=0; i<NUM_NODES*NUM_NODES; i++){
+   //    SECURE_record_output_data(output[output_count]);
+   // }
 }
 
 #endif

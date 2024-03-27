@@ -127,7 +127,7 @@ def clean_comment(arch, comment):
         
 def parse_nodes(arch,assembly_functions,cfg):
     br_instrs = arch.conditional_br_instrs + arch.unconditional_br_instrs + arch.call_instrs + arch.return_instrs
-
+    idx = 0
     for func_addr,func in assembly_functions.items():
         node = CFGNode(func.start_addr,func.end_addr)
 
@@ -136,7 +136,7 @@ def parse_nodes(arch,assembly_functions,cfg):
 
             #add instruction to node
             node.add_instruction(func.instr_list[i])
-            
+
             #check for br instr, if found create node
 
             ret_via_pop = (func.instr_list[i].instr == "pop" and "pc" in func.instr_list[i].arg) # check for ret via pop
@@ -148,6 +148,7 @@ def parse_nodes(arch,assembly_functions,cfg):
                 node.end_addr = func.instr_list[i].addr
                 if secure_ret or (func.instr_list[i].instr in arch.return_instrs) or ret_via_pop:
                     node.type = 'ret'
+                    print(f'Ret node has {node.instrs} instrs')
                 elif func.instr_list[i].instr in arch.conditional_br_instrs:
                     node.type = 'cond'
                 elif func.instr_list[i].instr in arch.unconditional_br_instrs:
@@ -201,8 +202,16 @@ def update_successors(cfg, arch):
                 br_dest = clean_comment(arch, node.instr_addrs[-1].arg)
             elif arch.arch_type == "armv8-m33":
                 br_dest = "0x"+node.instr_addrs[-1].arg.split(' ')[0]
-
+            
+            # print(f'Adding successor {br_dest}')
             node.add_successor(br_dest)
+
+            # print(f"Successors: {node.successors}")
+            # a = input()
+
+            ### Dont need to link returns to their call sites
+            ### Since verifier uses shadow stack during verification
+            '''
             # Locate the node at the end of the branching destination function
             # If the cfg.func_nodes[br_dest] doesnt exist, we need to 
             # find the function that DOES exist, whose start and end node wrap 
@@ -210,7 +219,7 @@ def update_successors(cfg, arch):
             try:
                 eof_node = cfg.func_nodes[br_dest][-1]
             except KeyError:
-
+                print(f"Handling KeyError for {br_dest}")
                 prev_key = list(cfg.func_nodes.keys())[0]
                 for n in cfg.func_nodes.keys():
                     if n < br_dest:
@@ -219,11 +228,16 @@ def update_successors(cfg, arch):
                         break
 
                 # Prev key should point to the function our br_dest is in 
+                print(f"prev_key: {prev_key}")
+                
+
                 nodes_list = list(cfg.nodes.keys()) 
+
+                print(f"prev_key in nodes_list: {prev_key in nodes_list}")
 
                 for i in range(cfg.num_nodes):
                     if nodes_list[i] == br_dest:
-                        cfg.func_nodes[br_dest]= [cfg.nodes[nodes_list[i]],cfg.func_nodes[prev_key][-1]]
+                        cfg.func_nodes[br_dest] = [cfg.nodes[nodes_list[i]],cfg.func_nodes[prev_key][-1]]
                         
                         popped_node = cfg.func_nodes[prev_key].pop() # Remove last node
                         
@@ -243,10 +257,12 @@ def update_successors(cfg, arch):
 
                 eof_node = cfg.func_nodes[br_dest][-1]
 
+                a = input()
             if eof_node.type == 'ret':
                 cfg.nodes[eof_node.start_addr].add_successor(node.adj_instr)
                 
                 # Update the node successors with the correct start node
+            '''
 
         # Add check to make sure all branching destinations are existing nodes
         # If not, create a new node
@@ -299,14 +315,15 @@ def create_cfg(arch, lines):
     # Parse nodes in each function
     cfg = parse_nodes(arch,assembly_functions,cfg)
 
-    print("------------- CFG Nodes ---------------")
-    for key in cfg.nodes.keys():
-        print("key = "+str(key))
-        # for inst in cfg.nodes[key].instr_addrs:
-        #     print("\t"+str(inst))
-
     #Update the successors of all generated nodes 
     cfg = update_successors(cfg, arch)
+
+    print("------------- CFG Nodes ---------------")
+    cfg_log_file = open('./logs/cfg.log', 'w')
+    for addr in cfg.nodes.keys():
+        cfg.nodes[addr].printNode(file=cfg_log_file)
+        print("---------------------------", file=cfg_log_file)
+    cfg_log_file.close()
 
     return cfg
     

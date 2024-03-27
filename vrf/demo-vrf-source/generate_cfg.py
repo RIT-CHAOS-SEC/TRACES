@@ -1,14 +1,7 @@
 from structures import *
 from utils import *
 from parse_asm import *
-
 import argparse
-import pickle
-
-def dump_cfg(cfg, filename):
-    filename = open(filename, 'wb')
-    pickle.dump(cfg, filename)
-    filename.close()
 
 def arg_parser():
     '''
@@ -40,7 +33,7 @@ def main():
     cfg = create_cfg(arch, lines)
 
     # Serialize cfg to output file
-    dump_cfg(cfg,args.cfgfile)
+    dump(cfg,args.cfgfile)
 
 if __name__ == "__main__":
     main()

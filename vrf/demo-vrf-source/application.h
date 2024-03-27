@@ -2,18 +2,18 @@
 #define __APPLICATION_H
 
 
-#define BASIC			0
-#define SYRINGE			1
-#define TEMP			2
-#define ULT				3
-#define GEIGER			4
-#define GPS				5
-#define MOUSE			6
+#define BASIC			0 //
+#define ULT				1 //
+#define TEMP			2 //
+#define SYRINGE			3 //
+#define GEIGER			4 //
+#define GPS				5 //
+#define DIJKSTRA		6
 #define SORT			7
-#define DIJKSTRA		8
-#define HAMMING			9
-#define ATTACK			10
-#define APP_SEL 		TEMP
+#define HAMMING			8
+#define ATTACK			9
+#define MOUSE			10
+#define APP_SEL 		DIJKSTRA
 
 #include "stdint.h"
 

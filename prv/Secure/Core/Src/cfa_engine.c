@@ -166,10 +166,6 @@ void _clean(){
 	}
 }
 
-void _clean_partial(){
-	report_secure.num_CF_Log_size = 0;
-}
-
 void _run_application(){
 	//start app
 	if (cfa_engine_conf.iac.app_start_address != NULL){
@@ -382,7 +378,7 @@ void CFA_time_interrupt_handler(){
 	report_secure.isFinal = PARTIAL_REPORT;
 	_sign_report();
 	_send_report_message();
-	_clean_partial();
+	report_secure.num_CF_Log_size = 0;
 	_read_serial_loop();
 	ti_reset_timer_counter(TIMER_INTERRUPT);
 	__HAL_RCC_TIM3_CLK_ENABLE();
@@ -477,7 +473,7 @@ void _send_report_message(){
 	#else
 	// CFA or TRACES
 	SecureUartTx(report_secure.signature, SIGNATURE_SIZE_BYTES+2);
-	int data_size = 2 + 4*report_secure.num_CF_Log_size;
+	int data_size = 2 + 4*(report_secure.num_CF_Log_size);
 	uint8_t * report_addr = (uint8_t*)(&(report_secure.num_CF_Log_size));
 	SecureUartTx(report_addr, data_size);
 	#endif
@@ -506,7 +502,7 @@ void _send_report(){
 		compute_send_report_start = HAL_GetTick();
 		_sign_report();
 		_send_report_message();
-		_clean_partial();
+		report_secure.num_CF_Log_size = 0;
 		compute_send_report_stop = HAL_GetTick();
 	}
 
@@ -581,7 +577,7 @@ void _sign_report(){
 uint8_t loop_detect = 0;
 uint16_t loop_counter = 1;
 uint32_t prev_entry;
-
+uint32_t overflow = 0;
 // VERBATIM STYLE
 /**/
 void CFA_ENGINE_new_log_entry(uint32_t value){
@@ -589,7 +585,21 @@ void CFA_ENGINE_new_log_entry(uint32_t value){
 		end = HAL_GetTick();
 		app_exec_time += end - start;
 		cfa_engine_conf.attestation_status = WAITING_PARTIAL;
+		report_secure.num_CF_Log_size = MAX_CF_LOG_SIZE; // might point over with loop overflow
 		_send_report();
+
+		if(overflow != 0){
+			#if CFLOG_TYPE == CFLOG_RAM
+			report_secure.CFLog[report_secure.num_CF_Log_size] = overflow;
+			#else
+			uint32_t addr = (uint32_t)(&FLASH_CFLog[report_secure.num_CF_Log_size]);
+			//		update_flash(addr, value);
+			FLASH_CFLog[report_secure.num_CF_Log_size] = overflow;
+			#endif
+			overflow = 0;
+			report_secure.num_CF_Log_size++;
+			cfa_engine_conf.log_counter++;
+		}
 
 		#if CFLOG_TYPE == CFLOG_RAM
 		report_secure.CFLog[report_secure.num_CF_Log_size] = value;
@@ -605,17 +615,19 @@ void CFA_ENGINE_new_log_entry(uint32_t value){
 		start = HAL_GetTick();
 	}
 	else{
-
-		if(report_secure.num_CF_Log_size == MAX_CF_LOG_SIZE)
-			loop_detect = loop_detect;
+//
+//		if(report_secure.num_CF_Log_size == MAX_CF_LOG_SIZE)
+//			loop_detect = loop_detect;
 
 		// compare current value to previous, if equal, replace with counter
 		#if CFLOG_TYPE == CFLOG_RAM
 		prev_entry = report_secure.CFLog[report_secure.num_CF_Log_size - 1];
 		if(report_secure.num_CF_Log_size != 0 && prev_entry == value){
+
 		#else
 		prev_entry = FLASH_CFLog[report_secure.num_CF_Log_size - 1];
 		if(report_secure.num_CF_Log_size != 0 && prev_entry == value){
+
 		#endif
 			if (loop_detect == 0){
 				// since first instance of repeat, set flag
@@ -641,19 +653,26 @@ void CFA_ENGINE_new_log_entry(uint32_t value){
 				cfa_engine_conf.log_counter++;
 				report_secure.num_CF_Log_size++;
 				loop_counter = 1;
+
+				// Need to catch case when the counter is the last entry in the cflog
+				if(report_secure.num_CF_Log_size == MAX_CF_LOG_SIZE){
+					overflow = value;
+				}
 			}
 
-			#if CFLOG_TYPE == CFLOG_RAM
-			report_secure.CFLog[report_secure.num_CF_Log_size] = value;
-			#else
-			uint32_t addr = (uint32_t)(&FLASH_CFLog[report_secure.num_CF_Log_size]);
-//			update_flash(addr, value);
-			FLASH_CFLog[report_secure.num_CF_Log_size] = value;
-			prev_entry = value;
-			#endif
+			 if (overflow == 0){
+				#if CFLOG_TYPE == CFLOG_RAM
+				report_secure.CFLog[report_secure.num_CF_Log_size] = value;
+				#else
+				uint32_t addr = (uint32_t)(&FLASH_CFLog[report_secure.num_CF_Log_size]);
+	//			update_flash(addr, value);
+				FLASH_CFLog[report_secure.num_CF_Log_size] = value;
+				prev_entry = value;
+				#endif
+				cfa_engine_conf.log_counter++;
+				report_secure.num_CF_Log_size++;
+			}
 
-			cfa_engine_conf.log_counter++;
-			report_secure.num_CF_Log_size++;
 		}
 	}
 	return;

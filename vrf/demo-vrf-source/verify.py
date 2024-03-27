@@ -1,9 +1,8 @@
 from collections import deque
 import argparse
-import pickle
-
+# import pickle
 from structures import *
-from utils import read_file
+from utils import *
 
 def verify(cfg, cflog, cflog_startaddr):
     '''
@@ -13,12 +12,26 @@ def verify(cfg, cflog, cflog_startaddr):
     # Instantiate shadow stack
     index = 0
 
-    shadow_stack = deque()
+    # Try to open prev. shadow_stack file
+    try:
+        # If intermediate report, open prevoius shadow stack state
+        shadow_stack = load("objects/shadow_stack.bin")
+    except FileNotFoundError as e:
+        # If first report, no file will be found. Therefore instantiate shadow stack
+        shadow_stack = deque()
+
     shadow_stack_violation = False
     shadow_stack_addr = ''
 
     app_entry = 0
-    verifyFile = open("logs/verify.log", "w")
+    print(f'cfg.first_verify: {cfg.first_verify}')
+    if cfg.first_verify:
+        verifyFile = open("logs/verify.log", "w")
+        cfg.first_verify = False
+        dump(cfg, "objects/cfg.bin")
+    else:
+        verifyFile = open("logs/verify.log", "a")
+    
     current_node = cfg.head
     while index < len(cflog):
         print(" ", file=verifyFile)
@@ -40,6 +53,8 @@ def verify(cfg, cflog, cflog_startaddr):
             print("changed node", file=verifyFile)
             current_node.printNode(verifyFile)
             print("-----", file=verifyFile)
+            if current_node.type == 'uncond':
+                continue
 
         # Check destinations
         if current_node.type == 'cond':
@@ -76,8 +91,15 @@ def verify(cfg, cflog, cflog_startaddr):
                     continue
                 else:
                     shadow_stack_violation = True
-
+        print("--------- VERIFICATION FAILED --------- ", file=verifyFile)
+        print("--------------------------------------- ", file=verifyFile)
         return False, current_node, log_node, index, shadow_stack_violation, shadow_stack_addr
+    
+    dump(shadow_stack, "objects/shadow_stack.bin")
+    cfg.head = current_node
+    dump(cfg, "objects/cfg.bin")
+    print("--------- VERIFICATION PASSED --------- ", file=verifyFile)
+    print("--------------------------------------- ", file=verifyFile)
     return True, current_node, None, index, shadow_stack_violation, shadow_stack_addr
 
 def parse_cflog(cflog_file):
@@ -102,12 +124,6 @@ def set_cfg_head(cfg, start_addr, end_addr=None):
     except KeyError as err:
         print(bcolors.RED + '[!] Error: Start address to verify from is not a valid node' + bcolors.END)
         exit(1)
-    return cfg
-
-def load_cfg(filename):
-    f = open(filename,'rb')
-    cfg = pickle.load(f)
-    f.close()
     return cfg
 
 def arg_parser():
@@ -138,7 +154,7 @@ def main():
     cflog = parse_cflog(args.cflog)
 
     # Load cfg
-    cfg = load_cfg(args.cfgfile)
+    cfg = load(args.cfgfile)
 
     # If start addr not provided, lookup addr of function (or label) instead
     if not args.startaddr:

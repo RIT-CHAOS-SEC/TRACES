@@ -1,5 +1,8 @@
-application.c:995:6:delay	24	static
-application.c:1008:6:read_data	16	static
-application.c:1056:10:get_temperature	16	static
-application.c:1064:10:get_humidity	16	static
-application.c:1073:6:application	8	static
+application.c:1482:1:qinit_heap	16	static
+application.c:1501:1:qmalloc_beebs	24	static
+application.c:1523:1:qfree_beebs	24	static
+application.c:1532:6:enqueue	32	static
+application.c:1555:8:dequeue	32	static
+application.c:1572:5:qcount	4	static
+application.c:1577:5:dijkstra	24	static
+application.c:1624:6:application	24	static

@@ -1,5 +1,6 @@
 from architectures import *
 from os.path import exists
+import pickle
 
 def read_file(file):
     '''
@@ -29,4 +30,14 @@ def set_arch(arch):
         return None
 
 
+def load(filename):
+    f = open(filename,'rb')
+    obj = pickle.load(f)
+    f.close()
+    return obj
+
+def dump(obj, filename):
+    filename = open(filename, 'wb')
+    pickle.dump(obj, filename)
+    filename.close()
 

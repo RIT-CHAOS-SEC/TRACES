@@ -130,13 +130,11 @@ def instrment_asm(directory, input_file, output_file):
 	# first pass -- instrument calls and returns, and cond.branch not taken
 	
 	forward_cond_dests = []
-
+	bt = 0
 	while i < len(lines):
 		x = lines[i]
 		i += 1
 		parsed = x.split('\t')
-		if "test_application" in x:
-			x = x.replace("test_application", "application")
 
 		if "application.c" in x:
 			continue
@@ -149,7 +147,17 @@ def instrment_asm(directory, input_file, output_file):
 			case = 1
 
 		if len(parsed) == 1 and '.' in parsed[0]:
+
 			label = parsed[0].replace(':', '')
+			try:
+				bt = max(int(label.split('L')[1]), bt)
+				print(label)
+				print(f"bt = {bt}")
+			except ValueError:
+				# some data labels are LC#
+				# we can ignore
+				debug_print(f"Ignoring label processing of {label}", file=outfile)
+				
 			print(x, file=outfile)
 			if label in conditional_dests:
 				print(label)
@@ -206,31 +214,35 @@ def instrment_asm(directory, input_file, output_file):
 
 	print("------------------")
 	print("Conditional br destinations: "+str(conditional_dests))
+	print("Forward cond. br destinations: "+str(forward_cond_dests))
 	print("------------------")
 
 	outfile.close()
 
 	infile = open(outfile_name, "r")
 	lines = infile.readlines()
+	print(f'FIRST LINE: {lines[0]}')
 	infile.close()
 
 	outfile = open(outfile_name, "w")
 
-	lines = [x.replace('\n','') for x in lines if x != '\n']
-
-	i = 0
+	lines = [x.replace('\n','') for x in lines]
+	print(f'FIRST LINE: {lines[0]}')
 	# second pass -- instrument cond.branch taken
-	bt = 0
+	
 	ready = True
 	forward_conds = {}
+	bt += 1
 	for i in range(0, len(forward_cond_dests)):
-		forward_conds[forward_cond_dests[i]] = i
+		forward_conds[forward_cond_dests[i]] = bt
+		bt += 1
 
 	inst = ''
+	print(f"bt = {bt}")
+	i = 0
 	while i < len(lines):
 		x = lines[i]
 		parsed = x.split('\t')
-		
 		if ".file" in x or 'nop' in x:
 			inst = ''
 		elif len(parsed) > 2:
@@ -238,7 +250,7 @@ def instrment_asm(directory, input_file, output_file):
 			if (parsed[1] in conditional_br_instrs) and parsed[2] in forward_cond_dests:
 				inst = parsed[1]
 				args = parsed[2]
-				print(x.replace(args, 'BT'+str(forward_conds[args])), file=outfile)
+				print(x.replace(args, '.L'+str(forward_conds[args])), file=outfile)
 			else:
 				print(x, file=outfile)	
 		elif len(parsed) == 1:
@@ -254,10 +266,9 @@ def instrment_asm(directory, input_file, output_file):
 						print(f'inst: {inst}')
 						print(f'\tb\t{label}', file=outfile)
 						# a = input()
-				print(f'BT{forward_conds[label]}:', file=outfile)
+				print(f'.L{forward_conds[label]}:', file=outfile)
 				print(f'\tbl\t{trampoline_cond_br}_taken', file=outfile)
 				print(x, file=outfile)
-				bt += 1
 			elif label in conditional_dests:
 				label = parsed[0].split(":")[0]
 				debug_print("------ instrumenting cond branch dest ("+x+")", file=outfile)

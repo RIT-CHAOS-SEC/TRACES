@@ -249,17 +249,15 @@ def verify_report():
 
     cflog = parse_cflog("../cflogs/"+str(pconfig.report_num)+".cflog")
     
-    cfg = load_cfg("objects/cfg.pickle")
-
-    cfg = set_cfg_head(cfg, pconfig.app_start_addr)
-
+    cfg = load("objects/cfg.bin")
+    
     valid_cflog, current_node, offending_node, cflog_index, shadow_stack_violation, shadow_stack_addr = verify(cfg, cflog, pconfig.app_start_addr)
 
     if valid_cflog:
         print("VALID CFLOG")
     else:
         print("INVALID CFLOG")
-        print("Offending CFLog entry: "+str(cflog_index))
+        print(f"Offending CFLog entry  ({current_node.type}): ({cflog_index})")
         print("Logged destination: "+str(offending_node.dest_addr))
         if shadow_stack_violation:
             print("Valid destination: "+str(shadow_stack_addr))
@@ -468,8 +466,8 @@ def process_cflog_bytes(CFLog_bytes, CFLog_size, log_number):
     f.close()
 
 
-def receive_report():
-    printyellow("Waiting for report ...\n")
+def receive_report(count):
+    printyellow(f"----------- WAITING FOR REPORT {count} -----------\n")
     # TIME MEASURING
     comm_start = time.perf_counter()
     read_report()
@@ -477,7 +475,7 @@ def receive_report():
     comm_end = time.perf_counter()
     # pconfig.comm_time += comm_end - comm_start
     print(" ")
-    printgreen("Report Received ...\n")
+    printgreen(f"----------- REPORT {count} RECEIVED -----------\n")
     print_report()
     if cfa_report.IsFinal == comm_protocol_messages.END_OF_APPLICATION:
         return 0
@@ -507,7 +505,7 @@ def start_protocol():
     isFinal = 1
     app_run_time = 0
     verify_decision = 1
-    while (receive_report()): # while receive partial reports
+    while (receive_report(count)): # while receive partial reports
     # while (count != 1 and isFinal): # while receive partial reports
         # isFinal = receive_report()
         
@@ -524,7 +522,7 @@ def start_protocol():
 
         generate_response()
         send_challenge()
-        count = 1
+        count += 1
 
         if verify_decision == comm_protocol_messages.HEAL_DEVICE:
             break
@@ -576,7 +574,8 @@ if __name__ == "__main__":
     cfg = create_cfg(set_arch("armv8-m33"), asm_lines)
     pconfig.app_start_addr = cfg.label_addr_map['application']
     print(f'Start_addr: { pconfig.app_start_addr}')
-    dump_cfg(cfg, "objects/cfg.pickle")
+    cfg = set_cfg_head(cfg, pconfig.app_start_addr)
+    dump(cfg, "objects/cfg.bin")
 
     in_cmd = ""
     global end_to_end_time
