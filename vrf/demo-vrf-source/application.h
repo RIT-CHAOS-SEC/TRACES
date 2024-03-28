@@ -8,12 +8,15 @@
 #define SYRINGE			3 //
 #define GEIGER			4 //
 #define GPS				5 //
-#define DIJKSTRA		6
-#define SORT			7
-#define HAMMING			8
-#define ATTACK			9
-#define MOUSE			10
-#define APP_SEL 		DIJKSTRA
+#define SEARCH			6 //
+#define CRC32			7 //
+#define DUFF			8 //
+#define PRIME			9 //
+#define DIJKSTRA		76 //
+#define HAMMING			78
+#define ATTACK			79
+#define MOUSE			710
+#define APP_SEL 		PRIME
 
 #include "stdint.h"
 

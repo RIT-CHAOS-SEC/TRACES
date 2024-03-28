@@ -29,9 +29,8 @@ typedef funcptr funcptr_NS;
 
 // LIMITS
 //#define TOTAL_KB			7936
-//#define KBYTE				1024
-
-#define MAX_LOG_SIZE_BYTES	1024*1
+#define KBYTE				1024
+#define MAX_LOG_SIZE_BYTES	16*KBYTE
 #define MAX_CF_LOG_SIZE 	(uint16_t)(MAX_LOG_SIZE_BYTES >> 2) //32 bits (4 bytes) per index
 
 // GENERAL
@@ -116,7 +115,7 @@ typedef funcptr funcptr_NS;
 #define SENSE_APP	0
 #define CFA			1
 #define AUD			2
-#define MODE		AUD
+#define MODE		SENSE_APP
 
 //#define HASH_ENGINE
 

@@ -35,9 +35,12 @@ def instrment_asm(directory, input_file, output_file):
 
 	ret_instrs    		  = ['bx', 'bxeq']
 	call_instrs			  = ['blx'] # bl treated as direct branches
+	dir_call_instrs	      = ['bl']
 	conditional_br_instrs = ['beq','bne','bhs','blo','bhi','bls','bgt','blt','bge','ble','bcs','bcc','bmi','bpl','bvs','bvc']
 
 	conditional_dests = []
+	forward_cond_dests = []
+
 	trampoline = "SECURE"
 	trampoline_cond_br = "SECURE_log_cond_br"
 	trampoline_call = "SECURE_log_call"
@@ -48,31 +51,6 @@ def instrment_asm(directory, input_file, output_file):
 	infile = open(infile_name, "r")
 	lines = infile.readlines()
 	infile.close()
-
-	# count = 0
-	# instruction_count = 0
-	# for x in lines:
-	# 	parsed  = x.split('\t')
-	# 	if len(parsed) > 2:
-	# 		inst = parsed[1]
-	# 		if '.' not in inst:
-	# 			instruction_count += 1
-	# 			if inst in ret_instrs:
-	# 				print(inst)
-	# 				count += 1
-	# 			elif inst in call_instrs:
-	# 				print(inst)
-	# 				count += 1
-	# 			elif inst in conditional_br_instrs:
-	# 				print(inst)
-	# 				count += 1
-	# 			elif inst =='pop':
-	# 				arg = parsed[2]
-	# 				if 'pc' in arg:
-	# 					print(inst+arg)
-	# 					count += 1
-	# print("Total Instructions: "+str(instruction_count))
-	# print("Total branching instructions: "+str(count))
 	
 	outfile = open(outfile_name, "w")
 
@@ -129,7 +107,7 @@ def instrment_asm(directory, input_file, output_file):
 	case = 0
 	# first pass -- instrument calls and returns, and cond.branch not taken
 	
-	forward_cond_dests = []
+	
 	bt = 0
 	while i < len(lines):
 		x = lines[i]
@@ -146,21 +124,21 @@ def instrment_asm(directory, input_file, output_file):
 			print(x, file=outfile)
 			case = 1
 
-		if len(parsed) == 1 and '.' in parsed[0]:
+		if len(parsed) == 1 and '.L' in parsed[0]:
 
 			label = parsed[0].replace(':', '')
 			try:
 				bt = max(int(label.split('L')[1]), bt)
-				print(label)
-				print(f"bt = {bt}")
+				# print(label)
+				# print(f"bt = {bt}")
 			except ValueError:
 				# some data labels are LC#
 				# we can ignore
 				debug_print(f"Ignoring label processing of {label}", file=outfile)
-				
+
 			print(x, file=outfile)
 			if label in conditional_dests:
-				print(label)
+				# print(label)
 				forward_cond_dests.append(label)
 
 		# Assembly line is an instruction
@@ -212,22 +190,15 @@ def instrment_asm(directory, input_file, output_file):
 			case = 8
 			print(x, file=outfile)
 
-	print("------------------")
-	print("Conditional br destinations: "+str(conditional_dests))
-	print("Forward cond. br destinations: "+str(forward_cond_dests))
-	print("------------------")
-
 	outfile.close()
 
 	infile = open(outfile_name, "r")
 	lines = infile.readlines()
-	print(f'FIRST LINE: {lines[0]}')
+	# print(f'FIRST LINE: {lines[0]}')
 	infile.close()
 
-	outfile = open(outfile_name, "w")
-
 	lines = [x.replace('\n','') for x in lines]
-	print(f'FIRST LINE: {lines[0]}')
+	# print(f'FIRST LINE: {lines[0]}')
 	# second pass -- instrument cond.branch taken
 	
 	ready = True
@@ -238,8 +209,9 @@ def instrment_asm(directory, input_file, output_file):
 		bt += 1
 
 	inst = ''
-	print(f"bt = {bt}")
+	# print(f"bt = {bt}")
 	i = 0
+	new_lines = []
 	while i < len(lines):
 		x = lines[i]
 		parsed = x.split('\t')
@@ -250,36 +222,129 @@ def instrment_asm(directory, input_file, output_file):
 			if (parsed[1] in conditional_br_instrs) and parsed[2] in forward_cond_dests:
 				inst = parsed[1]
 				args = parsed[2]
-				print(x.replace(args, '.L'+str(forward_conds[args])), file=outfile)
+				new_lines.append(x.replace(args, '.L'+str(forward_conds[args])))
+				# print(x.replace(args, '.L'+str(forward_conds[args])), file=outfile)
 			else:
-				print(x, file=outfile)	
+				# print(x, file=outfile)	
+				new_lines.append(x)
 		elif len(parsed) == 1:
 			inst = ''
 			label = parsed[0].split(":")[0]
 			if label in forward_cond_dests:
 				prev = lines[i-1].split('\t')
 				# dont need to add branch if prev. is a dir branch
-				print(f'prev: {prev}')
+				# print(f'prev: {prev}')
 				if len(prev) > 2:
 					inst = prev[1]
 					if 'b' != inst:
-						print(f'inst: {inst}')
-						print(f'\tb\t{label}', file=outfile)
+						# print(f'inst: {inst}')
+						# print(f'\tb\t{label}', file=outfile)
+						new_lines.append(f'\tb\t{label}')
 						# a = input()
-				print(f'.L{forward_conds[label]}:', file=outfile)
-				print(f'\tbl\t{trampoline_cond_br}_taken', file=outfile)
-				print(x, file=outfile)
+				# print(f'.L{forward_conds[label]}:', file=outfile)
+				# print(f'\tbl\t{trampoline_cond_br}_taken', file=outfile)
+				# print(x, file=outfile)
+				new_lines.append(f'.L{forward_conds[label]}:')
+				new_lines.append(f'\tbl\t{trampoline_cond_br}_taken')
+				new_lines.append(x)
+				conditional_dests.remove(label)
 			elif label in conditional_dests:
+				# is a loop
 				label = parsed[0].split(":")[0]
-				debug_print("------ instrumenting cond branch dest ("+x+")", file=outfile)
-				print(x, file=outfile)
-				print("\tbl\t"+trampoline_cond_br+'_taken', file=outfile)
+				j = i+1
+				empty_Loop = True
+				while label not in lines[j]:
+					for inst in call_instrs+dir_call_instrs:
+						if inst in lines[j]:
+							empty_Loop = False
+					for inst in conditional_br_instrs:
+						if inst in lines[j] and label not in lines[j]:
+							empty_Loop = False
+					j += 1
+				# print(f"Empty Loop: {empty_Loop}")
+				# print(f'Label line: {lines[j]}')
+				# print(f'Cond line: {lines[j-1]}')
+				# a = input()
+
+				if empty_Loop:
+					_, inst, args = lines[j-1].split('\t')
+					comp_reg, comp_base = args.split(', ')
+					
+					# traverse back until find where comp_reg is first written
+					# print(f'comp_reg: {comp_reg}')
+					loop_end_l = j
+					while not ('mov' in lines[j] and comp_reg in lines[j]) and not ('mov' in lines[j] and comp_base in lines[j]):
+						j -= 1
+					loop_start_l = j
+					# assumed format of (comp_reg, comp_base), but was actually (comp_base, comp_reg)
+					if ('mov' in lines[j] and comp_base in lines[j]):
+						tmp = comp_reg
+						comp_reg = comp_base
+						comp_base = tmp 
+					# print(f'Found in lines at {j}: {lines[j]}')
+					dec = 0
+					while not ('mov' in new_lines[dec] and comp_reg in new_lines[dec]) and not ('mov' in new_lines[dec] and comp_base in new_lines[dec]):
+						dec -=1
+					dec = len(new_lines)+dec
+					# print(f'len(new_lines): {len(new_lines)}')
+					# print(f'dec: {dec}')
+					
+					# print(f'Found in new_lines at {dec}: {new_lines[dec]}')
+					if '#' in comp_base:
+						# a = input()
+						## insert instrumentation to log the br-taken address and loop condition
+						inserted = []
+						inserted.append(f'\tadr\tr10, {label}')
+						inserted.append(f'\tmov\tr11, {comp_base}')
+						inserted.append(f'\tbl\t{trampoline}_log_loop_cond')
+						new_lines = new_lines[:dec] + inserted + new_lines[dec:] + [x]
+					else:
+						## loop base is a reg. check if it is also modified in the loop
+						notModified = True
+						for j in range(loop_start_l, loop_end_l-1):
+							if (comp_base in lines[j] and ('str' not in lines[j] and 'ldr' not in lines[j])):
+								notModified = False
+								# print(lines[j])
+						# print(f'{comp_base} not Modified? --> {notModified}')	
+					
+						if notModified:
+							# if not modified, log the initial value
+							## add the optimized version
+							inserted = []
+							inserted.append(f'\tadr\tr10, {label}')
+							inserted.append(f'\tmov\tr11, {comp_base}')
+							inserted.append(f'\tbl\t{trampoline}_log_loop_cond')
+							new_lines = new_lines[:dec] + inserted + new_lines[dec:] + [x]
+						else:
+							# if modified, log normally
+							new_lines.append(x)
+							new_lines.append("\tbl\t"+trampoline_cond_br+'_taken')
+						# a = input()
+		
+				else:
+					# there is internal branching, so instrument in typical manner
+					debug_print("------ instrumenting cond branch dest ("+x+")", file=outfile)
+					# print(x, file=outfile)
+					# print("\tbl\t"+trampoline_cond_br+'_taken', file=outfile)
+					new_lines.append(x)
+					new_lines.append("\tbl\t"+trampoline_cond_br+'_taken')
+
 			else:
-				print(x, file=outfile)	
+				new_lines.append(x)
+				# print(x, file=outfile)	
 		else:
-			print(x, file=outfile)
+			new_lines.append(x)
+			# print(x, file=outfile)	
 		i += 1
+	outfile = open(outfile_name, "w")
+	for line in new_lines:
+	    outfile.write(line + "\n")
 	outfile.close()
+
+	print("------------------")
+	print("Conditional br destinations: "+str(conditional_dests))
+	print("Forward cond. br destinations: "+str(forward_cond_dests))
+	print("------------------")
 	#'''
 
 if __name__ == '__main__':

@@ -47,6 +47,7 @@ void SECURE_Initialize_CFA_engine();
 void SECURE_Initialize_Attestation();
 void SECURE_log_ret();
 //void SECURE_log_cond_br();
+void SECURE_log_loop_cond();
 void SECURE_log_cond_br_taken();
 void SECURE_log_cond_br_not_taken();
 void SECURE_log_call(uint32_t);

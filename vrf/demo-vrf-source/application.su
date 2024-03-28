@@ -1,8 +1,5 @@
-application.c:1482:1:qinit_heap	16	static
-application.c:1501:1:qmalloc_beebs	24	static
-application.c:1523:1:qfree_beebs	24	static
-application.c:1532:6:enqueue	32	static
-application.c:1555:8:dequeue	32	static
-application.c:1572:5:qcount	4	static
-application.c:1577:5:dijkstra	24	static
-application.c:1624:6:application	24	static
+application.c:16:6:divides	16	static
+application.c:20:6:even	16	static
+application.c:24:6:prime	24	static
+application.c:35:6:swap	24	static
+application.c:45:6:application	8	static

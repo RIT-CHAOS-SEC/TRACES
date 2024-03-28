@@ -65,6 +65,8 @@ class ProtocolConfig:
     prv_sign_rep_time = 0
     prv_verify_resp_time = 0
     app_start_addr = ""
+    start_time = 0
+    end_time = 0
     @property
     def aermin():
         aux = [0xe0, 0x00] #aer_min = 0xe000
@@ -250,7 +252,7 @@ def verify_report():
     cflog = parse_cflog("../cflogs/"+str(pconfig.report_num)+".cflog")
     
     cfg = load("objects/cfg.bin")
-    
+
     valid_cflog, current_node, offending_node, cflog_index, shadow_stack_violation, shadow_stack_addr = verify(cfg, cflog, pconfig.app_start_addr)
 
     if valid_cflog:
@@ -271,9 +273,10 @@ def verify_report():
     
 
     verify_time_stop = time.perf_counter()
-    # print(" ")
-    # print("Time for Vrf to verify the attestation report: "+str(1000*(verify_time_stop - verify_time_start))+"ms")
-    # print(" ")
+    printblue("-----------------------------------------------------------")
+    printblue(f"CFLOG SIZE: {len(cflog)} entries = {len(cflog)*4} Bytes")
+    printblue("Time for Vrf to verify the attestation report: "+str(1000*(verify_time_stop - verify_time_start))+"ms")
+    printblue("-----------------------------------------------------------")
 
     return comm_protocol_messages.CONTINUE_APPLICATION
 
@@ -323,7 +326,7 @@ def send_initial_message():
         printgreen("Data Expected: ", end='')
         print(comm_protocol_messages.INITIALIZE_PROTOCOL_RESPONSE)
 
-def send_challenge():
+def send_response():
     comm_start = time.perf_counter()
     printyellow("Sending new challange ...")
     print(str(pconfig.challenge))
@@ -499,9 +502,10 @@ def start_protocol():
     count = 0
     printgreen("Sending Initial Message ...\n")
     send_initial_message()
+    pconfig.start_time = time.perf_counter()
     printgreen("\nSending Challenge ...\n")
     generate_response()
-    send_challenge()
+    send_response()
     isFinal = 1
     app_run_time = 0
     verify_decision = 1
@@ -521,7 +525,7 @@ def start_protocol():
         send(verify_decision)
 
         generate_response()
-        send_challenge()
+        send_response()
         count += 1
 
         if verify_decision == comm_protocol_messages.HEAL_DEVICE:
@@ -593,17 +597,15 @@ if __name__ == "__main__":
         if in_cmd == 's':
             break
         printgreen(f'Starting protocol ...\n')
-        # TIME MEASURING
-        start = time.perf_counter()
+
         # START PROTOCOL
         verify_decision = start_protocol()  
         # TIME MEASURING
-        end = time.perf_counter()
+        pconfig.end_time = time.perf_counter()
         # printblue('Elapsed time : '+str(end - start)+'s or ' + str((end - start)*1000)+'ms\n')
         pconfig.report_num += 1
         pconfig.challenge = update_challenge(pconfig.report_num,pconfig.challenge)
         # total_comm += pconfig.comm_time
-        end_to_end_time += (end - start)
-        print("--------------------- CUMULATIVE TIME -----------------------------")
+        end_to_end_time += (pconfig.end_time - pconfig.start_time)
         printblue('Total time : '+str(end_to_end_time)+'s or ' + str((end_to_end_time)*1000)+'ms\n')
     

@@ -246,7 +246,7 @@ int STATE_initialize_attestation(){
 		_send_report();
 	}
 
-	total_runtime += app_exec_time + time_sign_report + send_report_time + receive_resp_time + verify_resp_time;
+//	total_runtime += app_exec_time + time_sign_report + send_report_time + receive_resp_time + verify_resp_time;
 
 	return CONTINUE_LOOP;
 }
@@ -393,8 +393,8 @@ uint8_t  _receive_challenge(){
 	SecureUartRx((uint8_t*)(&chl[0]), 1);
 	receive_resp_start = HAL_GetTick();
 	SecureUartRx((uint8_t*)(&chl[1]), CHAL_SIZE-1);
-	uint32_t recv_chal_stop = HAL_GetTick();
-	uint32_t recv_chal = recv_chal_stop - receive_resp_start;
+//	uint32_t recv_chal_stop = HAL_GetTick();
+//	uint32_t recv_chal = recv_chal_stop - receive_resp_start;
 //	SecureUartTx(init_chal, COMMAND_SIZE); // echo for debug
 //	SecureUartTx((uint8_t*)chl, 64);
 
@@ -402,18 +402,20 @@ uint8_t  _receive_challenge(){
 	uint32_t recv_sig_start = HAL_GetTick();
 	SecureUartRx((uint8_t*)(&vrf_resp.signature), 32);
 //	SecureUartTx((uint8_t*)(&vrf_resp.signature), SIGNATURE_SIZE_BYTES);
-	uint32_t recv_sig_stop = HAL_GetTick();
-	uint32_t recv_sig = recv_sig_stop - recv_sig_start;
+//	uint32_t recv_sig_stop = HAL_GetTick();
+//	uint32_t recv_sig = recv_sig_stop - recv_sig_start;
 
 	receive_resp_stop = HAL_GetTick();
 	receive_resp_time += receive_resp_stop-receive_resp_start;
 
+
+
 	verify_resp_start = HAL_GetTick();
 
 	// Check chal is greater than prev chal
-	int valid_next_chal = 1;
 	unsigned int i;
 	#if MODE == AUD
+	int valid_next_chal = 1;
 	for(i=0; i<CHAL_SIZE; i++){
 		if(chl[i] < cfa_engine_conf.challenge[i]){
 			valid_next_chal = 0;
@@ -431,14 +433,14 @@ uint8_t  _receive_challenge(){
 //    curve = uECC_secp256r1();
 //    int valid_sig =  uECC_verify(public_key, response_hash, HASH_SIZE_BYTES, vrf_resp.signature, curve);
 
-	uint32_t hmac_start = HAL_GetTick();
+//	uint32_t hmac_start = HAL_GetTick();
 	#ifdef HASH_ENGINE
     HMAC_SHA_265((uint8_t*)(&vrf_resp), response_size, hash_output);
 	#else
     hmac(hash_output, att_key, 32, (uint8_t*)(&vrf_resp), (uint32_t) response_size);
 	#endif
-    uint32_t hmac_stop = HAL_GetTick();
-    hmac_time = hmac_stop-hmac_start;
+//    uint32_t hmac_stop = HAL_GetTick();
+//    hmac_time = hmac_stop-hmac_start;
 
     int valid_sig = 1;
     for(i=0; i<32; i++){
@@ -446,9 +448,11 @@ uint8_t  _receive_challenge(){
     		valid_sig = 0;
     	}
     }
-
+	#if MODE == AUD
     vrf_resp.verify_result = (valid_next_chal & valid_sig);
-
+	#else
+    	vrf_resp.verify_result = valid_sig;
+	#endif
     verify_resp_stop = HAL_GetTick();
     verify_resp_time += verify_resp_stop-verify_resp_start;
     recv_verify_response_time = receive_resp_time + verify_resp_time;
