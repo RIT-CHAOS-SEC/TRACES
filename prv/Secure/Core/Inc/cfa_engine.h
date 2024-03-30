@@ -1,10 +1,3 @@
-/*
- * cfa_engine.h
- *
- *  Created on: Dec 4, 2022
- *      Author: nneto
- */
-
 #ifndef INC_CFA_ENGINE_H_
 #define INC_CFA_ENGINE_H_
 
@@ -27,8 +20,7 @@
 /* typedef for non-secure callback functions */
 typedef funcptr funcptr_NS;
 
-// LIMITS
-//#define TOTAL_KB			7936
+// CFLog Sizes
 #define KBYTE				1024
 #define MAX_LOG_SIZE_BYTES	16*KBYTE
 #define MAX_CF_LOG_SIZE 	(uint16_t)(MAX_LOG_SIZE_BYTES >> 2) //32 bits (4 bytes) per index
@@ -115,7 +107,7 @@ typedef funcptr funcptr_NS;
 #define SENSE_APP	0
 #define CFA			1
 #define AUD			2
-#define MODE		SENSE_APP
+#define MODE		AUD
 
 //#define HASH_ENGINE
 

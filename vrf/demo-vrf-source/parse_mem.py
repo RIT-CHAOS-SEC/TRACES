@@ -62,6 +62,33 @@ def string_to_int(s):
 
 	return 16*int_vals[0]+int_vals[1]
 
+def get_total_cflog_size(cflog_dir):
+	print("----------")
+	print("Processing logs")
+	cf_events = 0
+	cflog_entries = 0
+	log_num = 0
+	more_cflogs = True
+	while more_cflogs:
+		try:
+			file_path = cflog_dir+str(log_num)+".cflog"
+			f = open(file_path)
+			print("\tProcessing \'"+file_path+"\'")
+			for x in f:
+				elt = x.replace("\n","")
+				cflog_entries += 1
+				if elt[:4] == "ffff":
+					cf_events += int(elt[4:],16)-1
+				else:
+					cf_events += 1
+			log_num += 1
+		except FileNotFoundError:
+			print(f"Cant find {log_num}")
+			more_cflogs = False
+
+	return cf_events, cflog_entries
+
+
 if __name__ == '__main__':
 	blake2b_blocksize = 128
 

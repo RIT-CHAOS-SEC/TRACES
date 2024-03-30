@@ -27,1122 +27,1038 @@ successors: []
 adj_instr: None
 ---------------------------
 start_addr: 0x8040238
-end_addr: 0x8040266
+end_addr: 0x8040262
 type: ret
-instrs: 21
+instrs: 18
 successors: []
-adj_instr: None
+adj_instr: 0x8040270
 ---------------------------
-start_addr: 0x8040268
-end_addr: 0x8040274
-type: call
+start_addr: 0x8040270
+end_addr: 0x804027e
+type: uncond
 instrs: 7
+successors: ['0x80402a2']
+adj_instr: 0x8040280
+---------------------------
+start_addr: 0x8040280
+end_addr: 0x8040284
+type: call
+instrs: 2
 successors: ['0x8040238']
-adj_instr: 0x8040278
+adj_instr: 0x8040288
 ---------------------------
-start_addr: 0x8040278
-end_addr: 0x8040280
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040282
-end_addr: 0x804028c
-type: call
-instrs: 6
-successors: ['0x8040268']
-adj_instr: 0x8040290
----------------------------
-start_addr: 0x8040290
-end_addr: 0x8040294
-type: cond
-instrs: 3
-successors: ['0x80402a4']
-adj_instr: 0x8040296
----------------------------
-start_addr: 0x8040296
-end_addr: 0x80402a2
-type: uncond
-instrs: 7
-successors: ['0x80402dc']
-adj_instr: 0x80402a4
----------------------------
-start_addr: 0x80402a4
+start_addr: 0x8040288
 end_addr: 0x80402a8
-type: uncond
-instrs: 3
-successors: ['0x80402c2']
+type: cond
+instrs: 14
+successors: ['0x8040280']
 adj_instr: 0x80402aa
 ---------------------------
 start_addr: 0x80402aa
-end_addr: 0x80402ae
-type: call
-instrs: 3
-successors: ['0x8040238']
-adj_instr: 0x80402b2
----------------------------
-start_addr: 0x80402b2
-end_addr: 0x80402b6
-type: cond
-instrs: 3
-successors: ['0x80402bc']
-adj_instr: 0x80402b8
----------------------------
-start_addr: 0x80402b8
 end_addr: 0x80402ba
-type: uncond
-instrs: 2
-successors: ['0x80402dc']
-adj_instr: 0x80402bc
----------------------------
-start_addr: 0x80402bc
-end_addr: 0x80402ce
-type: cond
-instrs: 9
-successors: ['0x80402aa']
-adj_instr: 0x80402d0
----------------------------
-start_addr: 0x80402d0
-end_addr: 0x80402e2
 type: ret
-instrs: 10
+instrs: 7
 successors: []
-adj_instr: None
+adj_instr: 0x80402c4
 ---------------------------
-start_addr: 0x80402e4
-end_addr: 0x804030c
-type: ret
-instrs: 19
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040310
-end_addr: 0x8040326
-type: call
-instrs: 11
-successors: ['0x80402e4']
-adj_instr: 0x804032a
----------------------------
-start_addr: 0x804032a
-end_addr: 0x8040330
+start_addr: 0x80402c4
+end_addr: 0x80402ca
 type: call
 instrs: 4
-successors: ['0x8040282']
-adj_instr: 0x8040334
+successors: ['0x8040270']
+adj_instr: 0x80402ce
 ---------------------------
-start_addr: 0x8040334
-end_addr: 0x8040338
-type: cond
-instrs: 3
-successors: ['0x804034a']
-adj_instr: 0x804033a
+start_addr: 0x80402ce
+end_addr: 0x80402e4
+type: ret
+instrs: 9
+successors: []
+adj_instr: 0x80402e8
 ---------------------------
-start_addr: 0x804033a
+start_addr: 0x80402e8
+end_addr: 0x8040334
+type: call
+instrs: 34
+successors: ['0x8040abc']
+adj_instr: 0x8040338
+---------------------------
+start_addr: 0x8040338
 end_addr: 0x8040340
 type: call
 instrs: 4
-successors: ['0x8040282']
+successors: ['0x8040abc']
 adj_instr: 0x8040344
 ---------------------------
 start_addr: 0x8040344
-end_addr: 0x8040348
-type: cond
-instrs: 3
-successors: ['0x804034e']
-adj_instr: 0x804034a
----------------------------
-start_addr: 0x804034a
-end_addr: 0x804034c
-type: uncond
-instrs: 2
-successors: ['0x8040350']
-adj_instr: 0x804034e
----------------------------
-start_addr: 0x804034e
-end_addr: 0x804035c
-type: ret
-instrs: 6
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040370
-end_addr: 0x80403bc
-type: call
-instrs: 34
-successors: ['0x8040b44']
-adj_instr: 0x80403c0
----------------------------
-start_addr: 0x80403c0
-end_addr: 0x80403c8
-type: call
-instrs: 4
-successors: ['0x8040b44']
-adj_instr: 0x80403cc
----------------------------
-start_addr: 0x80403cc
-end_addr: 0x80403e2
+end_addr: 0x804035a
 type: call
 instrs: 10
-successors: ['0x8040844']
-adj_instr: 0x80403e6
+successors: ['0x80407bc']
+adj_instr: 0x804035e
 ---------------------------
-start_addr: 0x80403e6
-end_addr: 0x80403fe
+start_addr: 0x804035e
+end_addr: 0x8040376
 type: call
 instrs: 12
-successors: ['0x8040844']
-adj_instr: 0x8040402
+successors: ['0x80407bc']
+adj_instr: 0x804037a
 ---------------------------
-start_addr: 0x8040402
-end_addr: 0x804041c
+start_addr: 0x804037a
+end_addr: 0x8040394
 type: call
 instrs: 12
-successors: ['0x8040844']
-adj_instr: 0x8040422
+successors: ['0x80407bc']
+adj_instr: 0x804039a
 ---------------------------
-start_addr: 0x8040422
-end_addr: 0x8040426
+start_addr: 0x804039a
+end_addr: 0x804039e
 type: ret
 instrs: 3
 successors: []
 adj_instr: None
 ---------------------------
-start_addr: 0x8040434
-end_addr: 0x8040440
+start_addr: 0x80403ac
+end_addr: 0x80403b8
 type: call
 instrs: 6
-successors: ['0x8040b44']
-adj_instr: 0x8040444
+successors: ['0x8040abc']
+adj_instr: 0x80403bc
 ---------------------------
-start_addr: 0x8040444
-end_addr: 0x8040444
+start_addr: 0x80403bc
+end_addr: 0x80403bc
 type: call
 instrs: 1
-successors: ['0x80404a4']
-adj_instr: 0x804044a
+successors: ['0x804041c']
+adj_instr: 0x80403c2
 ---------------------------
-start_addr: 0x804044a
-end_addr: 0x804044a
+start_addr: 0x80403c2
+end_addr: 0x80403c2
 type: ret
 instrs: 1
 successors: []
 adj_instr: None
 ---------------------------
-start_addr: 0x8040450
-end_addr: 0x804045c
+start_addr: 0x80403c8
+end_addr: 0x80403d4
 type: call
 instrs: 6
-successors: ['0x8040b44']
-adj_instr: 0x8040460
+successors: ['0x8040abc']
+adj_instr: 0x80403d8
 ---------------------------
-start_addr: 0x8040460
-end_addr: 0x8040460
+start_addr: 0x80403d8
+end_addr: 0x80403d8
 type: call
 instrs: 1
-successors: ['0x80404a4']
-adj_instr: 0x8040466
+successors: ['0x804041c']
+adj_instr: 0x80403de
 ---------------------------
-start_addr: 0x8040466
-end_addr: 0x8040466
+start_addr: 0x80403de
+end_addr: 0x80403de
 type: ret
 instrs: 1
 successors: []
 adj_instr: None
 ---------------------------
-start_addr: 0x804046c
-end_addr: 0x8040470
+start_addr: 0x80403e4
+end_addr: 0x80403e8
 type: call
 instrs: 3
-successors: ['0x80405a6']
-adj_instr: 0x8040474
+successors: ['0x804051e']
+adj_instr: 0x80403ec
 ---------------------------
-start_addr: 0x8040474
-end_addr: 0x8040474
+start_addr: 0x80403ec
+end_addr: 0x80403ec
 type: call
 instrs: 1
-successors: ['0x8040370']
-adj_instr: 0x8040478
+successors: ['0x80402e8']
+adj_instr: 0x80403f0
 ---------------------------
-start_addr: 0x8040478
-end_addr: 0x8040494
+start_addr: 0x80403f0
+end_addr: 0x804040c
 type: uncond
 instrs: 11
-successors: ['0x8040490']
-adj_instr: 0x80404a4
+successors: ['0x8040408']
+adj_instr: 0x804041c
 ---------------------------
-start_addr: 0x80404a4
-end_addr: 0x80404ac
+start_addr: 0x804041c
+end_addr: 0x8040424
 type: uncond
 instrs: 4
-successors: ['0x80404ac']
-adj_instr: 0x80404b0
+successors: ['0x8040424']
+adj_instr: 0x8040428
 ---------------------------
-start_addr: 0x80404b0
-end_addr: 0x80404f0
+start_addr: 0x8040428
+end_addr: 0x8040468
 type: ret
 instrs: 27
 successors: []
 adj_instr: None
 ---------------------------
-start_addr: 0x80404f8
-end_addr: 0x80404fc
+start_addr: 0x8040470
+end_addr: 0x8040474
 type: uncond
 instrs: 3
-successors: ['0x80404fc']
+successors: ['0x8040474']
+adj_instr: 0x8040476
+---------------------------
+start_addr: 0x8040476
+end_addr: 0x804047a
+type: uncond
+instrs: 3
+successors: ['0x804047a']
+adj_instr: 0x804047c
+---------------------------
+start_addr: 0x804047c
+end_addr: 0x8040488
+type: ret
+instrs: 5
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x804048a
+end_addr: 0x8040496
+type: ret
+instrs: 5
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040498
+end_addr: 0x804049c
+type: call
+instrs: 3
+successors: ['0x80405cc']
+adj_instr: 0x80404a2
+---------------------------
+start_addr: 0x80404a2
+end_addr: 0x80404a2
+type: ret
+instrs: 1
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x80404a4
+end_addr: 0x80404b0
+type: ret
+instrs: 5
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x80404b4
+end_addr: 0x80404c4
+type: ret
+instrs: 7
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x80404cc
+end_addr: 0x80404d0
+type: call
+instrs: 2
+successors: ['0x80404a4']
+adj_instr: 0x80404d4
+---------------------------
+start_addr: 0x80404d4
+end_addr: 0x80404d6
+type: uncond
+instrs: 2
+successors: ['0x80404e0']
+adj_instr: 0x80404d8
+---------------------------
+start_addr: 0x80404d8
+end_addr: 0x80404e8
+type: cond
+instrs: 9
+successors: ['0x80404d8']
+adj_instr: 0x80404ea
+---------------------------
+start_addr: 0x80404ea
+end_addr: 0x80404ec
+type: uncond
+instrs: 2
+successors: ['0x80404f4']
+adj_instr: 0x80404ee
+---------------------------
+start_addr: 0x80404ee
+end_addr: 0x80404f8
+type: cond
+instrs: 5
+successors: ['0x80404ee']
+adj_instr: 0x80404fa
+---------------------------
+start_addr: 0x80404fa
+end_addr: 0x80404fa
+type: call
+instrs: 1
+successors: ['0x8040aec']
 adj_instr: 0x80404fe
 ---------------------------
 start_addr: 0x80404fe
-end_addr: 0x8040502
-type: uncond
-instrs: 3
-successors: ['0x8040502']
-adj_instr: 0x8040504
----------------------------
-start_addr: 0x8040504
-end_addr: 0x8040510
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040512
-end_addr: 0x804051e
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040520
-end_addr: 0x8040524
-type: call
-instrs: 3
-successors: ['0x8040654']
-adj_instr: 0x804052a
----------------------------
-start_addr: 0x804052a
-end_addr: 0x804052a
-type: ret
-instrs: 1
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x804052c
-end_addr: 0x8040538
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x804053c
-end_addr: 0x804054c
-type: ret
-instrs: 7
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040554
-end_addr: 0x8040558
-type: call
-instrs: 2
-successors: ['0x804052c']
-adj_instr: 0x804055c
----------------------------
-start_addr: 0x804055c
-end_addr: 0x804055e
-type: uncond
-instrs: 2
-successors: ['0x8040568']
-adj_instr: 0x8040560
----------------------------
-start_addr: 0x8040560
-end_addr: 0x8040570
-type: cond
-instrs: 9
-successors: ['0x8040560']
-adj_instr: 0x8040572
----------------------------
-start_addr: 0x8040572
-end_addr: 0x8040574
-type: uncond
-instrs: 2
-successors: ['0x804057c']
-adj_instr: 0x8040576
----------------------------
-start_addr: 0x8040576
-end_addr: 0x8040580
-type: cond
-instrs: 5
-successors: ['0x8040576']
-adj_instr: 0x8040582
----------------------------
-start_addr: 0x8040582
-end_addr: 0x8040582
+end_addr: 0x80404fe
 type: call
 instrs: 1
-successors: ['0x8040b74']
-adj_instr: 0x8040586
----------------------------
-start_addr: 0x8040586
-end_addr: 0x8040586
-type: call
-instrs: 1
-successors: ['0x804046c']
-adj_instr: 0x804058a
----------------------------
-start_addr: 0x804058a
-end_addr: 0x804058a
-type: uncond
-instrs: 1
-successors: ['0x804058a']
-adj_instr: 0x80405a4
----------------------------
-start_addr: 0x80405a4
-end_addr: 0x80405a4
-type: uncond
-instrs: 1
-successors: ['0x80405a4']
-adj_instr: 0x80405a6
----------------------------
-start_addr: 0x80405a6
-end_addr: 0x80405b2
-type: call
-instrs: 7
-successors: ['0x80407e0']
-adj_instr: 0x80405b6
----------------------------
-start_addr: 0x80405b6
-end_addr: 0x80405b6
-type: call
-instrs: 1
-successors: ['0x804053c']
-adj_instr: 0x80405ba
----------------------------
-start_addr: 0x80405ba
-end_addr: 0x80405bc
-type: call
-instrs: 2
-successors: ['0x80405dc']
-adj_instr: 0x80405c0
----------------------------
-start_addr: 0x80405c0
-end_addr: 0x80405c4
-type: cond
-instrs: 3
-successors: ['0x80405cc']
-adj_instr: 0x80405c6
----------------------------
-start_addr: 0x80405c6
-end_addr: 0x80405ca
-type: uncond
-instrs: 3
-successors: ['0x80405d0']
-adj_instr: 0x80405cc
----------------------------
-start_addr: 0x80405cc
-end_addr: 0x80405cc
-type: call
-instrs: 1
-successors: ['0x80404b0']
-adj_instr: 0x80405d0
----------------------------
-start_addr: 0x80405d0
-end_addr: 0x80405d8
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x80405dc
-end_addr: 0x80405ee
-type: cond
-instrs: 10
-successors: ['0x8040638']
-adj_instr: 0x80405f0
----------------------------
-start_addr: 0x80405f0
-end_addr: 0x8040608
-type: call
-instrs: 10
-successors: ['0x804082a']
-adj_instr: 0x804060c
----------------------------
-start_addr: 0x804060c
-end_addr: 0x8040610
-type: cond
-instrs: 3
-successors: ['0x8040632']
-adj_instr: 0x8040612
----------------------------
-start_addr: 0x8040612
-end_addr: 0x8040616
-type: cond
-instrs: 3
-successors: ['0x804062c']
-adj_instr: 0x8040618
----------------------------
-start_addr: 0x8040618
-end_addr: 0x8040620
-type: call
-instrs: 4
-successors: ['0x80407f6']
-adj_instr: 0x8040624
----------------------------
-start_addr: 0x8040624
-end_addr: 0x804062a
-type: uncond
-instrs: 4
-successors: ['0x804063c']
-adj_instr: 0x804062c
----------------------------
-start_addr: 0x804062c
-end_addr: 0x8040630
-type: uncond
-instrs: 3
-successors: ['0x804063c']
-adj_instr: 0x8040632
----------------------------
-start_addr: 0x8040632
-end_addr: 0x8040636
-type: uncond
-instrs: 3
-successors: ['0x804063c']
-adj_instr: 0x8040638
----------------------------
-start_addr: 0x8040638
-end_addr: 0x8040644
-type: ret
-instrs: 7
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040654
-end_addr: 0x8040670
-type: ret
-instrs: 13
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x804067c
-end_addr: 0x80406be
-type: ret
-instrs: 28
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x80406c4
-end_addr: 0x80406da
-type: ret
-instrs: 10
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x80406e0
-end_addr: 0x80406f2
-type: cond
-instrs: 9
-successors: ['0x804070a']
-adj_instr: 0x80406f4
----------------------------
-start_addr: 0x80406f4
-end_addr: 0x8040708
-type: uncond
-instrs: 9
-successors: ['0x8040720']
-adj_instr: 0x804070a
----------------------------
-start_addr: 0x804070a
-end_addr: 0x804072a
-type: ret
-instrs: 14
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040734
-end_addr: 0x804075c
-type: cond
-instrs: 19
-successors: ['0x8040764']
-adj_instr: 0x804075e
----------------------------
-start_addr: 0x804075e
-end_addr: 0x8040762
-type: uncond
-instrs: 3
-successors: ['0x8040766']
-adj_instr: 0x8040764
----------------------------
-start_addr: 0x8040764
-end_addr: 0x8040798
-type: ret
-instrs: 22
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x804079c
-end_addr: 0x80407ac
-type: cond
-instrs: 8
-successors: ['0x80407b2']
-adj_instr: 0x80407ae
----------------------------
-start_addr: 0x80407ae
-end_addr: 0x80407b0
-type: uncond
-instrs: 2
-successors: ['0x80407d2']
-adj_instr: 0x80407b2
----------------------------
-start_addr: 0x80407b2
-end_addr: 0x80407c0
-type: call
-instrs: 7
-successors: ['0x80406e0']
-adj_instr: 0x80407c4
----------------------------
-start_addr: 0x80407c4
-end_addr: 0x80407d8
-type: ret
-instrs: 11
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x80407e0
-end_addr: 0x80407ea
-type: call
-instrs: 6
-successors: ['0x804067c']
-adj_instr: 0x80407f0
----------------------------
-start_addr: 0x80407f0
-end_addr: 0x80407f4
-type: ret
-instrs: 3
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x80407f6
-end_addr: 0x8040804
-type: call
-instrs: 8
-successors: ['0x80406c4']
-adj_instr: 0x8040808
----------------------------
-start_addr: 0x8040808
-end_addr: 0x8040810
-type: call
-instrs: 5
-successors: ['0x8040734']
-adj_instr: 0x8040814
----------------------------
-start_addr: 0x8040814
-end_addr: 0x804081e
-type: call
-instrs: 5
-successors: ['0x80406e0']
-adj_instr: 0x8040824
----------------------------
-start_addr: 0x8040824
-end_addr: 0x8040828
-type: ret
-instrs: 3
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x804082a
-end_addr: 0x8040834
-type: call
-instrs: 6
-successors: ['0x804079c']
-adj_instr: 0x8040838
----------------------------
-start_addr: 0x8040838
-end_addr: 0x8040840
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040844
-end_addr: 0x8040852
-type: uncond
-instrs: 8
-successors: ['0x8040b06']
-adj_instr: 0x8040854
----------------------------
-start_addr: 0x8040854
-end_addr: 0x8040868
-type: cond
-instrs: 10
-successors: ['0x8040b00']
-adj_instr: 0x804086c
----------------------------
-start_addr: 0x804086c
-end_addr: 0x8040872
-type: cond
-instrs: 4
-successors: ['0x804088c']
-adj_instr: 0x8040874
----------------------------
-start_addr: 0x8040874
-end_addr: 0x804087a
-type: cond
-instrs: 4
-successors: ['0x804088c']
-adj_instr: 0x804087c
----------------------------
-start_addr: 0x804087c
-end_addr: 0x8040882
-type: cond
-instrs: 4
-successors: ['0x804088c']
-adj_instr: 0x8040884
----------------------------
-start_addr: 0x8040884
-end_addr: 0x804088a
-type: cond
-instrs: 4
-successors: ['0x80408ee']
-adj_instr: 0x804088c
----------------------------
-start_addr: 0x804088c
-end_addr: 0x8040924
-type: cond
-instrs: 70
-successors: ['0x804092e']
-adj_instr: 0x8040926
----------------------------
-start_addr: 0x8040926
-end_addr: 0x804092c
-type: cond
-instrs: 4
-successors: ['0x8040976']
-adj_instr: 0x804092e
----------------------------
-start_addr: 0x804092e
-end_addr: 0x80409b4
-type: cond
-instrs: 58
-successors: ['0x8040b00']
-adj_instr: 0x80409b8
----------------------------
-start_addr: 0x80409b8
-end_addr: 0x80409e2
-type: cond
-instrs: 19
-successors: ['0x8040a30']
-adj_instr: 0x80409e4
----------------------------
-start_addr: 0x80409e4
-end_addr: 0x80409ea
-type: cond
-instrs: 4
-successors: ['0x8040a2c']
-adj_instr: 0x80409ec
----------------------------
-start_addr: 0x80409ec
-end_addr: 0x80409f2
-type: cond
-instrs: 4
-successors: ['0x8040a28']
-adj_instr: 0x80409f4
----------------------------
-start_addr: 0x80409f4
-end_addr: 0x80409fa
-type: cond
-instrs: 4
-successors: ['0x8040a24']
-adj_instr: 0x80409fc
----------------------------
-start_addr: 0x80409fc
-end_addr: 0x8040a02
-type: cond
-instrs: 4
-successors: ['0x8040a20']
-adj_instr: 0x8040a04
----------------------------
-start_addr: 0x8040a04
-end_addr: 0x8040a0a
-type: cond
-instrs: 4
-successors: ['0x8040a1c']
-adj_instr: 0x8040a0c
----------------------------
-start_addr: 0x8040a0c
-end_addr: 0x8040a12
-type: cond
-instrs: 4
-successors: ['0x8040a18']
-adj_instr: 0x8040a14
----------------------------
-start_addr: 0x8040a14
-end_addr: 0x8040a16
-type: uncond
-instrs: 2
-successors: ['0x8040a32']
-adj_instr: 0x8040a18
----------------------------
-start_addr: 0x8040a18
-end_addr: 0x8040a1a
-type: uncond
-instrs: 2
-successors: ['0x8040a32']
-adj_instr: 0x8040a1c
----------------------------
-start_addr: 0x8040a1c
-end_addr: 0x8040a1e
-type: uncond
-instrs: 2
-successors: ['0x8040a32']
-adj_instr: 0x8040a20
----------------------------
-start_addr: 0x8040a20
-end_addr: 0x8040a22
-type: uncond
-instrs: 2
-successors: ['0x8040a32']
-adj_instr: 0x8040a24
----------------------------
-start_addr: 0x8040a24
-end_addr: 0x8040a26
-type: uncond
-instrs: 2
-successors: ['0x8040a32']
-adj_instr: 0x8040a28
----------------------------
-start_addr: 0x8040a28
-end_addr: 0x8040a2a
-type: uncond
-instrs: 2
-successors: ['0x8040a32']
-adj_instr: 0x8040a2c
----------------------------
-start_addr: 0x8040a2c
-end_addr: 0x8040a2e
-type: uncond
-instrs: 2
-successors: ['0x8040a32']
-adj_instr: 0x8040a30
----------------------------
-start_addr: 0x8040a30
-end_addr: 0x8040a6c
-type: cond
-instrs: 27
-successors: ['0x8040a76']
-adj_instr: 0x8040a6e
----------------------------
-start_addr: 0x8040a6e
-end_addr: 0x8040a9a
-type: cond
-instrs: 20
-successors: ['0x8040aa4']
-adj_instr: 0x8040a9c
----------------------------
-start_addr: 0x8040a9c
-end_addr: 0x8040ac6
-type: cond
-instrs: 20
-successors: ['0x8040ad0']
-adj_instr: 0x8040ac8
----------------------------
-start_addr: 0x8040ac8
-end_addr: 0x8040af0
-type: cond
-instrs: 20
-successors: ['0x8040afa']
-adj_instr: 0x8040af2
----------------------------
-start_addr: 0x8040af2
-end_addr: 0x8040b12
-type: cond
-instrs: 16
-successors: ['0x8040854']
-adj_instr: 0x8040b1a
----------------------------
-start_addr: 0x8040b1a
-end_addr: 0x8040b22
-type: ret
-instrs: 4
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040b44
-end_addr: 0x8040b58
-type: cond
-instrs: 11
-successors: ['0x8040b62']
-adj_instr: 0x8040b5a
----------------------------
-start_addr: 0x8040b5a
-end_addr: 0x8040b60
-type: uncond
-instrs: 4
-successors: ['0x8040b68']
-adj_instr: 0x8040b62
----------------------------
-start_addr: 0x8040b62
-end_addr: 0x8040b72
-type: ret
-instrs: 7
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040b74
-end_addr: 0x8040b82
-type: cond
-instrs: 8
-successors: ['0x8040b98']
-adj_instr: 0x8040b84
----------------------------
-start_addr: 0x8040b84
-end_addr: 0x8040b8a
-type: call
-instrs: 4
-successors: ['0x8040bbc']
-adj_instr: 0x8040b8e
----------------------------
-start_addr: 0x8040b8e
-end_addr: 0x8040b94
-type: cond
-instrs: 4
-successors: ['0x8040ba2']
-adj_instr: 0x8040b96
----------------------------
-start_addr: 0x8040b96
-end_addr: 0x8040b96
-type: ret
-instrs: 1
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040b98
-end_addr: 0x8040ba0
-type: uncond
-instrs: 4
-successors: ['0x8040b80']
-adj_instr: 0x8040ba2
----------------------------
-start_addr: 0x8040ba2
-end_addr: 0x8040baa
-type: uncond
-instrs: 4
-successors: ['0x8040b92']
-adj_instr: 0x8040bbc
----------------------------
-start_addr: 0x8040bbc
-end_addr: 0x8040bc6
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040bc8
-end_addr: 0x8040bd2
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040bd4
-end_addr: 0x8040be0
-type: ret
-instrs: 6
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040be8
-end_addr: 0x8040bf0
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040bf8
-end_addr: 0x8040c00
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040c08
-end_addr: 0x8040c10
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x80402dc
-end_addr: 0x80402e2
-type: ret
-instrs: 4
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x80402c2
-end_addr: 0x80402ce
-type: cond
-instrs: 6
-successors: ['0x80402aa']
-adj_instr: 0x80402d0
----------------------------
-start_addr: 0x8040350
-end_addr: 0x804035c
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8040490
-end_addr: 0x8040494
-type: uncond
-instrs: 2
-successors: ['0x8040490']
-adj_instr: 0x80404a4
----------------------------
-start_addr: 0x80404ac
-end_addr: 0x80404ac
-type: uncond
-instrs: 1
-successors: ['0x80404ac']
-adj_instr: 0x80404b0
----------------------------
-start_addr: 0x80404fc
-end_addr: 0x80404fc
-type: uncond
-instrs: 1
-successors: ['0x80404fc']
-adj_instr: 0x80404fe
+successors: ['0x80403e4']
+adj_instr: 0x8040502
 ---------------------------
 start_addr: 0x8040502
 end_addr: 0x8040502
 type: uncond
 instrs: 1
 successors: ['0x8040502']
-adj_instr: 0x8040504
+adj_instr: 0x804051c
 ---------------------------
-start_addr: 0x8040568
-end_addr: 0x8040570
-type: cond
-instrs: 5
-successors: ['0x8040560']
-adj_instr: 0x8040572
+start_addr: 0x804051c
+end_addr: 0x804051c
+type: uncond
+instrs: 1
+successors: ['0x804051c']
+adj_instr: 0x804051e
 ---------------------------
-start_addr: 0x804057c
-end_addr: 0x8040580
+start_addr: 0x804051e
+end_addr: 0x804052a
+type: call
+instrs: 7
+successors: ['0x8040758']
+adj_instr: 0x804052e
+---------------------------
+start_addr: 0x804052e
+end_addr: 0x804052e
+type: call
+instrs: 1
+successors: ['0x80404b4']
+adj_instr: 0x8040532
+---------------------------
+start_addr: 0x8040532
+end_addr: 0x8040534
+type: call
+instrs: 2
+successors: ['0x8040554']
+adj_instr: 0x8040538
+---------------------------
+start_addr: 0x8040538
+end_addr: 0x804053c
 type: cond
 instrs: 3
-successors: ['0x8040576']
-adj_instr: 0x8040582
+successors: ['0x8040544']
+adj_instr: 0x804053e
 ---------------------------
-start_addr: 0x804063c
-end_addr: 0x8040644
+start_addr: 0x804053e
+end_addr: 0x8040542
+type: uncond
+instrs: 3
+successors: ['0x8040548']
+adj_instr: 0x8040544
+---------------------------
+start_addr: 0x8040544
+end_addr: 0x8040544
+type: call
+instrs: 1
+successors: ['0x8040428']
+adj_instr: 0x8040548
+---------------------------
+start_addr: 0x8040548
+end_addr: 0x8040550
 type: ret
 instrs: 5
 successors: []
 adj_instr: None
 ---------------------------
-start_addr: 0x8040720
-end_addr: 0x804072a
+start_addr: 0x8040554
+end_addr: 0x8040566
+type: cond
+instrs: 10
+successors: ['0x80405b0']
+adj_instr: 0x8040568
+---------------------------
+start_addr: 0x8040568
+end_addr: 0x8040580
+type: call
+instrs: 10
+successors: ['0x80407a2']
+adj_instr: 0x8040584
+---------------------------
+start_addr: 0x8040584
+end_addr: 0x8040588
+type: cond
+instrs: 3
+successors: ['0x80405aa']
+adj_instr: 0x804058a
+---------------------------
+start_addr: 0x804058a
+end_addr: 0x804058e
+type: cond
+instrs: 3
+successors: ['0x80405a4']
+adj_instr: 0x8040590
+---------------------------
+start_addr: 0x8040590
+end_addr: 0x8040598
+type: call
+instrs: 4
+successors: ['0x804076e']
+adj_instr: 0x804059c
+---------------------------
+start_addr: 0x804059c
+end_addr: 0x80405a2
+type: uncond
+instrs: 4
+successors: ['0x80405b4']
+adj_instr: 0x80405a4
+---------------------------
+start_addr: 0x80405a4
+end_addr: 0x80405a8
+type: uncond
+instrs: 3
+successors: ['0x80405b4']
+adj_instr: 0x80405aa
+---------------------------
+start_addr: 0x80405aa
+end_addr: 0x80405ae
+type: uncond
+instrs: 3
+successors: ['0x80405b4']
+adj_instr: 0x80405b0
+---------------------------
+start_addr: 0x80405b0
+end_addr: 0x80405bc
 type: ret
-instrs: 0
+instrs: 7
 successors: []
 adj_instr: None
 ---------------------------
-start_addr: 0x8040766
-end_addr: 0x8040798
+start_addr: 0x80405cc
+end_addr: 0x80405e8
 type: ret
-instrs: 21
+instrs: 13
 successors: []
 adj_instr: None
 ---------------------------
-start_addr: 0x80407d2
-end_addr: 0x80407d8
+start_addr: 0x80405f4
+end_addr: 0x8040636
+type: ret
+instrs: 28
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x804063c
+end_addr: 0x8040652
+type: ret
+instrs: 10
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040658
+end_addr: 0x804066a
+type: cond
+instrs: 9
+successors: ['0x8040682']
+adj_instr: 0x804066c
+---------------------------
+start_addr: 0x804066c
+end_addr: 0x8040680
+type: uncond
+instrs: 9
+successors: ['0x8040698']
+adj_instr: 0x8040682
+---------------------------
+start_addr: 0x8040682
+end_addr: 0x80406a2
+type: ret
+instrs: 14
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x80406ac
+end_addr: 0x80406d4
+type: cond
+instrs: 19
+successors: ['0x80406dc']
+adj_instr: 0x80406d6
+---------------------------
+start_addr: 0x80406d6
+end_addr: 0x80406da
+type: uncond
+instrs: 3
+successors: ['0x80406de']
+adj_instr: 0x80406dc
+---------------------------
+start_addr: 0x80406dc
+end_addr: 0x8040710
+type: ret
+instrs: 22
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040714
+end_addr: 0x8040724
+type: cond
+instrs: 8
+successors: ['0x804072a']
+adj_instr: 0x8040726
+---------------------------
+start_addr: 0x8040726
+end_addr: 0x8040728
+type: uncond
+instrs: 2
+successors: ['0x804074a']
+adj_instr: 0x804072a
+---------------------------
+start_addr: 0x804072a
+end_addr: 0x8040738
+type: call
+instrs: 7
+successors: ['0x8040658']
+adj_instr: 0x804073c
+---------------------------
+start_addr: 0x804073c
+end_addr: 0x8040750
+type: ret
+instrs: 11
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040758
+end_addr: 0x8040762
+type: call
+instrs: 6
+successors: ['0x80405f4']
+adj_instr: 0x8040768
+---------------------------
+start_addr: 0x8040768
+end_addr: 0x804076c
+type: ret
+instrs: 3
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x804076e
+end_addr: 0x804077c
+type: call
+instrs: 8
+successors: ['0x804063c']
+adj_instr: 0x8040780
+---------------------------
+start_addr: 0x8040780
+end_addr: 0x8040788
+type: call
+instrs: 5
+successors: ['0x80406ac']
+adj_instr: 0x804078c
+---------------------------
+start_addr: 0x804078c
+end_addr: 0x8040796
+type: call
+instrs: 5
+successors: ['0x8040658']
+adj_instr: 0x804079c
+---------------------------
+start_addr: 0x804079c
+end_addr: 0x80407a0
+type: ret
+instrs: 3
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x80407a2
+end_addr: 0x80407ac
+type: call
+instrs: 6
+successors: ['0x8040714']
+adj_instr: 0x80407b0
+---------------------------
+start_addr: 0x80407b0
+end_addr: 0x80407b8
+type: ret
+instrs: 5
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x80407bc
+end_addr: 0x80407ca
+type: uncond
+instrs: 8
+successors: ['0x8040a7e']
+adj_instr: 0x80407cc
+---------------------------
+start_addr: 0x80407cc
+end_addr: 0x80407e0
+type: cond
+instrs: 10
+successors: ['0x8040a78']
+adj_instr: 0x80407e4
+---------------------------
+start_addr: 0x80407e4
+end_addr: 0x80407ea
+type: cond
+instrs: 4
+successors: ['0x8040804']
+adj_instr: 0x80407ec
+---------------------------
+start_addr: 0x80407ec
+end_addr: 0x80407f2
+type: cond
+instrs: 4
+successors: ['0x8040804']
+adj_instr: 0x80407f4
+---------------------------
+start_addr: 0x80407f4
+end_addr: 0x80407fa
+type: cond
+instrs: 4
+successors: ['0x8040804']
+adj_instr: 0x80407fc
+---------------------------
+start_addr: 0x80407fc
+end_addr: 0x8040802
+type: cond
+instrs: 4
+successors: ['0x8040866']
+adj_instr: 0x8040804
+---------------------------
+start_addr: 0x8040804
+end_addr: 0x804089c
+type: cond
+instrs: 70
+successors: ['0x80408a6']
+adj_instr: 0x804089e
+---------------------------
+start_addr: 0x804089e
+end_addr: 0x80408a4
+type: cond
+instrs: 4
+successors: ['0x80408ee']
+adj_instr: 0x80408a6
+---------------------------
+start_addr: 0x80408a6
+end_addr: 0x804092c
+type: cond
+instrs: 58
+successors: ['0x8040a78']
+adj_instr: 0x8040930
+---------------------------
+start_addr: 0x8040930
+end_addr: 0x804095a
+type: cond
+instrs: 19
+successors: ['0x80409a8']
+adj_instr: 0x804095c
+---------------------------
+start_addr: 0x804095c
+end_addr: 0x8040962
+type: cond
+instrs: 4
+successors: ['0x80409a4']
+adj_instr: 0x8040964
+---------------------------
+start_addr: 0x8040964
+end_addr: 0x804096a
+type: cond
+instrs: 4
+successors: ['0x80409a0']
+adj_instr: 0x804096c
+---------------------------
+start_addr: 0x804096c
+end_addr: 0x8040972
+type: cond
+instrs: 4
+successors: ['0x804099c']
+adj_instr: 0x8040974
+---------------------------
+start_addr: 0x8040974
+end_addr: 0x804097a
+type: cond
+instrs: 4
+successors: ['0x8040998']
+adj_instr: 0x804097c
+---------------------------
+start_addr: 0x804097c
+end_addr: 0x8040982
+type: cond
+instrs: 4
+successors: ['0x8040994']
+adj_instr: 0x8040984
+---------------------------
+start_addr: 0x8040984
+end_addr: 0x804098a
+type: cond
+instrs: 4
+successors: ['0x8040990']
+adj_instr: 0x804098c
+---------------------------
+start_addr: 0x804098c
+end_addr: 0x804098e
+type: uncond
+instrs: 2
+successors: ['0x80409aa']
+adj_instr: 0x8040990
+---------------------------
+start_addr: 0x8040990
+end_addr: 0x8040992
+type: uncond
+instrs: 2
+successors: ['0x80409aa']
+adj_instr: 0x8040994
+---------------------------
+start_addr: 0x8040994
+end_addr: 0x8040996
+type: uncond
+instrs: 2
+successors: ['0x80409aa']
+adj_instr: 0x8040998
+---------------------------
+start_addr: 0x8040998
+end_addr: 0x804099a
+type: uncond
+instrs: 2
+successors: ['0x80409aa']
+adj_instr: 0x804099c
+---------------------------
+start_addr: 0x804099c
+end_addr: 0x804099e
+type: uncond
+instrs: 2
+successors: ['0x80409aa']
+adj_instr: 0x80409a0
+---------------------------
+start_addr: 0x80409a0
+end_addr: 0x80409a2
+type: uncond
+instrs: 2
+successors: ['0x80409aa']
+adj_instr: 0x80409a4
+---------------------------
+start_addr: 0x80409a4
+end_addr: 0x80409a6
+type: uncond
+instrs: 2
+successors: ['0x80409aa']
+adj_instr: 0x80409a8
+---------------------------
+start_addr: 0x80409a8
+end_addr: 0x80409e4
+type: cond
+instrs: 27
+successors: ['0x80409ee']
+adj_instr: 0x80409e6
+---------------------------
+start_addr: 0x80409e6
+end_addr: 0x8040a12
+type: cond
+instrs: 20
+successors: ['0x8040a1c']
+adj_instr: 0x8040a14
+---------------------------
+start_addr: 0x8040a14
+end_addr: 0x8040a3e
+type: cond
+instrs: 20
+successors: ['0x8040a48']
+adj_instr: 0x8040a40
+---------------------------
+start_addr: 0x8040a40
+end_addr: 0x8040a68
+type: cond
+instrs: 20
+successors: ['0x8040a72']
+adj_instr: 0x8040a6a
+---------------------------
+start_addr: 0x8040a6a
+end_addr: 0x8040a8a
+type: cond
+instrs: 16
+successors: ['0x80407cc']
+adj_instr: 0x8040a92
+---------------------------
+start_addr: 0x8040a92
+end_addr: 0x8040a9a
 type: ret
 instrs: 4
 successors: []
 adj_instr: None
 ---------------------------
+start_addr: 0x8040abc
+end_addr: 0x8040ad0
+type: cond
+instrs: 11
+successors: ['0x8040ada']
+adj_instr: 0x8040ad2
+---------------------------
+start_addr: 0x8040ad2
+end_addr: 0x8040ad8
+type: uncond
+instrs: 4
+successors: ['0x8040ae0']
+adj_instr: 0x8040ada
+---------------------------
+start_addr: 0x8040ada
+end_addr: 0x8040aea
+type: ret
+instrs: 7
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040aec
+end_addr: 0x8040afa
+type: cond
+instrs: 8
+successors: ['0x8040b10']
+adj_instr: 0x8040afc
+---------------------------
+start_addr: 0x8040afc
+end_addr: 0x8040b02
+type: call
+instrs: 4
+successors: ['0x8040b34']
+adj_instr: 0x8040b06
+---------------------------
 start_addr: 0x8040b06
-end_addr: 0x8040b12
+end_addr: 0x8040b0c
 type: cond
+instrs: 4
+successors: ['0x8040b1a']
+adj_instr: 0x8040b0e
+---------------------------
+start_addr: 0x8040b0e
+end_addr: 0x8040b0e
+type: ret
+instrs: 1
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040b10
+end_addr: 0x8040b18
+type: uncond
+instrs: 4
+successors: ['0x8040af8']
+adj_instr: 0x8040b1a
+---------------------------
+start_addr: 0x8040b1a
+end_addr: 0x8040b22
+type: uncond
+instrs: 4
+successors: ['0x8040b0a']
+adj_instr: 0x8040b34
+---------------------------
+start_addr: 0x8040b34
+end_addr: 0x8040b3e
+type: ret
+instrs: 5
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040b40
+end_addr: 0x8040b4a
+type: ret
+instrs: 5
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040b4c
+end_addr: 0x8040b58
+type: ret
 instrs: 6
-successors: ['0x8040854']
-adj_instr: 0x8040b1a
+successors: []
+adj_instr: None
 ---------------------------
-start_addr: 0x8040b00
-end_addr: 0x8040b12
+start_addr: 0x8040b60
+end_addr: 0x8040b68
+type: ret
+instrs: 5
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040b70
+end_addr: 0x8040b78
+type: ret
+instrs: 5
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040b80
+end_addr: 0x8040b88
+type: ret
+instrs: 5
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040b90
+end_addr: 0x8040b98
+type: ret
+instrs: 5
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040ba0
+end_addr: 0x8040ba8
+type: ret
+instrs: 5
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040bb0
+end_addr: 0x8040bb8
+type: ret
+instrs: 5
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x80402a2
+end_addr: 0x80402a8
 type: cond
-instrs: 9
-successors: ['0x8040854']
-adj_instr: 0x8040b1a
+instrs: 3
+successors: ['0x8040280']
+adj_instr: 0x80402aa
 ---------------------------
-start_addr: 0x80408ee
-end_addr: 0x8040924
+start_addr: 0x8040408
+end_addr: 0x804040c
+type: uncond
+instrs: 2
+successors: ['0x8040408']
+adj_instr: 0x804041c
+---------------------------
+start_addr: 0x8040424
+end_addr: 0x8040424
+type: uncond
+instrs: 1
+successors: ['0x8040424']
+adj_instr: 0x8040428
+---------------------------
+start_addr: 0x8040474
+end_addr: 0x8040474
+type: uncond
+instrs: 1
+successors: ['0x8040474']
+adj_instr: 0x8040476
+---------------------------
+start_addr: 0x804047a
+end_addr: 0x804047a
+type: uncond
+instrs: 1
+successors: ['0x804047a']
+adj_instr: 0x804047c
+---------------------------
+start_addr: 0x80404e0
+end_addr: 0x80404e8
 type: cond
-instrs: 26
-successors: ['0x804092e']
-adj_instr: 0x8040926
+instrs: 5
+successors: ['0x80404d8']
+adj_instr: 0x80404ea
 ---------------------------
-start_addr: 0x8040976
-end_addr: 0x80409b4
+start_addr: 0x80404f4
+end_addr: 0x80404f8
 type: cond
-instrs: 28
-successors: ['0x8040b00']
-adj_instr: 0x80409b8
+instrs: 3
+successors: ['0x80404ee']
+adj_instr: 0x80404fa
 ---------------------------
-start_addr: 0x8040a32
-end_addr: 0x8040a6c
-type: cond
-instrs: 26
-successors: ['0x8040a76']
-adj_instr: 0x8040a6e
+start_addr: 0x80405b4
+end_addr: 0x80405bc
+type: ret
+instrs: 5
+successors: []
+adj_instr: None
 ---------------------------
-start_addr: 0x8040a76
-end_addr: 0x8040a9a
-type: cond
-instrs: 16
-successors: ['0x8040aa4']
-adj_instr: 0x8040a9c
----------------------------
-start_addr: 0x8040aa4
-end_addr: 0x8040ac6
-type: cond
-instrs: 16
-successors: ['0x8040ad0']
-adj_instr: 0x8040ac8
----------------------------
-start_addr: 0x8040ad0
-end_addr: 0x8040af0
-type: cond
-instrs: 16
-successors: ['0x8040afa']
-adj_instr: 0x8040af2
----------------------------
-start_addr: 0x8040afa
-end_addr: 0x8040b12
-type: cond
-instrs: 12
-successors: ['0x8040854']
-adj_instr: 0x8040b1a
----------------------------
-start_addr: 0x8040b68
-end_addr: 0x8040b72
+start_addr: 0x8040698
+end_addr: 0x80406a2
 type: ret
 instrs: 0
 successors: []
 adj_instr: None
 ---------------------------
-start_addr: 0x8040b80
-end_addr: 0x8040b82
-type: cond
-instrs: 2
-successors: ['0x8040b98']
-adj_instr: 0x8040b84
+start_addr: 0x80406de
+end_addr: 0x8040710
+type: ret
+instrs: 21
+successors: []
+adj_instr: None
 ---------------------------
-start_addr: 0x8040b92
-end_addr: 0x8040b94
+start_addr: 0x804074a
+end_addr: 0x8040750
+type: ret
+instrs: 4
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040a7e
+end_addr: 0x8040a8a
+type: cond
+instrs: 6
+successors: ['0x80407cc']
+adj_instr: 0x8040a92
+---------------------------
+start_addr: 0x8040a78
+end_addr: 0x8040a8a
+type: cond
+instrs: 9
+successors: ['0x80407cc']
+adj_instr: 0x8040a92
+---------------------------
+start_addr: 0x8040866
+end_addr: 0x804089c
+type: cond
+instrs: 26
+successors: ['0x80408a6']
+adj_instr: 0x804089e
+---------------------------
+start_addr: 0x80408ee
+end_addr: 0x804092c
+type: cond
+instrs: 28
+successors: ['0x8040a78']
+adj_instr: 0x8040930
+---------------------------
+start_addr: 0x80409aa
+end_addr: 0x80409e4
+type: cond
+instrs: 26
+successors: ['0x80409ee']
+adj_instr: 0x80409e6
+---------------------------
+start_addr: 0x80409ee
+end_addr: 0x8040a12
+type: cond
+instrs: 16
+successors: ['0x8040a1c']
+adj_instr: 0x8040a14
+---------------------------
+start_addr: 0x8040a1c
+end_addr: 0x8040a3e
+type: cond
+instrs: 16
+successors: ['0x8040a48']
+adj_instr: 0x8040a40
+---------------------------
+start_addr: 0x8040a48
+end_addr: 0x8040a68
+type: cond
+instrs: 16
+successors: ['0x8040a72']
+adj_instr: 0x8040a6a
+---------------------------
+start_addr: 0x8040a72
+end_addr: 0x8040a8a
+type: cond
+instrs: 12
+successors: ['0x80407cc']
+adj_instr: 0x8040a92
+---------------------------
+start_addr: 0x8040ae0
+end_addr: 0x8040aea
+type: ret
+instrs: 0
+successors: []
+adj_instr: None
+---------------------------
+start_addr: 0x8040af8
+end_addr: 0x8040afa
 type: cond
 instrs: 2
-successors: ['0x8040ba2']
-adj_instr: 0x8040b96
+successors: ['0x8040b10']
+adj_instr: 0x8040afc
+---------------------------
+start_addr: 0x8040b0a
+end_addr: 0x8040b0c
+type: cond
+instrs: 2
+successors: ['0x8040b1a']
+adj_instr: 0x8040b0e
 ---------------------------

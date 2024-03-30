@@ -179,34 +179,6 @@ void record_output_data(uint32_t value){
 	output_data = value;
 }
 
-uint8_t error = 0;
-HAL_StatusTypeDef status;
-HAL_DMA_LevelCompleteTypeDef completeLevel;
-uint32_t dma_timeout = 0xffffffff;
-#if CFLOG_TYPE == CFLOG_FLASH
-void update_flash(uint32_t addr, uint32_t data){
-
-	status = HAL_FLASH_Unlock();
-	if(status != HAL_OK){
-		error |= 8;
-	}
-
-	status = HAL_DMA_Start(&hdma, (uint32_t)(&data), (uint32_t)(addr), 1);
-	if(status != HAL_OK){
-		error |= 2;
-	}
-
-	status = HAL_DMA_PollForTransfer(&hdma, completeLevel, dma_timeout);
-	if(status != HAL_OK){
-		error |= 1;
-	}
-
-	HAL_FLASH_Lock();
-	error = error + 0;
-
-}
-#endif
-
 /* -------------  NON SECURE CALLABLES */
 
 void CFA_ENGINE_start(){
@@ -227,7 +199,10 @@ void CFA_ENGINE_register_callback(){
 
 
 uint32_t total_runtime = 0;
+uint32_t total_start;
+uint32_t total_stop;
 int STATE_initialize_attestation(){
+	total_start = HAL_GetTick();
 	if (cfa_engine_conf.attestation_status == INACTIVE){
 
 		// send response to vrf
@@ -246,15 +221,16 @@ int STATE_initialize_attestation(){
 		_send_report();
 	}
 
-//	total_runtime += app_exec_time + time_sign_report + send_report_time + receive_resp_time + verify_resp_time;
-
 	return CONTINUE_LOOP;
 }
 
+// put breakpoint here to get app end
 int STATE_accept_report(){
 	if (cfa_engine_conf.attestation_status == COMPLETE){
 		cfa_engine_conf.attestation_status = INACTIVE; //temp
 		_clean();
+		total_stop = HAL_GetTick();
+		total_runtime = total_stop-total_start;
 		return EXIT_LOOP;
 	}
 	return CONTINUE_LOOP;
@@ -399,16 +375,12 @@ uint8_t  _receive_challenge(){
 //	SecureUartTx((uint8_t*)chl, 64);
 
 	// read verifier signature
-	uint32_t recv_sig_start = HAL_GetTick();
 	SecureUartRx((uint8_t*)(&vrf_resp.signature), 32);
 //	SecureUartTx((uint8_t*)(&vrf_resp.signature), SIGNATURE_SIZE_BYTES);
 //	uint32_t recv_sig_stop = HAL_GetTick();
 //	uint32_t recv_sig = recv_sig_stop - recv_sig_start;
-
 	receive_resp_stop = HAL_GetTick();
 	receive_resp_time += receive_resp_stop-receive_resp_start;
-
-
 
 	verify_resp_start = HAL_GetTick();
 
@@ -455,7 +427,6 @@ uint8_t  _receive_challenge(){
 	#endif
     verify_resp_stop = HAL_GetTick();
     verify_resp_time += verify_resp_stop-verify_resp_start;
-    recv_verify_response_time = receive_resp_time + verify_resp_time;
 
 	return vrf_resp.verify_result;
 }
@@ -681,107 +652,6 @@ void CFA_ENGINE_new_log_entry(uint32_t value){
 	}
 	return;
 }
-/*
-
-
-// OAT Style (no hash chain)
-int bit_idx = 0;
-void log_single_bit(uint32_t value){
-	// value is a conditional bit for the bitstream
-	report_secure.CFLog[report_secure.num_CF_Log_size] = (report_secure.CFLog[report_secure.num_CF_Log_size] << 1) | value;
-	bit_idx += 1;
-	if (bit_idx == 32){
-		bit_idx = 0;
-		report_secure.num_CF_Log_size++;
-		cfa_engine_conf.log_counter++;
-	}
-}
-
-void log_32_bit_val(uint32_t value){
-//	int rem_bits = 32-bit_idx;
-//	uint32_t cur_val = report_secure.CFLog[report_secure.num_CF_Log_size];
-//	cur_val = cur_val << rem_bits;
-//
-//	uint32_t mask = 0;
-//
-//	for(int i=0; i<bit_idx; i++){
-//		mask = (mask << 1) | 1;
-//	}
-//
-//	uint32_t value_shf = value >> bit_idx;
-//
-//	uint32_t new_val = cur_val | value_shf;
-//
-//	value_shf = value & mask;
-//
-//	report_secure.CFLog[report_secure.num_CF_Log_size] = new_val;
-//	report_secure.num_CF_Log_size++;
-//	report_secure.CFLog[report_secure.num_CF_Log_size] = value_shf;
-//	cfa_engine_conf.log_counter++;
-	uint32_t bit_val = 0;
-	for(int i=0; i<32; i++){
-		bit_val = (value >> (31-i)) & 0x1;
-		log_single_bit(bit_val);
-	}
-}
-
-uint32_t prev_val = 0;
-void CFA_ENGINE_new_log_cond(uint32_t addr, uint32_t value){
-	if(addr == prev_val){
-		if(loop_detect == 0){
-			loop_detect = 1;
-		}
-		loop_counter++;
-	} else{
-		loop_detect = 0;
-		loop_counter = 1;
-		CFA_ENGINE_new_log_entry(value);
-		prev_val = addr;
-	}
-}
-
-void CFA_ENGINE_new_log_entry(uint32_t value){
-	if(report_secure.num_CF_Log_size >= MAX_CF_LOG_SIZE){
-		end = HAL_GetTick();
-		app_exec_time += end - start;
-		cfa_engine_conf.attestation_status = WAITING_PARTIAL;
-		_send_report();
-
-		#if CFLOG_TYPE == CFLOG_RAM
-		report_secure.CFLog[report_secure.num_CF_Log_size] = value;
-		#else
-		uint32_t addr = (uint32_t)(&FLASH_CFLog[report_secure.num_CF_Log_size]);
-//		update_flash(addr, value);
-		FLASH_CFLog[report_secure.num_CF_Log_size] = value;
-		#endif
-
-		report_secure.num_CF_Log_size++;
-		cfa_engine_conf.log_counter++;
-		_read_serial_loop();
-		start = HAL_GetTick();
-	}
-	else{
-		// loop exit
-		if(loop_detect == 1){
-			// log counter
-			log_32_bit_val(loop_counter);
-			//reset loop detect/counter
-			loop_counter = 1;
-			loop_detect = 0;
-			prev_val = 0;
-		}
-
-		if(value == 1 || value == 0){
-			log_single_bit(value);
-		} else {
-			// value is a full indr address
-			log_32_bit_val(value);
-		}
-
-	}
-	return;
-}
-*/
 
 void CFA_ENGINE_run_attestation(){
 	if (cfa_engine_conf.initialized != INITIALIZED){
@@ -810,50 +680,6 @@ void CFA_ENGINE_run_attestation(){
 	return;
 }
 
-void TRACES_DMA_init(){
-	  /* DMA controller clock enable */
-	  __HAL_RCC_DMA1_CLK_ENABLE();
-
-	  /* Configure DMA request hdma on DMA1_Channel1 */
-	  hdma.Instance = DMA1_Channel1;
-	  hdma.Init.Request = DMA_REQUEST_MEM2MEM;
-	  hdma.Init.Direction = DMA_MEMORY_TO_MEMORY;
-	  hdma.Init.PeriphInc = DMA_PINC_ENABLE;
-	  hdma.Init.MemInc = DMA_MINC_ENABLE;
-	  hdma.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-	  hdma.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
-	  hdma.Init.Mode = DMA_NORMAL;
-	  hdma.Init.Priority = DMA_PRIORITY_VERY_HIGH;
-	  if (HAL_DMA_Init(&hdma) != HAL_OK)
-	  {
-	    Error_Handler( );
-	  }
-
-	  /*  */
-	  if (HAL_DMA_ConfigChannelAttributes(&hdma, DMA_CHANNEL_NPRIV) != HAL_OK)
-	  {
-	    Error_Handler( );
-	  }
-
-	  /*  */
-	  if (HAL_DMA_ConfigChannelAttributes(&hdma, DMA_CHANNEL_SEC) != HAL_OK)
-	  {
-	    Error_Handler( );
-	  }
-
-	  /*  */
-	  if (HAL_DMA_ConfigChannelAttributes(&hdma, DMA_CHANNEL_SRC_SEC) != HAL_OK)
-	  {
-	    Error_Handler( );
-	  }
-
-	  /*  */
-	  if (HAL_DMA_ConfigChannelAttributes(&hdma, DMA_CHANNEL_DEST_SEC) != HAL_OK)
-	  {
-	    Error_Handler( );
-	  }
-}
-
 void CFA_ENGINE_initialize(){
 
 	if (cfa_engine_conf.initialized == INITIALIZED){
@@ -865,10 +691,6 @@ void CFA_ENGINE_initialize(){
 	_attest_memory();
 	_setup_data();
 	_clean();
-
-	// init DMA
-	TRACES_DMA_init();
-	////
 
 	return;
 }

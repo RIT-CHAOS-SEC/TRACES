@@ -5,45 +5,45 @@ Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
   0 .isr_vector   000001f4  08040000  08040000  00010000  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  1 .text         00000a20  080401f8  080401f8  000101f8  2**3
+  1 .text         000009c8  080401f8  080401f8  000101f8  2**3
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .rodata       00000000  08040c18  08040c18  0001800c  2**0
-                  CONTENTS, ALLOC, LOAD, DATA
-  3 .ARM.extab    00000000  08040c18  08040c18  0001800c  2**0
+  2 .rodata       00000400  08040bc0  08040bc0  00010bc0  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  3 .ARM.extab    00000000  08040fc0  08040fc0  0001800c  2**0
                   CONTENTS
-  4 .ARM          00000000  08040c18  08040c18  0001800c  2**0
+  4 .ARM          00000000  08040fc0  08040fc0  0001800c  2**0
                   CONTENTS
-  5 .preinit_array 00000000  08040c18  08040c18  0001800c  2**0
+  5 .preinit_array 00000000  08040fc0  08040fc0  0001800c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  6 .init_array   00000004  08040c18  08040c18  00010c18  2**2
+  6 .init_array   00000004  08040fc0  08040fc0  00010fc0  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  7 .fini_array   00000004  08040c1c  08040c1c  00010c1c  2**2
+  7 .fini_array   00000004  08040fc4  08040fc4  00010fc4  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  8 .data         0000000c  20018000  08040c20  00018000  2**2
+  8 .data         0000000c  20018000  08040fc8  00018000  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  9 .bss          0000002c  2001800c  08040c2c  0001800c  2**2
+  9 .bss          00000024  2001800c  08040fd4  0001800c  2**2
                   ALLOC
- 10 ._user_heap_stack 00000600  20018038  08040c2c  00018038  2**0
+ 10 ._user_heap_stack 00000600  20018030  08040fd4  00018030  2**0
                   ALLOC
  11 .ARM.attributes 00000036  00000000  00000000  0001800c  2**0
                   CONTENTS, READONLY
  12 .comment      00000081  00000000  00000000  00018042  2**0
                   CONTENTS, READONLY
- 13 .debug_line   00004a2e  00000000  00000000  000180c3  2**0
+ 13 .debug_line   000049d6  00000000  00000000  000180c3  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_info   00003be8  00000000  00000000  0001caf1  2**0
+ 14 .debug_info   00003be8  00000000  00000000  0001ca99  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_abbrev 00000dc4  00000000  00000000  000206d9  2**0
+ 15 .debug_abbrev 00000dc4  00000000  00000000  00020681  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_aranges 00000420  00000000  00000000  000214a0  2**3
+ 16 .debug_aranges 00000410  00000000  00000000  00021448  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_str    000fe8f3  00000000  00000000  000218c0  2**0
+ 17 .debug_str    000fe8ff  00000000  00000000  00021858  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_ranges 00000390  00000000  00000000  001201b8  2**3
+ 18 .debug_ranges 00000380  00000000  00000000  00120158  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_macro  000272a0  00000000  00000000  00120548  2**0
+ 19 .debug_macro  000272a0  00000000  00000000  001204d8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_frame  00000d8c  00000000  00000000  001477e8  2**2
+ 20 .debug_frame  00000d8c  00000000  00000000  00147778  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -63,7 +63,7 @@ Disassembly of section .text:
  804020e:	bd10      	pop	{r4, pc}
  8040210:	2001800c 	.word	0x2001800c
  8040214:	00000000 	.word	0x00000000
- 8040218:	08040bbc 	.word	0x08040bbc
+ 8040218:	08040b34 	.word	0x08040b34
 
 0804021c <frame_dummy>:
  804021c:	b508      	push	{r3, lr}
@@ -76,1304 +76,1387 @@ Disassembly of section .text:
  804022a:	bd08      	pop	{r3, pc}
  804022c:	00000000 	.word	0x00000000
  8040230:	20018010 	.word	0x20018010
- 8040234:	08040bbc 	.word	0x08040bbc
+ 8040234:	08040b34 	.word	0x08040b34
 
-08040238 <divides>:
- 8040238:	b480      	push	{r7}
- 804023a:	b083      	sub	sp, #12
- 804023c:	af00      	add	r7, sp, #0
- 804023e:	6078      	str	r0, [r7, #4]
- 8040240:	6039      	str	r1, [r7, #0]
- 8040242:	683b      	ldr	r3, [r7, #0]
- 8040244:	687a      	ldr	r2, [r7, #4]
- 8040246:	fbb3 f2f2 	udiv	r2, r3, r2
- 804024a:	6879      	ldr	r1, [r7, #4]
- 804024c:	fb01 f202 	mul.w	r2, r1, r2
- 8040250:	1a9b      	subs	r3, r3, r2
- 8040252:	2b00      	cmp	r3, #0
- 8040254:	bf0c      	ite	eq
- 8040256:	2301      	moveq	r3, #1
- 8040258:	2300      	movne	r3, #0
- 804025a:	b2db      	uxtb	r3, r3
- 804025c:	4618      	mov	r0, r3
- 804025e:	370c      	adds	r7, #12
- 8040260:	46bd      	mov	sp, r7
- 8040262:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8040266:	4770      	bx	lr
+08040238 <rand_beebs>:
+	.type	rand_beebs, %function
+rand_beebs:
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 1, uses_anonymous_args = 0
+	@ link register save eliminated.
+	push	{r7, lr}
+ 8040238:	b580      	push	{r7, lr}
+	add	r7, sp, #0
+ 804023a:	af00      	add	r7, sp, #0
+	ldr	r3, .L3
+ 804023c:	4b0a      	ldr	r3, [pc, #40]	; (8040268 <rand_beebs+0x30>)
+	ldr	r3, [r3]
+ 804023e:	681b      	ldr	r3, [r3, #0]
+	ldr	r2, .L3+4
+ 8040240:	4a0a      	ldr	r2, [pc, #40]	; (804026c <rand_beebs+0x34>)
+	mul	r3, r2, r3
+ 8040242:	fb02 f303 	mul.w	r3, r2, r3
+	add	r3, r3, #12288
+ 8040246:	f503 5340 	add.w	r3, r3, #12288	; 0x3000
+	adds	r3, r3, #57
+ 804024a:	3339      	adds	r3, #57	; 0x39
+	bic	r3, r3, #-2147483648
+ 804024c:	f023 4300 	bic.w	r3, r3, #2147483648	; 0x80000000
+	ldr	r2, .L3
+ 8040250:	4a05      	ldr	r2, [pc, #20]	; (8040268 <rand_beebs+0x30>)
+	str	r3, [r2]
+ 8040252:	6013      	str	r3, [r2, #0]
+	ldr	r3, .L3
+ 8040254:	4b04      	ldr	r3, [pc, #16]	; (8040268 <rand_beebs+0x30>)
+	ldr	r3, [r3]
+ 8040256:	681b      	ldr	r3, [r3, #0]
+	asrs	r3, r3, #16
+ 8040258:	141b      	asrs	r3, r3, #16
+	mov	r0, r3
+ 804025a:	4618      	mov	r0, r3
+	mov	sp, r7
+ 804025c:	46bd      	mov	sp, r7
+	@ sp needed
+	pop	{r7, lr}
+ 804025e:	e8bd 4080 	ldmia.w	sp!, {r7, lr}
+	b	SECURE_log_ret
+ 8040262:	f000 bc75 	b.w	8040b50 <__SECURE_log_ret_veneer>
+ 8040266:	bf00      	nop
+ 8040268:	20018028 	.word	0x20018028
+ 804026c:	41c64e6d 	.word	0x41c64e6d
 
-08040268 <even>:
- 8040268:	b580      	push	{r7, lr}
- 804026a:	b082      	sub	sp, #8
- 804026c:	af00      	add	r7, sp, #0
- 804026e:	6078      	str	r0, [r7, #4]
- 8040270:	6879      	ldr	r1, [r7, #4]
- 8040272:	2002      	movs	r0, #2
- 8040274:	f7ff ffe0 	bl	8040238 <divides>
- 8040278:	4603      	mov	r3, r0
- 804027a:	4618      	mov	r0, r3
- 804027c:	3708      	adds	r7, #8
- 804027e:	46bd      	mov	sp, r7
- 8040280:	bd80      	pop	{r7, pc}
+08040270 <crc32pseudo>:
+	.fpu fpv5-sp-d16
+	.type	crc32pseudo, %function
+crc32pseudo:
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r4, r7, lr}
+ 8040270:	b590      	push	{r4, r7, lr}
+	sub	sp, sp, #12
+ 8040272:	b083      	sub	sp, #12
+	add	r7, sp, #0
+ 8040274:	af00      	add	r7, sp, #0
+	mov	r4, #-1
+ 8040276:	f04f 34ff 	mov.w	r4, #4294967295	; 0xffffffff
+	movs	r3, #0
+ 804027a:	2300      	movs	r3, #0
+	str	r3, [r7, #4]
+ 804027c:	607b      	str	r3, [r7, #4]
+	b	.L6
+ 804027e:	e010      	b.n	80402a2 <crc32pseudo+0x32>
+.L7:
+	bl	SECURE_log_cond_br_taken
+ 8040280:	f000 fc96 	bl	8040bb0 <__SECURE_log_cond_br_taken_veneer>
+	bl	rand_beebs
+ 8040284:	f7ff ffd8 	bl	8040238 <rand_beebs>
+	mov	r3, r0
+ 8040288:	4603      	mov	r3, r0
+	uxtb	r3, r3
+ 804028a:	b2db      	uxtb	r3, r3
+	eors	r3, r3, r4
+ 804028c:	4063      	eors	r3, r4
+	uxtb	r3, r3
+ 804028e:	b2db      	uxtb	r3, r3
+	ldr	r2, .L9
+ 8040290:	4a0b      	ldr	r2, [pc, #44]	; (80402c0 <crc32pseudo+0x50>)
+	ldr	r2, [r2, r3, lsl #2]
+ 8040292:	f852 2023 	ldr.w	r2, [r2, r3, lsl #2]
+	lsrs	r3, r4, #8
+ 8040296:	0a23      	lsrs	r3, r4, #8
+	eor	r4, r2, r3
+ 8040298:	ea82 0403 	eor.w	r4, r2, r3
+	ldr	r3, [r7, #4]
+ 804029c:	687b      	ldr	r3, [r7, #4]
+	adds	r3, r3, #1
+ 804029e:	3301      	adds	r3, #1
+	str	r3, [r7, #4]
+ 80402a0:	607b      	str	r3, [r7, #4]
+.L6:
+	ldr	r3, [r7, #4]
+ 80402a2:	687b      	ldr	r3, [r7, #4]
+	cmp	r3, #1024
+ 80402a4:	f5b3 6f80 	cmp.w	r3, #1024	; 0x400
+	blt	.L7
+ 80402a8:	dbea      	blt.n	8040280 <crc32pseudo+0x10>
+	bl	SECURE_log_cond_br_not_taken
+ 80402aa:	f000 fc71 	bl	8040b90 <__SECURE_log_cond_br_not_taken_veneer>
+	mvns	r3, r4
+ 80402ae:	43e3      	mvns	r3, r4
+	mov	r0, r3
+ 80402b0:	4618      	mov	r0, r3
+	adds	r7, r7, #12
+ 80402b2:	370c      	adds	r7, #12
+	mov	sp, r7
+ 80402b4:	46bd      	mov	sp, r7
+	@ sp needed
+	pop	{r4, r7, lr}
+ 80402b6:	e8bd 4090 	ldmia.w	sp!, {r4, r7, lr}
+	b	SECURE_log_ret
+ 80402ba:	f000 bc49 	b.w	8040b50 <__SECURE_log_ret_veneer>
+ 80402be:	bf00      	nop
+ 80402c0:	08040bc0 	.word	0x08040bc0
 
-08040282 <prime>:
- 8040282:	b580      	push	{r7, lr}
- 8040284:	b084      	sub	sp, #16
- 8040286:	af00      	add	r7, sp, #0
- 8040288:	6078      	str	r0, [r7, #4]
- 804028a:	6878      	ldr	r0, [r7, #4]
- 804028c:	f7ff ffec 	bl	8040268 <even>
- 8040290:	4603      	mov	r3, r0
- 8040292:	2b00      	cmp	r3, #0
- 8040294:	d006      	beq.n	80402a4 <prime+0x22>
- 8040296:	687b      	ldr	r3, [r7, #4]
- 8040298:	2b02      	cmp	r3, #2
- 804029a:	bf0c      	ite	eq
- 804029c:	2301      	moveq	r3, #1
- 804029e:	2300      	movne	r3, #0
- 80402a0:	b2db      	uxtb	r3, r3
- 80402a2:	e01b      	b.n	80402dc <prime+0x5a>
- 80402a4:	2303      	movs	r3, #3
- 80402a6:	60fb      	str	r3, [r7, #12]
- 80402a8:	e00b      	b.n	80402c2 <prime+0x40>
- 80402aa:	6879      	ldr	r1, [r7, #4]
- 80402ac:	68f8      	ldr	r0, [r7, #12]
- 80402ae:	f7ff ffc3 	bl	8040238 <divides>
- 80402b2:	4603      	mov	r3, r0
- 80402b4:	2b00      	cmp	r3, #0
- 80402b6:	d001      	beq.n	80402bc <prime+0x3a>
- 80402b8:	2300      	movs	r3, #0
- 80402ba:	e00f      	b.n	80402dc <prime+0x5a>
- 80402bc:	68fb      	ldr	r3, [r7, #12]
- 80402be:	3302      	adds	r3, #2
- 80402c0:	60fb      	str	r3, [r7, #12]
- 80402c2:	68fb      	ldr	r3, [r7, #12]
- 80402c4:	68fa      	ldr	r2, [r7, #12]
- 80402c6:	fb02 f203 	mul.w	r2, r2, r3
- 80402ca:	687b      	ldr	r3, [r7, #4]
- 80402cc:	429a      	cmp	r2, r3
- 80402ce:	d9ec      	bls.n	80402aa <prime+0x28>
+080402c4 <application>:
+	.fpu fpv5-sp-d16
+	.type	application, %function
+application:
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+ 80402c4:	b580      	push	{r7, lr}
+	sub	sp, sp, #8
+ 80402c6:	b082      	sub	sp, #8
+	add	r7, sp, #0
+ 80402c8:	af00      	add	r7, sp, #0
+	bl	crc32pseudo
+ 80402ca:	f7ff ffd1 	bl	8040270 <crc32pseudo>
+	str	r0, [r7, #4]
+ 80402ce:	6078      	str	r0, [r7, #4]
+	ldr	r3, [r7, #4]
  80402d0:	687b      	ldr	r3, [r7, #4]
- 80402d2:	2b01      	cmp	r3, #1
- 80402d4:	bf8c      	ite	hi
- 80402d6:	2301      	movhi	r3, #1
- 80402d8:	2300      	movls	r3, #0
- 80402da:	b2db      	uxtb	r3, r3
- 80402dc:	4618      	mov	r0, r3
- 80402de:	3710      	adds	r7, #16
- 80402e0:	46bd      	mov	sp, r7
- 80402e2:	bd80      	pop	{r7, pc}
+	mov	r0, r3
+ 80402d2:	4618      	mov	r0, r3
+	bl	SECURE_record_output_data
+ 80402d4:	f000 fc64 	bl	8040ba0 <__SECURE_record_output_data_veneer>
+	bl	SECURE_record_output_data
+ 80402d8:	f000 fc62 	bl	8040ba0 <__SECURE_record_output_data_veneer>
+	adds	r7, r7, #8
+ 80402dc:	3708      	adds	r7, #8
+	mov	sp, r7
+ 80402de:	46bd      	mov	sp, r7
+	@ sp needed
+	pop	{r7, lr}
+ 80402e0:	e8bd 4080 	ldmia.w	sp!, {r7, lr}
+	b	SECURE_log_ret
+ 80402e4:	f000 bc34 	b.w	8040b50 <__SECURE_log_ret_veneer>
 
-080402e4 <swap>:
- 80402e4:	b480      	push	{r7}
- 80402e6:	b085      	sub	sp, #20
- 80402e8:	af00      	add	r7, sp, #0
- 80402ea:	6078      	str	r0, [r7, #4]
- 80402ec:	6039      	str	r1, [r7, #0]
- 80402ee:	687b      	ldr	r3, [r7, #4]
- 80402f0:	681b      	ldr	r3, [r3, #0]
- 80402f2:	60fb      	str	r3, [r7, #12]
- 80402f4:	683b      	ldr	r3, [r7, #0]
- 80402f6:	681a      	ldr	r2, [r3, #0]
- 80402f8:	687b      	ldr	r3, [r7, #4]
- 80402fa:	601a      	str	r2, [r3, #0]
- 80402fc:	683b      	ldr	r3, [r7, #0]
- 80402fe:	68fa      	ldr	r2, [r7, #12]
- 8040300:	601a      	str	r2, [r3, #0]
- 8040302:	bf00      	nop
- 8040304:	3714      	adds	r7, #20
- 8040306:	46bd      	mov	sp, r7
- 8040308:	f85d 7b04 	ldr.w	r7, [sp], #4
- 804030c:	4770      	bx	lr
-	...
-
-08040310 <application>:
- 8040310:	b580      	push	{r7, lr}
- 8040312:	af00      	add	r7, sp, #0
- 8040314:	4b12      	ldr	r3, [pc, #72]	; (8040360 <application+0x50>)
- 8040316:	f245 4291 	movw	r2, #21649	; 0x5491
- 804031a:	601a      	str	r2, [r3, #0]
- 804031c:	4b11      	ldr	r3, [pc, #68]	; (8040364 <application+0x54>)
- 804031e:	4a12      	ldr	r2, [pc, #72]	; (8040368 <application+0x58>)
- 8040320:	601a      	str	r2, [r3, #0]
- 8040322:	4910      	ldr	r1, [pc, #64]	; (8040364 <application+0x54>)
- 8040324:	480e      	ldr	r0, [pc, #56]	; (8040360 <application+0x50>)
- 8040326:	f7ff ffdd 	bl	80402e4 <swap>
- 804032a:	4b0d      	ldr	r3, [pc, #52]	; (8040360 <application+0x50>)
- 804032c:	681b      	ldr	r3, [r3, #0]
- 804032e:	4618      	mov	r0, r3
- 8040330:	f7ff ffa7 	bl	8040282 <prime>
- 8040334:	4603      	mov	r3, r0
- 8040336:	2b00      	cmp	r3, #0
- 8040338:	d007      	beq.n	804034a <application+0x3a>
- 804033a:	4b0a      	ldr	r3, [pc, #40]	; (8040364 <application+0x54>)
- 804033c:	681b      	ldr	r3, [r3, #0]
- 804033e:	4618      	mov	r0, r3
- 8040340:	f7ff ff9f 	bl	8040282 <prime>
- 8040344:	4603      	mov	r3, r0
- 8040346:	2b00      	cmp	r3, #0
- 8040348:	d101      	bne.n	804034e <application+0x3e>
- 804034a:	2301      	movs	r3, #1
- 804034c:	e000      	b.n	8040350 <application+0x40>
- 804034e:	2300      	movs	r3, #0
- 8040350:	4a06      	ldr	r2, [pc, #24]	; (804036c <application+0x5c>)
- 8040352:	6013      	str	r3, [r2, #0]
- 8040354:	2000      	movs	r0, #0
- 8040356:	f000 fc47 	bl	8040be8 <__SECURE_record_output_data_veneer>
- 804035a:	bf00      	nop
- 804035c:	bd80      	pop	{r7, pc}
- 804035e:	bf00      	nop
- 8040360:	20018030 	.word	0x20018030
- 8040364:	20018034 	.word	0x20018034
- 8040368:	0007d4d7 	.word	0x0007d4d7
- 804036c:	20018028 	.word	0x20018028
-
-08040370 <MX_GPIO_Init>:
+080402e8 <MX_GPIO_Init>:
 /* USER CODE END 1 */
 
 /** Configure pins
 */
 void MX_GPIO_Init(void)
 {
- 8040370:	b580      	push	{r7, lr}
- 8040372:	b088      	sub	sp, #32
- 8040374:	af00      	add	r7, sp, #0
+ 80402e8:	b580      	push	{r7, lr}
+ 80402ea:	b088      	sub	sp, #32
+ 80402ec:	af00      	add	r7, sp, #0
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
- 8040376:	f107 030c 	add.w	r3, r7, #12
- 804037a:	2200      	movs	r2, #0
- 804037c:	601a      	str	r2, [r3, #0]
- 804037e:	605a      	str	r2, [r3, #4]
- 8040380:	609a      	str	r2, [r3, #8]
- 8040382:	60da      	str	r2, [r3, #12]
- 8040384:	611a      	str	r2, [r3, #16]
+ 80402ee:	f107 030c 	add.w	r3, r7, #12
+ 80402f2:	2200      	movs	r2, #0
+ 80402f4:	601a      	str	r2, [r3, #0]
+ 80402f6:	605a      	str	r2, [r3, #4]
+ 80402f8:	609a      	str	r2, [r3, #8]
+ 80402fa:	60da      	str	r2, [r3, #12]
+ 80402fc:	611a      	str	r2, [r3, #16]
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
- 8040386:	4b28      	ldr	r3, [pc, #160]	; (8040428 <MX_GPIO_Init+0xb8>)
- 8040388:	6cdb      	ldr	r3, [r3, #76]	; 0x4c
- 804038a:	4a27      	ldr	r2, [pc, #156]	; (8040428 <MX_GPIO_Init+0xb8>)
- 804038c:	f043 0304 	orr.w	r3, r3, #4
- 8040390:	64d3      	str	r3, [r2, #76]	; 0x4c
- 8040392:	4b25      	ldr	r3, [pc, #148]	; (8040428 <MX_GPIO_Init+0xb8>)
- 8040394:	6cdb      	ldr	r3, [r3, #76]	; 0x4c
- 8040396:	f003 0304 	and.w	r3, r3, #4
- 804039a:	60bb      	str	r3, [r7, #8]
- 804039c:	68bb      	ldr	r3, [r7, #8]
+ 80402fe:	4b28      	ldr	r3, [pc, #160]	; (80403a0 <MX_GPIO_Init+0xb8>)
+ 8040300:	6cdb      	ldr	r3, [r3, #76]	; 0x4c
+ 8040302:	4a27      	ldr	r2, [pc, #156]	; (80403a0 <MX_GPIO_Init+0xb8>)
+ 8040304:	f043 0304 	orr.w	r3, r3, #4
+ 8040308:	64d3      	str	r3, [r2, #76]	; 0x4c
+ 804030a:	4b25      	ldr	r3, [pc, #148]	; (80403a0 <MX_GPIO_Init+0xb8>)
+ 804030c:	6cdb      	ldr	r3, [r3, #76]	; 0x4c
+ 804030e:	f003 0304 	and.w	r3, r3, #4
+ 8040312:	60bb      	str	r3, [r7, #8]
+ 8040314:	68bb      	ldr	r3, [r7, #8]
   __HAL_RCC_GPIOA_CLK_ENABLE();
- 804039e:	4b22      	ldr	r3, [pc, #136]	; (8040428 <MX_GPIO_Init+0xb8>)
- 80403a0:	6cdb      	ldr	r3, [r3, #76]	; 0x4c
- 80403a2:	4a21      	ldr	r2, [pc, #132]	; (8040428 <MX_GPIO_Init+0xb8>)
- 80403a4:	f043 0301 	orr.w	r3, r3, #1
- 80403a8:	64d3      	str	r3, [r2, #76]	; 0x4c
- 80403aa:	4b1f      	ldr	r3, [pc, #124]	; (8040428 <MX_GPIO_Init+0xb8>)
- 80403ac:	6cdb      	ldr	r3, [r3, #76]	; 0x4c
- 80403ae:	f003 0301 	and.w	r3, r3, #1
- 80403b2:	607b      	str	r3, [r7, #4]
- 80403b4:	687b      	ldr	r3, [r7, #4]
+ 8040316:	4b22      	ldr	r3, [pc, #136]	; (80403a0 <MX_GPIO_Init+0xb8>)
+ 8040318:	6cdb      	ldr	r3, [r3, #76]	; 0x4c
+ 804031a:	4a21      	ldr	r2, [pc, #132]	; (80403a0 <MX_GPIO_Init+0xb8>)
+ 804031c:	f043 0301 	orr.w	r3, r3, #1
+ 8040320:	64d3      	str	r3, [r2, #76]	; 0x4c
+ 8040322:	4b1f      	ldr	r3, [pc, #124]	; (80403a0 <MX_GPIO_Init+0xb8>)
+ 8040324:	6cdb      	ldr	r3, [r3, #76]	; 0x4c
+ 8040326:	f003 0301 	and.w	r3, r3, #1
+ 804032a:	607b      	str	r3, [r7, #4]
+ 804032c:	687b      	ldr	r3, [r7, #4]
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
- 80403b6:	2200      	movs	r2, #0
- 80403b8:	2180      	movs	r1, #128	; 0x80
- 80403ba:	481c      	ldr	r0, [pc, #112]	; (804042c <MX_GPIO_Init+0xbc>)
- 80403bc:	f000 fbc2 	bl	8040b44 <HAL_GPIO_WritePin>
+ 804032e:	2200      	movs	r2, #0
+ 8040330:	2180      	movs	r1, #128	; 0x80
+ 8040332:	481c      	ldr	r0, [pc, #112]	; (80403a4 <MX_GPIO_Init+0xbc>)
+ 8040334:	f000 fbc2 	bl	8040abc <HAL_GPIO_WritePin>
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET);
- 80403c0:	2200      	movs	r2, #0
- 80403c2:	f44f 7100 	mov.w	r1, #512	; 0x200
- 80403c6:	481a      	ldr	r0, [pc, #104]	; (8040430 <MX_GPIO_Init+0xc0>)
- 80403c8:	f000 fbbc 	bl	8040b44 <HAL_GPIO_WritePin>
+ 8040338:	2200      	movs	r2, #0
+ 804033a:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 804033e:	481a      	ldr	r0, [pc, #104]	; (80403a8 <MX_GPIO_Init+0xc0>)
+ 8040340:	f000 fbbc 	bl	8040abc <HAL_GPIO_WritePin>
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = BTN_BLUE_Pin;
- 80403cc:	f44f 5300 	mov.w	r3, #8192	; 0x2000
- 80403d0:	60fb      	str	r3, [r7, #12]
+ 8040344:	f44f 5300 	mov.w	r3, #8192	; 0x2000
+ 8040348:	60fb      	str	r3, [r7, #12]
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
- 80403d2:	2300      	movs	r3, #0
- 80403d4:	613b      	str	r3, [r7, #16]
+ 804034a:	2300      	movs	r3, #0
+ 804034c:	613b      	str	r3, [r7, #16]
   GPIO_InitStruct.Pull = GPIO_NOPULL;
- 80403d6:	2300      	movs	r3, #0
- 80403d8:	617b      	str	r3, [r7, #20]
+ 804034e:	2300      	movs	r3, #0
+ 8040350:	617b      	str	r3, [r7, #20]
   HAL_GPIO_Init(BTN_BLUE_GPIO_Port, &GPIO_InitStruct);
- 80403da:	f107 030c 	add.w	r3, r7, #12
- 80403de:	4619      	mov	r1, r3
- 80403e0:	4812      	ldr	r0, [pc, #72]	; (804042c <MX_GPIO_Init+0xbc>)
- 80403e2:	f000 fa2f 	bl	8040844 <HAL_GPIO_Init>
+ 8040352:	f107 030c 	add.w	r3, r7, #12
+ 8040356:	4619      	mov	r1, r3
+ 8040358:	4812      	ldr	r0, [pc, #72]	; (80403a4 <MX_GPIO_Init+0xbc>)
+ 804035a:	f000 fa2f 	bl	80407bc <HAL_GPIO_Init>
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = LED_GREEN_Pin;
- 80403e6:	2380      	movs	r3, #128	; 0x80
- 80403e8:	60fb      	str	r3, [r7, #12]
+ 804035e:	2380      	movs	r3, #128	; 0x80
+ 8040360:	60fb      	str	r3, [r7, #12]
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
- 80403ea:	2301      	movs	r3, #1
- 80403ec:	613b      	str	r3, [r7, #16]
+ 8040362:	2301      	movs	r3, #1
+ 8040364:	613b      	str	r3, [r7, #16]
   GPIO_InitStruct.Pull = GPIO_NOPULL;
- 80403ee:	2300      	movs	r3, #0
- 80403f0:	617b      	str	r3, [r7, #20]
+ 8040366:	2300      	movs	r3, #0
+ 8040368:	617b      	str	r3, [r7, #20]
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
- 80403f2:	2300      	movs	r3, #0
- 80403f4:	61bb      	str	r3, [r7, #24]
+ 804036a:	2300      	movs	r3, #0
+ 804036c:	61bb      	str	r3, [r7, #24]
   HAL_GPIO_Init(LED_GREEN_GPIO_Port, &GPIO_InitStruct);
- 80403f6:	f107 030c 	add.w	r3, r7, #12
- 80403fa:	4619      	mov	r1, r3
- 80403fc:	480b      	ldr	r0, [pc, #44]	; (804042c <MX_GPIO_Init+0xbc>)
- 80403fe:	f000 fa21 	bl	8040844 <HAL_GPIO_Init>
+ 804036e:	f107 030c 	add.w	r3, r7, #12
+ 8040372:	4619      	mov	r1, r3
+ 8040374:	480b      	ldr	r0, [pc, #44]	; (80403a4 <MX_GPIO_Init+0xbc>)
+ 8040376:	f000 fa21 	bl	80407bc <HAL_GPIO_Init>
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = LED_RED_Pin;
- 8040402:	f44f 7300 	mov.w	r3, #512	; 0x200
- 8040406:	60fb      	str	r3, [r7, #12]
+ 804037a:	f44f 7300 	mov.w	r3, #512	; 0x200
+ 804037e:	60fb      	str	r3, [r7, #12]
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
- 8040408:	2301      	movs	r3, #1
- 804040a:	613b      	str	r3, [r7, #16]
+ 8040380:	2301      	movs	r3, #1
+ 8040382:	613b      	str	r3, [r7, #16]
   GPIO_InitStruct.Pull = GPIO_NOPULL;
- 804040c:	2300      	movs	r3, #0
- 804040e:	617b      	str	r3, [r7, #20]
+ 8040384:	2300      	movs	r3, #0
+ 8040386:	617b      	str	r3, [r7, #20]
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
- 8040410:	2300      	movs	r3, #0
- 8040412:	61bb      	str	r3, [r7, #24]
+ 8040388:	2300      	movs	r3, #0
+ 804038a:	61bb      	str	r3, [r7, #24]
   HAL_GPIO_Init(LED_RED_GPIO_Port, &GPIO_InitStruct);
- 8040414:	f107 030c 	add.w	r3, r7, #12
- 8040418:	4619      	mov	r1, r3
- 804041a:	4805      	ldr	r0, [pc, #20]	; (8040430 <MX_GPIO_Init+0xc0>)
- 804041c:	f000 fa12 	bl	8040844 <HAL_GPIO_Init>
+ 804038c:	f107 030c 	add.w	r3, r7, #12
+ 8040390:	4619      	mov	r1, r3
+ 8040392:	4805      	ldr	r0, [pc, #20]	; (80403a8 <MX_GPIO_Init+0xc0>)
+ 8040394:	f000 fa12 	bl	80407bc <HAL_GPIO_Init>
 
 }
- 8040420:	bf00      	nop
- 8040422:	3720      	adds	r7, #32
- 8040424:	46bd      	mov	sp, r7
- 8040426:	bd80      	pop	{r7, pc}
- 8040428:	40021000 	.word	0x40021000
- 804042c:	42020800 	.word	0x42020800
- 8040430:	42020000 	.word	0x42020000
+ 8040398:	bf00      	nop
+ 804039a:	3720      	adds	r7, #32
+ 804039c:	46bd      	mov	sp, r7
+ 804039e:	bd80      	pop	{r7, pc}
+ 80403a0:	40021000 	.word	0x40021000
+ 80403a4:	42020800 	.word	0x42020800
+ 80403a8:	42020000 	.word	0x42020000
 
-08040434 <SecureFault_Callback>:
+080403ac <SecureFault_Callback>:
   *(volatile uint32_t *)0x30000000UL = 0;
 }
 
 //secure fault generated by IDAU/SAU check */
 void SecureFault_Callback(void)
 {
- 8040434:	b580      	push	{r7, lr}
- 8040436:	af00      	add	r7, sp, #0
+ 80403ac:	b580      	push	{r7, lr}
+ 80403ae:	af00      	add	r7, sp, #0
   HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);
- 8040438:	2201      	movs	r2, #1
- 804043a:	f44f 7100 	mov.w	r1, #512	; 0x200
- 804043e:	4803      	ldr	r0, [pc, #12]	; (804044c <SecureFault_Callback+0x18>)
- 8040440:	f000 fb80 	bl	8040b44 <HAL_GPIO_WritePin>
+ 80403b0:	2201      	movs	r2, #1
+ 80403b2:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 80403b6:	4803      	ldr	r0, [pc, #12]	; (80403c4 <SecureFault_Callback+0x18>)
+ 80403b8:	f000 fb80 	bl	8040abc <HAL_GPIO_WritePin>
   Error_Handler();
- 8040444:	f000 f82e 	bl	80404a4 <Error_Handler>
+ 80403bc:	f000 f82e 	bl	804041c <Error_Handler>
 }
- 8040448:	bf00      	nop
- 804044a:	bd80      	pop	{r7, pc}
- 804044c:	42020000 	.word	0x42020000
+ 80403c0:	bf00      	nop
+ 80403c2:	bd80      	pop	{r7, pc}
+ 80403c4:	42020000 	.word	0x42020000
 
-08040450 <SecureError_Callback>:
+080403c8 <SecureError_Callback>:
 
 //secure error generated by GTZC check
 void SecureError_Callback(void)
 {
- 8040450:	b580      	push	{r7, lr}
- 8040452:	af00      	add	r7, sp, #0
+ 80403c8:	b580      	push	{r7, lr}
+ 80403ca:	af00      	add	r7, sp, #0
   HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);
- 8040454:	2201      	movs	r2, #1
- 8040456:	f44f 7100 	mov.w	r1, #512	; 0x200
- 804045a:	4803      	ldr	r0, [pc, #12]	; (8040468 <SecureError_Callback+0x18>)
- 804045c:	f000 fb72 	bl	8040b44 <HAL_GPIO_WritePin>
+ 80403cc:	2201      	movs	r2, #1
+ 80403ce:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 80403d2:	4803      	ldr	r0, [pc, #12]	; (80403e0 <SecureError_Callback+0x18>)
+ 80403d4:	f000 fb72 	bl	8040abc <HAL_GPIO_WritePin>
   Error_Handler();
- 8040460:	f000 f820 	bl	80404a4 <Error_Handler>
+ 80403d8:	f000 f820 	bl	804041c <Error_Handler>
 }
- 8040464:	bf00      	nop
- 8040466:	bd80      	pop	{r7, pc}
- 8040468:	42020000 	.word	0x42020000
+ 80403dc:	bf00      	nop
+ 80403de:	bd80      	pop	{r7, pc}
+ 80403e0:	42020000 	.word	0x42020000
 
-0804046c <main>:
+080403e4 <main>:
   */
 
 extern char input[33];
 uint32_t c;
 int main(void)
 {
- 804046c:	b580      	push	{r7, lr}
- 804046e:	af00      	add	r7, sp, #0
+ 80403e4:	b580      	push	{r7, lr}
+ 80403e6:	af00      	add	r7, sp, #0
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
- 8040470:	f000 f899 	bl	80405a6 <HAL_Init>
+ 80403e8:	f000 f899 	bl	804051e <HAL_Init>
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
 
   /* Initialize all configured peripherals */
    MX_GPIO_Init();
- 8040474:	f7ff ff7c 	bl	8040370 <MX_GPIO_Init>
+ 80403ec:	f7ff ff7c 	bl	80402e8 <MX_GPIO_Init>
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
   //register error callbacks
   SECURE_RegisterCallback(SECURE_FAULT_CB_ID, (void *)SecureFault_Callback);
- 8040478:	4907      	ldr	r1, [pc, #28]	; (8040498 <main+0x2c>)
- 804047a:	2000      	movs	r0, #0
- 804047c:	f000 fbc4 	bl	8040c08 <__SECURE_RegisterCallback_veneer>
+ 80403f0:	4907      	ldr	r1, [pc, #28]	; (8040410 <main+0x2c>)
+ 80403f2:	2000      	movs	r0, #0
+ 80403f4:	f000 fbbc 	bl	8040b70 <__SECURE_RegisterCallback_veneer>
   SECURE_RegisterCallback(GTZC_ERROR_CB_ID, (void *)SecureError_Callback);
- 8040480:	4906      	ldr	r1, [pc, #24]	; (804049c <main+0x30>)
- 8040482:	2001      	movs	r0, #1
- 8040484:	f000 fbc0 	bl	8040c08 <__SECURE_RegisterCallback_veneer>
+ 80403f8:	4906      	ldr	r1, [pc, #24]	; (8040414 <main+0x30>)
+ 80403fa:	2001      	movs	r0, #1
+ 80403fc:	f000 fbb8 	bl	8040b70 <__SECURE_RegisterCallback_veneer>
   SECURE_RegisterCallback(ATTESTATION_APP_ID,(void*)&application);
- 8040488:	4905      	ldr	r1, [pc, #20]	; (80404a0 <main+0x34>)
- 804048a:	2002      	movs	r0, #2
- 804048c:	f000 fbbc 	bl	8040c08 <__SECURE_RegisterCallback_veneer>
+ 8040400:	4905      	ldr	r1, [pc, #20]	; (8040418 <main+0x34>)
+ 8040402:	2002      	movs	r0, #2
+ 8040404:	f000 fbb4 	bl	8040b70 <__SECURE_RegisterCallback_veneer>
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
 	  SECURE_run_attestation_wait_mode();
- 8040490:	f000 fba2 	bl	8040bd8 <__SECURE_run_attestation_wait_mode_veneer>
- 8040494:	e7fc      	b.n	8040490 <main+0x24>
- 8040496:	bf00      	nop
- 8040498:	08040435 	.word	0x08040435
- 804049c:	08040451 	.word	0x08040451
- 80404a0:	08040311 	.word	0x08040311
+ 8040408:	f000 fbba 	bl	8040b80 <__SECURE_run_attestation_wait_mode_veneer>
+ 804040c:	e7fc      	b.n	8040408 <main+0x24>
+ 804040e:	bf00      	nop
+ 8040410:	080403ad 	.word	0x080403ad
+ 8040414:	080403c9 	.word	0x080403c9
+ 8040418:	080402c5 	.word	0x080402c5
 
-080404a4 <Error_Handler>:
+0804041c <Error_Handler>:
 /**
   * @brief  This function is executed in case of error occurrence.
   * @retval None
   */
 void Error_Handler(void)
 {
- 80404a4:	b480      	push	{r7}
- 80404a6:	af00      	add	r7, sp, #0
+ 804041c:	b480      	push	{r7}
+ 804041e:	af00      	add	r7, sp, #0
   \details Disables IRQ interrupts by setting the I-bit in the CPSR.
            Can only be executed in Privileged modes.
  */
 __STATIC_FORCEINLINE void __disable_irq(void)
 {
   __ASM volatile ("cpsid i" : : : "memory");
- 80404a8:	b672      	cpsid	i
+ 8040420:	b672      	cpsid	i
 }
- 80404aa:	bf00      	nop
+ 8040422:	bf00      	nop
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   while (1)
- 80404ac:	e7fe      	b.n	80404ac <Error_Handler+0x8>
+ 8040424:	e7fe      	b.n	8040424 <Error_Handler+0x8>
 	...
 
-080404b0 <HAL_MspInit>:
+08040428 <HAL_MspInit>:
 /* USER CODE END 0 */
 /**
   * Initializes the Global MSP.
   */
 void HAL_MspInit(void)
 {
- 80404b0:	b480      	push	{r7}
- 80404b2:	b083      	sub	sp, #12
- 80404b4:	af00      	add	r7, sp, #0
+ 8040428:	b480      	push	{r7}
+ 804042a:	b083      	sub	sp, #12
+ 804042c:	af00      	add	r7, sp, #0
   /* USER CODE BEGIN MspInit 0 */
 
   /* USER CODE END MspInit 0 */
 
   __HAL_RCC_SYSCFG_CLK_ENABLE();
- 80404b6:	4b0f      	ldr	r3, [pc, #60]	; (80404f4 <HAL_MspInit+0x44>)
- 80404b8:	6e1b      	ldr	r3, [r3, #96]	; 0x60
- 80404ba:	4a0e      	ldr	r2, [pc, #56]	; (80404f4 <HAL_MspInit+0x44>)
- 80404bc:	f043 0301 	orr.w	r3, r3, #1
- 80404c0:	6613      	str	r3, [r2, #96]	; 0x60
- 80404c2:	4b0c      	ldr	r3, [pc, #48]	; (80404f4 <HAL_MspInit+0x44>)
- 80404c4:	6e1b      	ldr	r3, [r3, #96]	; 0x60
- 80404c6:	f003 0301 	and.w	r3, r3, #1
- 80404ca:	607b      	str	r3, [r7, #4]
- 80404cc:	687b      	ldr	r3, [r7, #4]
+ 804042e:	4b0f      	ldr	r3, [pc, #60]	; (804046c <HAL_MspInit+0x44>)
+ 8040430:	6e1b      	ldr	r3, [r3, #96]	; 0x60
+ 8040432:	4a0e      	ldr	r2, [pc, #56]	; (804046c <HAL_MspInit+0x44>)
+ 8040434:	f043 0301 	orr.w	r3, r3, #1
+ 8040438:	6613      	str	r3, [r2, #96]	; 0x60
+ 804043a:	4b0c      	ldr	r3, [pc, #48]	; (804046c <HAL_MspInit+0x44>)
+ 804043c:	6e1b      	ldr	r3, [r3, #96]	; 0x60
+ 804043e:	f003 0301 	and.w	r3, r3, #1
+ 8040442:	607b      	str	r3, [r7, #4]
+ 8040444:	687b      	ldr	r3, [r7, #4]
   __HAL_RCC_PWR_CLK_ENABLE();
- 80404ce:	4b09      	ldr	r3, [pc, #36]	; (80404f4 <HAL_MspInit+0x44>)
- 80404d0:	6d9b      	ldr	r3, [r3, #88]	; 0x58
- 80404d2:	4a08      	ldr	r2, [pc, #32]	; (80404f4 <HAL_MspInit+0x44>)
- 80404d4:	f043 5380 	orr.w	r3, r3, #268435456	; 0x10000000
- 80404d8:	6593      	str	r3, [r2, #88]	; 0x58
- 80404da:	4b06      	ldr	r3, [pc, #24]	; (80404f4 <HAL_MspInit+0x44>)
- 80404dc:	6d9b      	ldr	r3, [r3, #88]	; 0x58
- 80404de:	f003 5380 	and.w	r3, r3, #268435456	; 0x10000000
- 80404e2:	603b      	str	r3, [r7, #0]
- 80404e4:	683b      	ldr	r3, [r7, #0]
+ 8040446:	4b09      	ldr	r3, [pc, #36]	; (804046c <HAL_MspInit+0x44>)
+ 8040448:	6d9b      	ldr	r3, [r3, #88]	; 0x58
+ 804044a:	4a08      	ldr	r2, [pc, #32]	; (804046c <HAL_MspInit+0x44>)
+ 804044c:	f043 5380 	orr.w	r3, r3, #268435456	; 0x10000000
+ 8040450:	6593      	str	r3, [r2, #88]	; 0x58
+ 8040452:	4b06      	ldr	r3, [pc, #24]	; (804046c <HAL_MspInit+0x44>)
+ 8040454:	6d9b      	ldr	r3, [r3, #88]	; 0x58
+ 8040456:	f003 5380 	and.w	r3, r3, #268435456	; 0x10000000
+ 804045a:	603b      	str	r3, [r7, #0]
+ 804045c:	683b      	ldr	r3, [r7, #0]
   /* System interrupt init*/
 
   /* USER CODE BEGIN MspInit 1 */
 
   /* USER CODE END MspInit 1 */
 }
- 80404e6:	bf00      	nop
- 80404e8:	370c      	adds	r7, #12
- 80404ea:	46bd      	mov	sp, r7
- 80404ec:	f85d 7b04 	ldr.w	r7, [sp], #4
- 80404f0:	4770      	bx	lr
- 80404f2:	bf00      	nop
- 80404f4:	40021000 	.word	0x40021000
+ 804045e:	bf00      	nop
+ 8040460:	370c      	adds	r7, #12
+ 8040462:	46bd      	mov	sp, r7
+ 8040464:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8040468:	4770      	bx	lr
+ 804046a:	bf00      	nop
+ 804046c:	40021000 	.word	0x40021000
 
-080404f8 <MemManage_Handler>:
+08040470 <MemManage_Handler>:
 /******************************************************************************/
 /**
   * @brief This function handles Memory management fault.
   */
 void MemManage_Handler(void)
 {
- 80404f8:	b480      	push	{r7}
- 80404fa:	af00      	add	r7, sp, #0
+ 8040470:	b480      	push	{r7}
+ 8040472:	af00      	add	r7, sp, #0
   /* USER CODE BEGIN MemoryManagement_IRQn 0 */
 
   /* USER CODE END MemoryManagement_IRQn 0 */
   while (1)
- 80404fc:	e7fe      	b.n	80404fc <MemManage_Handler+0x4>
+ 8040474:	e7fe      	b.n	8040474 <MemManage_Handler+0x4>
 
-080404fe <UsageFault_Handler>:
+08040476 <UsageFault_Handler>:
 
 /**
   * @brief This function handles Undefined instruction or illegal state.
   */
 void UsageFault_Handler(void)
 {
- 80404fe:	b480      	push	{r7}
- 8040500:	af00      	add	r7, sp, #0
+ 8040476:	b480      	push	{r7}
+ 8040478:	af00      	add	r7, sp, #0
   /* USER CODE BEGIN UsageFault_IRQn 0 */
 
   /* USER CODE END UsageFault_IRQn 0 */
   while (1)
- 8040502:	e7fe      	b.n	8040502 <UsageFault_Handler+0x4>
+ 804047a:	e7fe      	b.n	804047a <UsageFault_Handler+0x4>
 
-08040504 <SVC_Handler>:
+0804047c <SVC_Handler>:
 
 /**
   * @brief This function handles System service call via SWI instruction.
   */
 void SVC_Handler(void)
 {
- 8040504:	b480      	push	{r7}
- 8040506:	af00      	add	r7, sp, #0
+ 804047c:	b480      	push	{r7}
+ 804047e:	af00      	add	r7, sp, #0
 
   /* USER CODE END SVCall_IRQn 0 */
   /* USER CODE BEGIN SVCall_IRQn 1 */
 
   /* USER CODE END SVCall_IRQn 1 */
 }
- 8040508:	bf00      	nop
- 804050a:	46bd      	mov	sp, r7
- 804050c:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8040510:	4770      	bx	lr
+ 8040480:	bf00      	nop
+ 8040482:	46bd      	mov	sp, r7
+ 8040484:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8040488:	4770      	bx	lr
 
-08040512 <PendSV_Handler>:
+0804048a <PendSV_Handler>:
 
 /**
   * @brief This function handles Pendable request for system service.
   */
 void PendSV_Handler(void)
 {
- 8040512:	b480      	push	{r7}
- 8040514:	af00      	add	r7, sp, #0
+ 804048a:	b480      	push	{r7}
+ 804048c:	af00      	add	r7, sp, #0
 
   /* USER CODE END PendSV_IRQn 0 */
   /* USER CODE BEGIN PendSV_IRQn 1 */
 
   /* USER CODE END PendSV_IRQn 1 */
 }
- 8040516:	bf00      	nop
- 8040518:	46bd      	mov	sp, r7
- 804051a:	f85d 7b04 	ldr.w	r7, [sp], #4
- 804051e:	4770      	bx	lr
+ 804048e:	bf00      	nop
+ 8040490:	46bd      	mov	sp, r7
+ 8040492:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8040496:	4770      	bx	lr
 
-08040520 <SysTick_Handler>:
+08040498 <SysTick_Handler>:
 
 /**
   * @brief This function handles System tick timer.
   */
 void SysTick_Handler(void)
 {
- 8040520:	b580      	push	{r7, lr}
- 8040522:	af00      	add	r7, sp, #0
+ 8040498:	b580      	push	{r7, lr}
+ 804049a:	af00      	add	r7, sp, #0
   /* USER CODE BEGIN SysTick_IRQn 0 */
 
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
- 8040524:	f000 f896 	bl	8040654 <HAL_IncTick>
+ 804049c:	f000 f896 	bl	80405cc <HAL_IncTick>
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
   /* USER CODE END SysTick_IRQn 1 */
 }
- 8040528:	bf00      	nop
- 804052a:	bd80      	pop	{r7, pc}
+ 80404a0:	bf00      	nop
+ 80404a2:	bd80      	pop	{r7, pc}
 
-0804052c <SystemInit>:
+080404a4 <SystemInit>:
   * @brief  Setup the microcontroller system.
   * @retval None
   */
 
 void SystemInit(void)
 {
- 804052c:	b480      	push	{r7}
- 804052e:	af00      	add	r7, sp, #0
+ 80404a4:	b480      	push	{r7}
+ 80404a6:	af00      	add	r7, sp, #0
 #endif
 
   /* Non-secure main application shall call SystemCoreClockUpdate() to update */
   /* the SystemCoreClock variable to insure non-secure application relies on  */
   /* the initial clock reference set by secure application.                   */
 }
- 8040530:	bf00      	nop
- 8040532:	46bd      	mov	sp, r7
- 8040534:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8040538:	4770      	bx	lr
+ 80404a8:	bf00      	nop
+ 80404aa:	46bd      	mov	sp, r7
+ 80404ac:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80404b0:	4770      	bx	lr
 	...
 
-0804053c <SystemCoreClockUpdate>:
+080404b4 <SystemCoreClockUpdate>:
   *           value for HSE crystal.
   *
   * @retval None
   */
 void SystemCoreClockUpdate(void)
 {
- 804053c:	b580      	push	{r7, lr}
- 804053e:	af00      	add	r7, sp, #0
+ 80404b4:	b580      	push	{r7, lr}
+ 80404b6:	af00      	add	r7, sp, #0
   /* Get the SystemCoreClock value from the secure domain */
   SystemCoreClock = SECURE_SystemCoreClockUpdate();
- 8040540:	f000 fb5a 	bl	8040bf8 <__SECURE_SystemCoreClockUpdate_veneer>
- 8040544:	4603      	mov	r3, r0
- 8040546:	4a02      	ldr	r2, [pc, #8]	; (8040550 <SystemCoreClockUpdate+0x14>)
- 8040548:	6013      	str	r3, [r2, #0]
+ 80404b8:	f000 fb52 	bl	8040b60 <__SECURE_SystemCoreClockUpdate_veneer>
+ 80404bc:	4603      	mov	r3, r0
+ 80404be:	4a02      	ldr	r2, [pc, #8]	; (80404c8 <SystemCoreClockUpdate+0x14>)
+ 80404c0:	6013      	str	r3, [r2, #0]
 }
- 804054a:	bf00      	nop
- 804054c:	bd80      	pop	{r7, pc}
- 804054e:	bf00      	nop
- 8040550:	20018000 	.word	0x20018000
+ 80404c2:	bf00      	nop
+ 80404c4:	bd80      	pop	{r7, pc}
+ 80404c6:	bf00      	nop
+ 80404c8:	20018000 	.word	0x20018000
 
-08040554 <Reset_Handler>:
+080404cc <Reset_Handler>:
 
     .section	.text.Reset_Handler
 	.weak	Reset_Handler
 	.type	Reset_Handler, %function
 Reset_Handler:
   ldr   sp, =_estack    /* set stack pointer */
- 8040554:	f8df d034 	ldr.w	sp, [pc, #52]	; 804058c <LoopForever+0x2>
+ 80404cc:	f8df d034 	ldr.w	sp, [pc, #52]	; 8040504 <LoopForever+0x2>
 
 /* Call the clock system initialization function.*/
   bl  SystemInit
- 8040558:	f7ff ffe8 	bl	804052c <SystemInit>
+ 80404d0:	f7ff ffe8 	bl	80404a4 <SystemInit>
 
 /* Copy the data segment initializers from flash to SRAM */
   movs	r1, #0
- 804055c:	2100      	movs	r1, #0
+ 80404d4:	2100      	movs	r1, #0
   b	LoopCopyDataInit
- 804055e:	e003      	b.n	8040568 <LoopCopyDataInit>
+ 80404d6:	e003      	b.n	80404e0 <LoopCopyDataInit>
 
-08040560 <CopyDataInit>:
+080404d8 <CopyDataInit>:
 
 CopyDataInit:
 	ldr	r3, =_sidata
- 8040560:	4b0b      	ldr	r3, [pc, #44]	; (8040590 <LoopForever+0x6>)
+ 80404d8:	4b0b      	ldr	r3, [pc, #44]	; (8040508 <LoopForever+0x6>)
 	ldr	r3, [r3, r1]
- 8040562:	585b      	ldr	r3, [r3, r1]
+ 80404da:	585b      	ldr	r3, [r3, r1]
 	str	r3, [r0, r1]
- 8040564:	5043      	str	r3, [r0, r1]
+ 80404dc:	5043      	str	r3, [r0, r1]
 	adds	r1, r1, #4
- 8040566:	3104      	adds	r1, #4
+ 80404de:	3104      	adds	r1, #4
 
-08040568 <LoopCopyDataInit>:
+080404e0 <LoopCopyDataInit>:
 
 LoopCopyDataInit:
 	ldr	r0, =_sdata
- 8040568:	480a      	ldr	r0, [pc, #40]	; (8040594 <LoopForever+0xa>)
+ 80404e0:	480a      	ldr	r0, [pc, #40]	; (804050c <LoopForever+0xa>)
 	ldr	r3, =_edata
- 804056a:	4b0b      	ldr	r3, [pc, #44]	; (8040598 <LoopForever+0xe>)
+ 80404e2:	4b0b      	ldr	r3, [pc, #44]	; (8040510 <LoopForever+0xe>)
 	adds	r2, r0, r1
- 804056c:	1842      	adds	r2, r0, r1
+ 80404e4:	1842      	adds	r2, r0, r1
 	cmp	r2, r3
- 804056e:	429a      	cmp	r2, r3
+ 80404e6:	429a      	cmp	r2, r3
 	bcc	CopyDataInit
- 8040570:	d3f6      	bcc.n	8040560 <CopyDataInit>
+ 80404e8:	d3f6      	bcc.n	80404d8 <CopyDataInit>
 	ldr	r2, =_sbss
- 8040572:	4a0a      	ldr	r2, [pc, #40]	; (804059c <LoopForever+0x12>)
+ 80404ea:	4a0a      	ldr	r2, [pc, #40]	; (8040514 <LoopForever+0x12>)
 	b	LoopFillZerobss
- 8040574:	e002      	b.n	804057c <LoopFillZerobss>
+ 80404ec:	e002      	b.n	80404f4 <LoopFillZerobss>
 
-08040576 <FillZerobss>:
+080404ee <FillZerobss>:
 /* Zero fill the bss segment. */
 FillZerobss:
 	movs	r3, #0
- 8040576:	2300      	movs	r3, #0
+ 80404ee:	2300      	movs	r3, #0
 	str	r3, [r2], #4
- 8040578:	f842 3b04 	str.w	r3, [r2], #4
+ 80404f0:	f842 3b04 	str.w	r3, [r2], #4
 
-0804057c <LoopFillZerobss>:
+080404f4 <LoopFillZerobss>:
 
 LoopFillZerobss:
 	ldr	r3, = _ebss
- 804057c:	4b08      	ldr	r3, [pc, #32]	; (80405a0 <LoopForever+0x16>)
+ 80404f4:	4b08      	ldr	r3, [pc, #32]	; (8040518 <LoopForever+0x16>)
 	cmp	r2, r3
- 804057e:	429a      	cmp	r2, r3
+ 80404f6:	429a      	cmp	r2, r3
 	bcc	FillZerobss
- 8040580:	d3f9      	bcc.n	8040576 <FillZerobss>
+ 80404f8:	d3f9      	bcc.n	80404ee <FillZerobss>
 
 /* Call static constructors */
   bl __libc_init_array
- 8040582:	f000 faf7 	bl	8040b74 <__libc_init_array>
+ 80404fa:	f000 faf7 	bl	8040aec <__libc_init_array>
 /* Call the application's entry point.*/
 	bl	main
- 8040586:	f7ff ff71 	bl	804046c <main>
+ 80404fe:	f7ff ff71 	bl	80403e4 <main>
 
-0804058a <LoopForever>:
+08040502 <LoopForever>:
 
 LoopForever:
     b LoopForever
- 804058a:	e7fe      	b.n	804058a <LoopForever>
+ 8040502:	e7fe      	b.n	8040502 <LoopForever>
   ldr   sp, =_estack    /* set stack pointer */
- 804058c:	20040000 	.word	0x20040000
+ 8040504:	20040000 	.word	0x20040000
 	ldr	r3, =_sidata
- 8040590:	08040c20 	.word	0x08040c20
+ 8040508:	08040fc8 	.word	0x08040fc8
 	ldr	r0, =_sdata
- 8040594:	20018000 	.word	0x20018000
+ 804050c:	20018000 	.word	0x20018000
 	ldr	r3, =_edata
- 8040598:	2001800c 	.word	0x2001800c
+ 8040510:	2001800c 	.word	0x2001800c
 	ldr	r2, =_sbss
- 804059c:	2001800c 	.word	0x2001800c
+ 8040514:	2001800c 	.word	0x2001800c
 	ldr	r3, = _ebss
- 80405a0:	20018038 	.word	0x20018038
+ 8040518:	20018030 	.word	0x20018030
 
-080405a4 <ADC1_2_IRQHandler>:
+0804051c <ADC1_2_IRQHandler>:
  * @retval : None
 */
     .section	.text.Default_Handler,"ax",%progbits
 Default_Handler:
 Infinite_Loop:
 	b	Infinite_Loop
- 80405a4:	e7fe      	b.n	80405a4 <ADC1_2_IRQHandler>
+ 804051c:	e7fe      	b.n	804051c <ADC1_2_IRQHandler>
 
-080405a6 <HAL_Init>:
+0804051e <HAL_Init>:
   *         each 1ms in the SysTick_Handler() interrupt handler.
   *
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_Init(void)
 {
- 80405a6:	b580      	push	{r7, lr}
- 80405a8:	b082      	sub	sp, #8
- 80405aa:	af00      	add	r7, sp, #0
+ 804051e:	b580      	push	{r7, lr}
+ 8040520:	b082      	sub	sp, #8
+ 8040522:	af00      	add	r7, sp, #0
   HAL_StatusTypeDef  status = HAL_OK;
- 80405ac:	2300      	movs	r3, #0
- 80405ae:	71fb      	strb	r3, [r7, #7]
+ 8040524:	2300      	movs	r3, #0
+ 8040526:	71fb      	strb	r3, [r7, #7]
 
   /* Set Interrupt Group Priority */
   HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_3);
- 80405b0:	2004      	movs	r0, #4
- 80405b2:	f000 f915 	bl	80407e0 <HAL_NVIC_SetPriorityGrouping>
+ 8040528:	2004      	movs	r0, #4
+ 804052a:	f000 f915 	bl	8040758 <HAL_NVIC_SetPriorityGrouping>
 
   /* Insure time base clock coherency */
   SystemCoreClockUpdate();
- 80405b6:	f7ff ffc1 	bl	804053c <SystemCoreClockUpdate>
+ 804052e:	f7ff ffc1 	bl	80404b4 <SystemCoreClockUpdate>
 
   /* Use SysTick as time base source and configure 1ms tick (default clock after Reset is MSI) */
   if (HAL_InitTick(TICK_INT_PRIORITY) != HAL_OK)
- 80405ba:	2007      	movs	r0, #7
- 80405bc:	f000 f80e 	bl	80405dc <HAL_InitTick>
- 80405c0:	4603      	mov	r3, r0
- 80405c2:	2b00      	cmp	r3, #0
- 80405c4:	d002      	beq.n	80405cc <HAL_Init+0x26>
+ 8040532:	2007      	movs	r0, #7
+ 8040534:	f000 f80e 	bl	8040554 <HAL_InitTick>
+ 8040538:	4603      	mov	r3, r0
+ 804053a:	2b00      	cmp	r3, #0
+ 804053c:	d002      	beq.n	8040544 <HAL_Init+0x26>
   {
     status = HAL_ERROR;
- 80405c6:	2301      	movs	r3, #1
- 80405c8:	71fb      	strb	r3, [r7, #7]
- 80405ca:	e001      	b.n	80405d0 <HAL_Init+0x2a>
+ 804053e:	2301      	movs	r3, #1
+ 8040540:	71fb      	strb	r3, [r7, #7]
+ 8040542:	e001      	b.n	8040548 <HAL_Init+0x2a>
   }
   else
   {
     /* Init the low level hardware */
     HAL_MspInit();
- 80405cc:	f7ff ff70 	bl	80404b0 <HAL_MspInit>
+ 8040544:	f7ff ff70 	bl	8040428 <HAL_MspInit>
   }
 
   /* Return function status */
   return status;
- 80405d0:	79fb      	ldrb	r3, [r7, #7]
+ 8040548:	79fb      	ldrb	r3, [r7, #7]
 }
- 80405d2:	4618      	mov	r0, r3
- 80405d4:	3708      	adds	r7, #8
- 80405d6:	46bd      	mov	sp, r7
- 80405d8:	bd80      	pop	{r7, pc}
+ 804054a:	4618      	mov	r0, r3
+ 804054c:	3708      	adds	r7, #8
+ 804054e:	46bd      	mov	sp, r7
+ 8040550:	bd80      	pop	{r7, pc}
 	...
 
-080405dc <HAL_InitTick>:
+08040554 <HAL_InitTick>:
   *       implementation  in user file.
   * @param TickPriority  Tick interrupt priority.
   * @retval HAL status
   */
 __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
- 80405dc:	b580      	push	{r7, lr}
- 80405de:	b084      	sub	sp, #16
- 80405e0:	af00      	add	r7, sp, #0
- 80405e2:	6078      	str	r0, [r7, #4]
+ 8040554:	b580      	push	{r7, lr}
+ 8040556:	b084      	sub	sp, #16
+ 8040558:	af00      	add	r7, sp, #0
+ 804055a:	6078      	str	r0, [r7, #4]
   HAL_StatusTypeDef  status = HAL_OK;
- 80405e4:	2300      	movs	r3, #0
- 80405e6:	73fb      	strb	r3, [r7, #15]
+ 804055c:	2300      	movs	r3, #0
+ 804055e:	73fb      	strb	r3, [r7, #15]
 
   /* Check uwTickFreq for MisraC 2012 (even if uwTickFreq is a enum type that doesn't take the value zero)*/
   if ((uint32_t)uwTickFreq != 0U)
- 80405e8:	4b17      	ldr	r3, [pc, #92]	; (8040648 <HAL_InitTick+0x6c>)
- 80405ea:	781b      	ldrb	r3, [r3, #0]
- 80405ec:	2b00      	cmp	r3, #0
- 80405ee:	d023      	beq.n	8040638 <HAL_InitTick+0x5c>
+ 8040560:	4b17      	ldr	r3, [pc, #92]	; (80405c0 <HAL_InitTick+0x6c>)
+ 8040562:	781b      	ldrb	r3, [r3, #0]
+ 8040564:	2b00      	cmp	r3, #0
+ 8040566:	d023      	beq.n	80405b0 <HAL_InitTick+0x5c>
   {
     /*Configure the SysTick to have interrupt in 1ms time basis*/
     if (HAL_SYSTICK_Config(SystemCoreClock / (1000U / (uint32_t)uwTickFreq)) == 0U)
- 80405f0:	4b16      	ldr	r3, [pc, #88]	; (804064c <HAL_InitTick+0x70>)
- 80405f2:	681a      	ldr	r2, [r3, #0]
- 80405f4:	4b14      	ldr	r3, [pc, #80]	; (8040648 <HAL_InitTick+0x6c>)
- 80405f6:	781b      	ldrb	r3, [r3, #0]
- 80405f8:	4619      	mov	r1, r3
- 80405fa:	f44f 737a 	mov.w	r3, #1000	; 0x3e8
- 80405fe:	fbb3 f3f1 	udiv	r3, r3, r1
- 8040602:	fbb2 f3f3 	udiv	r3, r2, r3
- 8040606:	4618      	mov	r0, r3
- 8040608:	f000 f90f 	bl	804082a <HAL_SYSTICK_Config>
- 804060c:	4603      	mov	r3, r0
- 804060e:	2b00      	cmp	r3, #0
- 8040610:	d10f      	bne.n	8040632 <HAL_InitTick+0x56>
+ 8040568:	4b16      	ldr	r3, [pc, #88]	; (80405c4 <HAL_InitTick+0x70>)
+ 804056a:	681a      	ldr	r2, [r3, #0]
+ 804056c:	4b14      	ldr	r3, [pc, #80]	; (80405c0 <HAL_InitTick+0x6c>)
+ 804056e:	781b      	ldrb	r3, [r3, #0]
+ 8040570:	4619      	mov	r1, r3
+ 8040572:	f44f 737a 	mov.w	r3, #1000	; 0x3e8
+ 8040576:	fbb3 f3f1 	udiv	r3, r3, r1
+ 804057a:	fbb2 f3f3 	udiv	r3, r2, r3
+ 804057e:	4618      	mov	r0, r3
+ 8040580:	f000 f90f 	bl	80407a2 <HAL_SYSTICK_Config>
+ 8040584:	4603      	mov	r3, r0
+ 8040586:	2b00      	cmp	r3, #0
+ 8040588:	d10f      	bne.n	80405aa <HAL_InitTick+0x56>
     {
       /* Configure the SysTick IRQ priority */
       if (TickPriority < (1UL << __NVIC_PRIO_BITS))
- 8040612:	687b      	ldr	r3, [r7, #4]
- 8040614:	2b07      	cmp	r3, #7
- 8040616:	d809      	bhi.n	804062c <HAL_InitTick+0x50>
+ 804058a:	687b      	ldr	r3, [r7, #4]
+ 804058c:	2b07      	cmp	r3, #7
+ 804058e:	d809      	bhi.n	80405a4 <HAL_InitTick+0x50>
       {
         HAL_NVIC_SetPriority(SysTick_IRQn, TickPriority, 0U);
- 8040618:	2200      	movs	r2, #0
- 804061a:	6879      	ldr	r1, [r7, #4]
- 804061c:	f04f 30ff 	mov.w	r0, #4294967295	; 0xffffffff
- 8040620:	f000 f8e9 	bl	80407f6 <HAL_NVIC_SetPriority>
+ 8040590:	2200      	movs	r2, #0
+ 8040592:	6879      	ldr	r1, [r7, #4]
+ 8040594:	f04f 30ff 	mov.w	r0, #4294967295	; 0xffffffff
+ 8040598:	f000 f8e9 	bl	804076e <HAL_NVIC_SetPriority>
         uwTickPrio = TickPriority;
- 8040624:	4a0a      	ldr	r2, [pc, #40]	; (8040650 <HAL_InitTick+0x74>)
- 8040626:	687b      	ldr	r3, [r7, #4]
- 8040628:	6013      	str	r3, [r2, #0]
- 804062a:	e007      	b.n	804063c <HAL_InitTick+0x60>
+ 804059c:	4a0a      	ldr	r2, [pc, #40]	; (80405c8 <HAL_InitTick+0x74>)
+ 804059e:	687b      	ldr	r3, [r7, #4]
+ 80405a0:	6013      	str	r3, [r2, #0]
+ 80405a2:	e007      	b.n	80405b4 <HAL_InitTick+0x60>
       }
       else
       {
         status = HAL_ERROR;
- 804062c:	2301      	movs	r3, #1
- 804062e:	73fb      	strb	r3, [r7, #15]
- 8040630:	e004      	b.n	804063c <HAL_InitTick+0x60>
+ 80405a4:	2301      	movs	r3, #1
+ 80405a6:	73fb      	strb	r3, [r7, #15]
+ 80405a8:	e004      	b.n	80405b4 <HAL_InitTick+0x60>
       }
     }
     else
     {
       status = HAL_ERROR;
- 8040632:	2301      	movs	r3, #1
- 8040634:	73fb      	strb	r3, [r7, #15]
- 8040636:	e001      	b.n	804063c <HAL_InitTick+0x60>
+ 80405aa:	2301      	movs	r3, #1
+ 80405ac:	73fb      	strb	r3, [r7, #15]
+ 80405ae:	e001      	b.n	80405b4 <HAL_InitTick+0x60>
     }
   }
   else
   {
     status = HAL_ERROR;
- 8040638:	2301      	movs	r3, #1
- 804063a:	73fb      	strb	r3, [r7, #15]
+ 80405b0:	2301      	movs	r3, #1
+ 80405b2:	73fb      	strb	r3, [r7, #15]
   }
 
   /* Return function status */
   return status;
- 804063c:	7bfb      	ldrb	r3, [r7, #15]
+ 80405b4:	7bfb      	ldrb	r3, [r7, #15]
 }
- 804063e:	4618      	mov	r0, r3
- 8040640:	3710      	adds	r7, #16
- 8040642:	46bd      	mov	sp, r7
- 8040644:	bd80      	pop	{r7, pc}
- 8040646:	bf00      	nop
- 8040648:	20018008 	.word	0x20018008
- 804064c:	20018000 	.word	0x20018000
- 8040650:	20018004 	.word	0x20018004
+ 80405b6:	4618      	mov	r0, r3
+ 80405b8:	3710      	adds	r7, #16
+ 80405ba:	46bd      	mov	sp, r7
+ 80405bc:	bd80      	pop	{r7, pc}
+ 80405be:	bf00      	nop
+ 80405c0:	20018008 	.word	0x20018008
+ 80405c4:	20018000 	.word	0x20018000
+ 80405c8:	20018004 	.word	0x20018004
 
-08040654 <HAL_IncTick>:
+080405cc <HAL_IncTick>:
   * @note This function is declared as __weak to be overwritten in case of other
   *      implementations in user file.
   * @retval None
   */
 __weak void HAL_IncTick(void)
 {
- 8040654:	b480      	push	{r7}
- 8040656:	af00      	add	r7, sp, #0
+ 80405cc:	b480      	push	{r7}
+ 80405ce:	af00      	add	r7, sp, #0
   uwTick += (uint32_t)uwTickFreq;
- 8040658:	4b06      	ldr	r3, [pc, #24]	; (8040674 <HAL_IncTick+0x20>)
- 804065a:	781b      	ldrb	r3, [r3, #0]
- 804065c:	461a      	mov	r2, r3
- 804065e:	4b06      	ldr	r3, [pc, #24]	; (8040678 <HAL_IncTick+0x24>)
- 8040660:	681b      	ldr	r3, [r3, #0]
- 8040662:	4413      	add	r3, r2
- 8040664:	4a04      	ldr	r2, [pc, #16]	; (8040678 <HAL_IncTick+0x24>)
- 8040666:	6013      	str	r3, [r2, #0]
+ 80405d0:	4b06      	ldr	r3, [pc, #24]	; (80405ec <HAL_IncTick+0x20>)
+ 80405d2:	781b      	ldrb	r3, [r3, #0]
+ 80405d4:	461a      	mov	r2, r3
+ 80405d6:	4b06      	ldr	r3, [pc, #24]	; (80405f0 <HAL_IncTick+0x24>)
+ 80405d8:	681b      	ldr	r3, [r3, #0]
+ 80405da:	4413      	add	r3, r2
+ 80405dc:	4a04      	ldr	r2, [pc, #16]	; (80405f0 <HAL_IncTick+0x24>)
+ 80405de:	6013      	str	r3, [r2, #0]
 }
- 8040668:	bf00      	nop
- 804066a:	46bd      	mov	sp, r7
- 804066c:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8040670:	4770      	bx	lr
- 8040672:	bf00      	nop
- 8040674:	20018008 	.word	0x20018008
- 8040678:	2001802c 	.word	0x2001802c
+ 80405e0:	bf00      	nop
+ 80405e2:	46bd      	mov	sp, r7
+ 80405e4:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80405e8:	4770      	bx	lr
+ 80405ea:	bf00      	nop
+ 80405ec:	20018008 	.word	0x20018008
+ 80405f0:	2001802c 	.word	0x2001802c
 
-0804067c <__NVIC_SetPriorityGrouping>:
+080405f4 <__NVIC_SetPriorityGrouping>:
            In case of a conflict between priority grouping and available
            priority bits (__NVIC_PRIO_BITS), the smallest possible priority group is set.
   \param [in]      PriorityGroup  Priority grouping field.
  */
 __STATIC_INLINE void __NVIC_SetPriorityGrouping(uint32_t PriorityGroup)
 {
- 804067c:	b480      	push	{r7}
- 804067e:	b085      	sub	sp, #20
- 8040680:	af00      	add	r7, sp, #0
- 8040682:	6078      	str	r0, [r7, #4]
+ 80405f4:	b480      	push	{r7}
+ 80405f6:	b085      	sub	sp, #20
+ 80405f8:	af00      	add	r7, sp, #0
+ 80405fa:	6078      	str	r0, [r7, #4]
   uint32_t reg_value;
   uint32_t PriorityGroupTmp = (PriorityGroup & (uint32_t)0x07UL);             /* only values 0..7 are used          */
- 8040684:	687b      	ldr	r3, [r7, #4]
- 8040686:	f003 0307 	and.w	r3, r3, #7
- 804068a:	60fb      	str	r3, [r7, #12]
+ 80405fc:	687b      	ldr	r3, [r7, #4]
+ 80405fe:	f003 0307 	and.w	r3, r3, #7
+ 8040602:	60fb      	str	r3, [r7, #12]
 
   reg_value  =  SCB->AIRCR;                                                   /* read old register configuration    */
- 804068c:	4b0c      	ldr	r3, [pc, #48]	; (80406c0 <__NVIC_SetPriorityGrouping+0x44>)
- 804068e:	68db      	ldr	r3, [r3, #12]
- 8040690:	60bb      	str	r3, [r7, #8]
+ 8040604:	4b0c      	ldr	r3, [pc, #48]	; (8040638 <__NVIC_SetPriorityGrouping+0x44>)
+ 8040606:	68db      	ldr	r3, [r3, #12]
+ 8040608:	60bb      	str	r3, [r7, #8]
   reg_value &= ~((uint32_t)(SCB_AIRCR_VECTKEY_Msk | SCB_AIRCR_PRIGROUP_Msk)); /* clear bits to change               */
- 8040692:	68ba      	ldr	r2, [r7, #8]
- 8040694:	f64f 03ff 	movw	r3, #63743	; 0xf8ff
- 8040698:	4013      	ands	r3, r2
- 804069a:	60bb      	str	r3, [r7, #8]
+ 804060a:	68ba      	ldr	r2, [r7, #8]
+ 804060c:	f64f 03ff 	movw	r3, #63743	; 0xf8ff
+ 8040610:	4013      	ands	r3, r2
+ 8040612:	60bb      	str	r3, [r7, #8]
   reg_value  =  (reg_value                                   |
                 ((uint32_t)0x5FAUL << SCB_AIRCR_VECTKEY_Pos) |
                 (PriorityGroupTmp << SCB_AIRCR_PRIGROUP_Pos)  );              /* Insert write key and priority group */
- 804069c:	68fb      	ldr	r3, [r7, #12]
- 804069e:	021a      	lsls	r2, r3, #8
+ 8040614:	68fb      	ldr	r3, [r7, #12]
+ 8040616:	021a      	lsls	r2, r3, #8
                 ((uint32_t)0x5FAUL << SCB_AIRCR_VECTKEY_Pos) |
- 80406a0:	68bb      	ldr	r3, [r7, #8]
- 80406a2:	4313      	orrs	r3, r2
+ 8040618:	68bb      	ldr	r3, [r7, #8]
+ 804061a:	4313      	orrs	r3, r2
   reg_value  =  (reg_value                                   |
- 80406a4:	f043 63bf 	orr.w	r3, r3, #100139008	; 0x5f80000
- 80406a8:	f443 3300 	orr.w	r3, r3, #131072	; 0x20000
- 80406ac:	60bb      	str	r3, [r7, #8]
+ 804061c:	f043 63bf 	orr.w	r3, r3, #100139008	; 0x5f80000
+ 8040620:	f443 3300 	orr.w	r3, r3, #131072	; 0x20000
+ 8040624:	60bb      	str	r3, [r7, #8]
   SCB->AIRCR =  reg_value;
- 80406ae:	4a04      	ldr	r2, [pc, #16]	; (80406c0 <__NVIC_SetPriorityGrouping+0x44>)
- 80406b0:	68bb      	ldr	r3, [r7, #8]
- 80406b2:	60d3      	str	r3, [r2, #12]
+ 8040626:	4a04      	ldr	r2, [pc, #16]	; (8040638 <__NVIC_SetPriorityGrouping+0x44>)
+ 8040628:	68bb      	ldr	r3, [r7, #8]
+ 804062a:	60d3      	str	r3, [r2, #12]
 }
- 80406b4:	bf00      	nop
- 80406b6:	3714      	adds	r7, #20
- 80406b8:	46bd      	mov	sp, r7
- 80406ba:	f85d 7b04 	ldr.w	r7, [sp], #4
- 80406be:	4770      	bx	lr
- 80406c0:	e000ed00 	.word	0xe000ed00
+ 804062c:	bf00      	nop
+ 804062e:	3714      	adds	r7, #20
+ 8040630:	46bd      	mov	sp, r7
+ 8040632:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8040636:	4770      	bx	lr
+ 8040638:	e000ed00 	.word	0xe000ed00
 
-080406c4 <__NVIC_GetPriorityGrouping>:
+0804063c <__NVIC_GetPriorityGrouping>:
   \brief   Get Priority Grouping
   \details Reads the priority grouping field from the NVIC Interrupt Controller.
   \return                Priority grouping field (SCB->AIRCR [10:8] PRIGROUP field).
  */
 __STATIC_INLINE uint32_t __NVIC_GetPriorityGrouping(void)
 {
- 80406c4:	b480      	push	{r7}
- 80406c6:	af00      	add	r7, sp, #0
+ 804063c:	b480      	push	{r7}
+ 804063e:	af00      	add	r7, sp, #0
   return ((uint32_t)((SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) >> SCB_AIRCR_PRIGROUP_Pos));
- 80406c8:	4b04      	ldr	r3, [pc, #16]	; (80406dc <__NVIC_GetPriorityGrouping+0x18>)
- 80406ca:	68db      	ldr	r3, [r3, #12]
- 80406cc:	0a1b      	lsrs	r3, r3, #8
- 80406ce:	f003 0307 	and.w	r3, r3, #7
+ 8040640:	4b04      	ldr	r3, [pc, #16]	; (8040654 <__NVIC_GetPriorityGrouping+0x18>)
+ 8040642:	68db      	ldr	r3, [r3, #12]
+ 8040644:	0a1b      	lsrs	r3, r3, #8
+ 8040646:	f003 0307 	and.w	r3, r3, #7
 }
- 80406d2:	4618      	mov	r0, r3
- 80406d4:	46bd      	mov	sp, r7
- 80406d6:	f85d 7b04 	ldr.w	r7, [sp], #4
- 80406da:	4770      	bx	lr
- 80406dc:	e000ed00 	.word	0xe000ed00
+ 804064a:	4618      	mov	r0, r3
+ 804064c:	46bd      	mov	sp, r7
+ 804064e:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8040652:	4770      	bx	lr
+ 8040654:	e000ed00 	.word	0xe000ed00
 
-080406e0 <__NVIC_SetPriority>:
+08040658 <__NVIC_SetPriority>:
   \param [in]      IRQn  Interrupt number.
   \param [in]  priority  Priority to set.
   \note    The priority cannot be set for every processor exception.
  */
 __STATIC_INLINE void __NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
 {
- 80406e0:	b480      	push	{r7}
- 80406e2:	b083      	sub	sp, #12
- 80406e4:	af00      	add	r7, sp, #0
- 80406e6:	4603      	mov	r3, r0
- 80406e8:	6039      	str	r1, [r7, #0]
- 80406ea:	71fb      	strb	r3, [r7, #7]
+ 8040658:	b480      	push	{r7}
+ 804065a:	b083      	sub	sp, #12
+ 804065c:	af00      	add	r7, sp, #0
+ 804065e:	4603      	mov	r3, r0
+ 8040660:	6039      	str	r1, [r7, #0]
+ 8040662:	71fb      	strb	r3, [r7, #7]
   if ((int32_t)(IRQn) >= 0)
- 80406ec:	f997 3007 	ldrsb.w	r3, [r7, #7]
- 80406f0:	2b00      	cmp	r3, #0
- 80406f2:	db0a      	blt.n	804070a <__NVIC_SetPriority+0x2a>
+ 8040664:	f997 3007 	ldrsb.w	r3, [r7, #7]
+ 8040668:	2b00      	cmp	r3, #0
+ 804066a:	db0a      	blt.n	8040682 <__NVIC_SetPriority+0x2a>
   {
     NVIC->IPR[((uint32_t)IRQn)]               = (uint8_t)((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL);
- 80406f4:	683b      	ldr	r3, [r7, #0]
- 80406f6:	b2da      	uxtb	r2, r3
- 80406f8:	490c      	ldr	r1, [pc, #48]	; (804072c <__NVIC_SetPriority+0x4c>)
- 80406fa:	f997 3007 	ldrsb.w	r3, [r7, #7]
- 80406fe:	0152      	lsls	r2, r2, #5
- 8040700:	b2d2      	uxtb	r2, r2
- 8040702:	440b      	add	r3, r1
- 8040704:	f883 2300 	strb.w	r2, [r3, #768]	; 0x300
+ 804066c:	683b      	ldr	r3, [r7, #0]
+ 804066e:	b2da      	uxtb	r2, r3
+ 8040670:	490c      	ldr	r1, [pc, #48]	; (80406a4 <__NVIC_SetPriority+0x4c>)
+ 8040672:	f997 3007 	ldrsb.w	r3, [r7, #7]
+ 8040676:	0152      	lsls	r2, r2, #5
+ 8040678:	b2d2      	uxtb	r2, r2
+ 804067a:	440b      	add	r3, r1
+ 804067c:	f883 2300 	strb.w	r2, [r3, #768]	; 0x300
   }
   else
   {
     SCB->SHPR[(((uint32_t)IRQn) & 0xFUL)-4UL] = (uint8_t)((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL);
   }
 }
- 8040708:	e00a      	b.n	8040720 <__NVIC_SetPriority+0x40>
+ 8040680:	e00a      	b.n	8040698 <__NVIC_SetPriority+0x40>
     SCB->SHPR[(((uint32_t)IRQn) & 0xFUL)-4UL] = (uint8_t)((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL);
- 804070a:	683b      	ldr	r3, [r7, #0]
- 804070c:	b2da      	uxtb	r2, r3
- 804070e:	4908      	ldr	r1, [pc, #32]	; (8040730 <__NVIC_SetPriority+0x50>)
- 8040710:	79fb      	ldrb	r3, [r7, #7]
- 8040712:	f003 030f 	and.w	r3, r3, #15
- 8040716:	3b04      	subs	r3, #4
- 8040718:	0152      	lsls	r2, r2, #5
- 804071a:	b2d2      	uxtb	r2, r2
- 804071c:	440b      	add	r3, r1
- 804071e:	761a      	strb	r2, [r3, #24]
+ 8040682:	683b      	ldr	r3, [r7, #0]
+ 8040684:	b2da      	uxtb	r2, r3
+ 8040686:	4908      	ldr	r1, [pc, #32]	; (80406a8 <__NVIC_SetPriority+0x50>)
+ 8040688:	79fb      	ldrb	r3, [r7, #7]
+ 804068a:	f003 030f 	and.w	r3, r3, #15
+ 804068e:	3b04      	subs	r3, #4
+ 8040690:	0152      	lsls	r2, r2, #5
+ 8040692:	b2d2      	uxtb	r2, r2
+ 8040694:	440b      	add	r3, r1
+ 8040696:	761a      	strb	r2, [r3, #24]
 }
- 8040720:	bf00      	nop
- 8040722:	370c      	adds	r7, #12
- 8040724:	46bd      	mov	sp, r7
- 8040726:	f85d 7b04 	ldr.w	r7, [sp], #4
- 804072a:	4770      	bx	lr
- 804072c:	e000e100 	.word	0xe000e100
- 8040730:	e000ed00 	.word	0xe000ed00
+ 8040698:	bf00      	nop
+ 804069a:	370c      	adds	r7, #12
+ 804069c:	46bd      	mov	sp, r7
+ 804069e:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80406a2:	4770      	bx	lr
+ 80406a4:	e000e100 	.word	0xe000e100
+ 80406a8:	e000ed00 	.word	0xe000ed00
 
-08040734 <NVIC_EncodePriority>:
+080406ac <NVIC_EncodePriority>:
   \param [in]   PreemptPriority  Preemptive priority value (starting from 0).
   \param [in]       SubPriority  Subpriority value (starting from 0).
   \return                        Encoded priority. Value can be used in the function \ref NVIC_SetPriority().
  */
 __STATIC_INLINE uint32_t NVIC_EncodePriority (uint32_t PriorityGroup, uint32_t PreemptPriority, uint32_t SubPriority)
 {
- 8040734:	b480      	push	{r7}
- 8040736:	b089      	sub	sp, #36	; 0x24
- 8040738:	af00      	add	r7, sp, #0
- 804073a:	60f8      	str	r0, [r7, #12]
- 804073c:	60b9      	str	r1, [r7, #8]
- 804073e:	607a      	str	r2, [r7, #4]
+ 80406ac:	b480      	push	{r7}
+ 80406ae:	b089      	sub	sp, #36	; 0x24
+ 80406b0:	af00      	add	r7, sp, #0
+ 80406b2:	60f8      	str	r0, [r7, #12]
+ 80406b4:	60b9      	str	r1, [r7, #8]
+ 80406b6:	607a      	str	r2, [r7, #4]
   uint32_t PriorityGroupTmp = (PriorityGroup & (uint32_t)0x07UL);   /* only values 0..7 are used          */
- 8040740:	68fb      	ldr	r3, [r7, #12]
- 8040742:	f003 0307 	and.w	r3, r3, #7
- 8040746:	61fb      	str	r3, [r7, #28]
+ 80406b8:	68fb      	ldr	r3, [r7, #12]
+ 80406ba:	f003 0307 	and.w	r3, r3, #7
+ 80406be:	61fb      	str	r3, [r7, #28]
   uint32_t PreemptPriorityBits;
   uint32_t SubPriorityBits;
 
   PreemptPriorityBits = ((7UL - PriorityGroupTmp) > (uint32_t)(__NVIC_PRIO_BITS)) ? (uint32_t)(__NVIC_PRIO_BITS) : (uint32_t)(7UL - PriorityGroupTmp);
- 8040748:	69fb      	ldr	r3, [r7, #28]
- 804074a:	f1c3 0307 	rsb	r3, r3, #7
- 804074e:	2b03      	cmp	r3, #3
- 8040750:	bf28      	it	cs
- 8040752:	2303      	movcs	r3, #3
- 8040754:	61bb      	str	r3, [r7, #24]
+ 80406c0:	69fb      	ldr	r3, [r7, #28]
+ 80406c2:	f1c3 0307 	rsb	r3, r3, #7
+ 80406c6:	2b03      	cmp	r3, #3
+ 80406c8:	bf28      	it	cs
+ 80406ca:	2303      	movcs	r3, #3
+ 80406cc:	61bb      	str	r3, [r7, #24]
   SubPriorityBits     = ((PriorityGroupTmp + (uint32_t)(__NVIC_PRIO_BITS)) < (uint32_t)7UL) ? (uint32_t)0UL : (uint32_t)((PriorityGroupTmp - 7UL) + (uint32_t)(__NVIC_PRIO_BITS));
- 8040756:	69fb      	ldr	r3, [r7, #28]
- 8040758:	3303      	adds	r3, #3
- 804075a:	2b06      	cmp	r3, #6
- 804075c:	d902      	bls.n	8040764 <NVIC_EncodePriority+0x30>
- 804075e:	69fb      	ldr	r3, [r7, #28]
- 8040760:	3b04      	subs	r3, #4
- 8040762:	e000      	b.n	8040766 <NVIC_EncodePriority+0x32>
- 8040764:	2300      	movs	r3, #0
- 8040766:	617b      	str	r3, [r7, #20]
+ 80406ce:	69fb      	ldr	r3, [r7, #28]
+ 80406d0:	3303      	adds	r3, #3
+ 80406d2:	2b06      	cmp	r3, #6
+ 80406d4:	d902      	bls.n	80406dc <NVIC_EncodePriority+0x30>
+ 80406d6:	69fb      	ldr	r3, [r7, #28]
+ 80406d8:	3b04      	subs	r3, #4
+ 80406da:	e000      	b.n	80406de <NVIC_EncodePriority+0x32>
+ 80406dc:	2300      	movs	r3, #0
+ 80406de:	617b      	str	r3, [r7, #20]
 
   return (
            ((PreemptPriority & (uint32_t)((1UL << (PreemptPriorityBits)) - 1UL)) << SubPriorityBits) |
- 8040768:	f04f 32ff 	mov.w	r2, #4294967295	; 0xffffffff
- 804076c:	69bb      	ldr	r3, [r7, #24]
- 804076e:	fa02 f303 	lsl.w	r3, r2, r3
- 8040772:	43da      	mvns	r2, r3
- 8040774:	68bb      	ldr	r3, [r7, #8]
- 8040776:	401a      	ands	r2, r3
- 8040778:	697b      	ldr	r3, [r7, #20]
- 804077a:	409a      	lsls	r2, r3
+ 80406e0:	f04f 32ff 	mov.w	r2, #4294967295	; 0xffffffff
+ 80406e4:	69bb      	ldr	r3, [r7, #24]
+ 80406e6:	fa02 f303 	lsl.w	r3, r2, r3
+ 80406ea:	43da      	mvns	r2, r3
+ 80406ec:	68bb      	ldr	r3, [r7, #8]
+ 80406ee:	401a      	ands	r2, r3
+ 80406f0:	697b      	ldr	r3, [r7, #20]
+ 80406f2:	409a      	lsls	r2, r3
            ((SubPriority     & (uint32_t)((1UL << (SubPriorityBits    )) - 1UL)))
- 804077c:	f04f 31ff 	mov.w	r1, #4294967295	; 0xffffffff
- 8040780:	697b      	ldr	r3, [r7, #20]
- 8040782:	fa01 f303 	lsl.w	r3, r1, r3
- 8040786:	43d9      	mvns	r1, r3
- 8040788:	687b      	ldr	r3, [r7, #4]
- 804078a:	400b      	ands	r3, r1
+ 80406f4:	f04f 31ff 	mov.w	r1, #4294967295	; 0xffffffff
+ 80406f8:	697b      	ldr	r3, [r7, #20]
+ 80406fa:	fa01 f303 	lsl.w	r3, r1, r3
+ 80406fe:	43d9      	mvns	r1, r3
+ 8040700:	687b      	ldr	r3, [r7, #4]
+ 8040702:	400b      	ands	r3, r1
            ((PreemptPriority & (uint32_t)((1UL << (PreemptPriorityBits)) - 1UL)) << SubPriorityBits) |
- 804078c:	4313      	orrs	r3, r2
+ 8040704:	4313      	orrs	r3, r2
          );
 }
- 804078e:	4618      	mov	r0, r3
- 8040790:	3724      	adds	r7, #36	; 0x24
- 8040792:	46bd      	mov	sp, r7
- 8040794:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8040798:	4770      	bx	lr
+ 8040706:	4618      	mov	r0, r3
+ 8040708:	3724      	adds	r7, #36	; 0x24
+ 804070a:	46bd      	mov	sp, r7
+ 804070c:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8040710:	4770      	bx	lr
 	...
 
-0804079c <SysTick_Config>:
+08040714 <SysTick_Config>:
   \note    When the variable <b>__Vendor_SysTickConfig</b> is set to 1, then the
            function <b>SysTick_Config</b> is not included. In this case, the file <b><i>device</i>.h</b>
            must contain a vendor-specific implementation of this function.
  */
 __STATIC_INLINE uint32_t SysTick_Config(uint32_t ticks)
 {
- 804079c:	b580      	push	{r7, lr}
- 804079e:	b082      	sub	sp, #8
- 80407a0:	af00      	add	r7, sp, #0
- 80407a2:	6078      	str	r0, [r7, #4]
+ 8040714:	b580      	push	{r7, lr}
+ 8040716:	b082      	sub	sp, #8
+ 8040718:	af00      	add	r7, sp, #0
+ 804071a:	6078      	str	r0, [r7, #4]
   if ((ticks - 1UL) > SysTick_LOAD_RELOAD_Msk)
- 80407a4:	687b      	ldr	r3, [r7, #4]
- 80407a6:	3b01      	subs	r3, #1
- 80407a8:	f1b3 7f80 	cmp.w	r3, #16777216	; 0x1000000
- 80407ac:	d301      	bcc.n	80407b2 <SysTick_Config+0x16>
+ 804071c:	687b      	ldr	r3, [r7, #4]
+ 804071e:	3b01      	subs	r3, #1
+ 8040720:	f1b3 7f80 	cmp.w	r3, #16777216	; 0x1000000
+ 8040724:	d301      	bcc.n	804072a <SysTick_Config+0x16>
   {
     return (1UL);                                                   /* Reload value impossible */
- 80407ae:	2301      	movs	r3, #1
- 80407b0:	e00f      	b.n	80407d2 <SysTick_Config+0x36>
+ 8040726:	2301      	movs	r3, #1
+ 8040728:	e00f      	b.n	804074a <SysTick_Config+0x36>
   }
 
   SysTick->LOAD  = (uint32_t)(ticks - 1UL);                         /* set reload register */
- 80407b2:	4a0a      	ldr	r2, [pc, #40]	; (80407dc <SysTick_Config+0x40>)
- 80407b4:	687b      	ldr	r3, [r7, #4]
- 80407b6:	3b01      	subs	r3, #1
- 80407b8:	6053      	str	r3, [r2, #4]
+ 804072a:	4a0a      	ldr	r2, [pc, #40]	; (8040754 <SysTick_Config+0x40>)
+ 804072c:	687b      	ldr	r3, [r7, #4]
+ 804072e:	3b01      	subs	r3, #1
+ 8040730:	6053      	str	r3, [r2, #4]
   NVIC_SetPriority (SysTick_IRQn, (1UL << __NVIC_PRIO_BITS) - 1UL); /* set Priority for Systick Interrupt */
- 80407ba:	2107      	movs	r1, #7
- 80407bc:	f04f 30ff 	mov.w	r0, #4294967295	; 0xffffffff
- 80407c0:	f7ff ff8e 	bl	80406e0 <__NVIC_SetPriority>
+ 8040732:	2107      	movs	r1, #7
+ 8040734:	f04f 30ff 	mov.w	r0, #4294967295	; 0xffffffff
+ 8040738:	f7ff ff8e 	bl	8040658 <__NVIC_SetPriority>
   SysTick->VAL   = 0UL;                                             /* Load the SysTick Counter Value */
- 80407c4:	4b05      	ldr	r3, [pc, #20]	; (80407dc <SysTick_Config+0x40>)
- 80407c6:	2200      	movs	r2, #0
- 80407c8:	609a      	str	r2, [r3, #8]
+ 804073c:	4b05      	ldr	r3, [pc, #20]	; (8040754 <SysTick_Config+0x40>)
+ 804073e:	2200      	movs	r2, #0
+ 8040740:	609a      	str	r2, [r3, #8]
   SysTick->CTRL  = SysTick_CTRL_CLKSOURCE_Msk |
- 80407ca:	4b04      	ldr	r3, [pc, #16]	; (80407dc <SysTick_Config+0x40>)
- 80407cc:	2207      	movs	r2, #7
- 80407ce:	601a      	str	r2, [r3, #0]
+ 8040742:	4b04      	ldr	r3, [pc, #16]	; (8040754 <SysTick_Config+0x40>)
+ 8040744:	2207      	movs	r2, #7
+ 8040746:	601a      	str	r2, [r3, #0]
                    SysTick_CTRL_TICKINT_Msk   |
                    SysTick_CTRL_ENABLE_Msk;                         /* Enable SysTick IRQ and SysTick Timer */
   return (0UL);                                                     /* Function successful */
- 80407d0:	2300      	movs	r3, #0
+ 8040748:	2300      	movs	r3, #0
 }
- 80407d2:	4618      	mov	r0, r3
- 80407d4:	3708      	adds	r7, #8
- 80407d6:	46bd      	mov	sp, r7
- 80407d8:	bd80      	pop	{r7, pc}
- 80407da:	bf00      	nop
- 80407dc:	e000e010 	.word	0xe000e010
+ 804074a:	4618      	mov	r0, r3
+ 804074c:	3708      	adds	r7, #8
+ 804074e:	46bd      	mov	sp, r7
+ 8040750:	bd80      	pop	{r7, pc}
+ 8040752:	bf00      	nop
+ 8040754:	e000e010 	.word	0xe000e010
 
-080407e0 <HAL_NVIC_SetPriorityGrouping>:
+08040758 <HAL_NVIC_SetPriorityGrouping>:
   * @note   When the NVIC_PriorityGroup_0 is selected, IRQ pre-emption is no more possible.
   *         The pending IRQ priority will be managed only by the subpriority.
   * @retval None
   */
 void HAL_NVIC_SetPriorityGrouping(uint32_t PriorityGroup)
 {
- 80407e0:	b580      	push	{r7, lr}
- 80407e2:	b082      	sub	sp, #8
- 80407e4:	af00      	add	r7, sp, #0
- 80407e6:	6078      	str	r0, [r7, #4]
+ 8040758:	b580      	push	{r7, lr}
+ 804075a:	b082      	sub	sp, #8
+ 804075c:	af00      	add	r7, sp, #0
+ 804075e:	6078      	str	r0, [r7, #4]
   /* Check the parameters */
   assert_param(IS_NVIC_PRIORITY_GROUP(PriorityGroup));
 
   /* Set the PRIGROUP[10:8] bits according to the PriorityGroup parameter value */
   NVIC_SetPriorityGrouping(PriorityGroup);
- 80407e8:	6878      	ldr	r0, [r7, #4]
- 80407ea:	f7ff ff47 	bl	804067c <__NVIC_SetPriorityGrouping>
+ 8040760:	6878      	ldr	r0, [r7, #4]
+ 8040762:	f7ff ff47 	bl	80405f4 <__NVIC_SetPriorityGrouping>
 }
- 80407ee:	bf00      	nop
- 80407f0:	3708      	adds	r7, #8
- 80407f2:	46bd      	mov	sp, r7
- 80407f4:	bd80      	pop	{r7, pc}
+ 8040766:	bf00      	nop
+ 8040768:	3708      	adds	r7, #8
+ 804076a:	46bd      	mov	sp, r7
+ 804076c:	bd80      	pop	{r7, pc}
 
-080407f6 <HAL_NVIC_SetPriority>:
+0804076e <HAL_NVIC_SetPriority>:
   *         This parameter can be a value between 0 and 7
   *         A lower priority value indicates a higher priority.
   * @retval None
   */
 void HAL_NVIC_SetPriority(IRQn_Type IRQn, uint32_t PreemptPriority, uint32_t SubPriority)
 {
- 80407f6:	b580      	push	{r7, lr}
- 80407f8:	b086      	sub	sp, #24
- 80407fa:	af00      	add	r7, sp, #0
- 80407fc:	4603      	mov	r3, r0
- 80407fe:	60b9      	str	r1, [r7, #8]
- 8040800:	607a      	str	r2, [r7, #4]
- 8040802:	73fb      	strb	r3, [r7, #15]
+ 804076e:	b580      	push	{r7, lr}
+ 8040770:	b086      	sub	sp, #24
+ 8040772:	af00      	add	r7, sp, #0
+ 8040774:	4603      	mov	r3, r0
+ 8040776:	60b9      	str	r1, [r7, #8]
+ 8040778:	607a      	str	r2, [r7, #4]
+ 804077a:	73fb      	strb	r3, [r7, #15]
 
   /* Check the parameters */
   assert_param(IS_NVIC_SUB_PRIORITY(SubPriority));
   assert_param(IS_NVIC_PREEMPTION_PRIORITY(PreemptPriority));
 
   prioritygroup = NVIC_GetPriorityGrouping();
- 8040804:	f7ff ff5e 	bl	80406c4 <__NVIC_GetPriorityGrouping>
- 8040808:	6178      	str	r0, [r7, #20]
+ 804077c:	f7ff ff5e 	bl	804063c <__NVIC_GetPriorityGrouping>
+ 8040780:	6178      	str	r0, [r7, #20]
 
   NVIC_SetPriority(IRQn, NVIC_EncodePriority(prioritygroup, PreemptPriority, SubPriority));
- 804080a:	687a      	ldr	r2, [r7, #4]
- 804080c:	68b9      	ldr	r1, [r7, #8]
- 804080e:	6978      	ldr	r0, [r7, #20]
- 8040810:	f7ff ff90 	bl	8040734 <NVIC_EncodePriority>
- 8040814:	4602      	mov	r2, r0
- 8040816:	f997 300f 	ldrsb.w	r3, [r7, #15]
- 804081a:	4611      	mov	r1, r2
- 804081c:	4618      	mov	r0, r3
- 804081e:	f7ff ff5f 	bl	80406e0 <__NVIC_SetPriority>
+ 8040782:	687a      	ldr	r2, [r7, #4]
+ 8040784:	68b9      	ldr	r1, [r7, #8]
+ 8040786:	6978      	ldr	r0, [r7, #20]
+ 8040788:	f7ff ff90 	bl	80406ac <NVIC_EncodePriority>
+ 804078c:	4602      	mov	r2, r0
+ 804078e:	f997 300f 	ldrsb.w	r3, [r7, #15]
+ 8040792:	4611      	mov	r1, r2
+ 8040794:	4618      	mov	r0, r3
+ 8040796:	f7ff ff5f 	bl	8040658 <__NVIC_SetPriority>
 }
- 8040822:	bf00      	nop
- 8040824:	3718      	adds	r7, #24
- 8040826:	46bd      	mov	sp, r7
- 8040828:	bd80      	pop	{r7, pc}
+ 804079a:	bf00      	nop
+ 804079c:	3718      	adds	r7, #24
+ 804079e:	46bd      	mov	sp, r7
+ 80407a0:	bd80      	pop	{r7, pc}
 
-0804082a <HAL_SYSTICK_Config>:
+080407a2 <HAL_SYSTICK_Config>:
   * @param  TicksNumb Specifies the ticks Number of ticks between two interrupts.
   * @retval status:  - 0  Function succeeded.
   *                  - 1  Function failed.
   */
 uint32_t HAL_SYSTICK_Config(uint32_t TicksNumb)
 {
- 804082a:	b580      	push	{r7, lr}
- 804082c:	b082      	sub	sp, #8
- 804082e:	af00      	add	r7, sp, #0
- 8040830:	6078      	str	r0, [r7, #4]
+ 80407a2:	b580      	push	{r7, lr}
+ 80407a4:	b082      	sub	sp, #8
+ 80407a6:	af00      	add	r7, sp, #0
+ 80407a8:	6078      	str	r0, [r7, #4]
   return SysTick_Config(TicksNumb);
- 8040832:	6878      	ldr	r0, [r7, #4]
- 8040834:	f7ff ffb2 	bl	804079c <SysTick_Config>
- 8040838:	4603      	mov	r3, r0
+ 80407aa:	6878      	ldr	r0, [r7, #4]
+ 80407ac:	f7ff ffb2 	bl	8040714 <SysTick_Config>
+ 80407b0:	4603      	mov	r3, r0
 }
- 804083a:	4618      	mov	r0, r3
- 804083c:	3708      	adds	r7, #8
- 804083e:	46bd      	mov	sp, r7
- 8040840:	bd80      	pop	{r7, pc}
+ 80407b2:	4618      	mov	r0, r3
+ 80407b4:	3708      	adds	r7, #8
+ 80407b6:	46bd      	mov	sp, r7
+ 80407b8:	bd80      	pop	{r7, pc}
 	...
 
-08040844 <HAL_GPIO_Init>:
+080407bc <HAL_GPIO_Init>:
   * @param  GPIO_Init pointer to a GPIO_InitTypeDef structure that contains
   *         the configuration information for the specified GPIO peripheral.
   * @retval None
   */
 void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
 {
- 8040844:	b480      	push	{r7}
- 8040846:	b087      	sub	sp, #28
- 8040848:	af00      	add	r7, sp, #0
- 804084a:	6078      	str	r0, [r7, #4]
- 804084c:	6039      	str	r1, [r7, #0]
+ 80407bc:	b480      	push	{r7}
+ 80407be:	b087      	sub	sp, #28
+ 80407c0:	af00      	add	r7, sp, #0
+ 80407c2:	6078      	str	r0, [r7, #4]
+ 80407c4:	6039      	str	r1, [r7, #0]
   uint32_t position = 0U;
- 804084e:	2300      	movs	r3, #0
- 8040850:	617b      	str	r3, [r7, #20]
+ 80407c6:	2300      	movs	r3, #0
+ 80407c8:	617b      	str	r3, [r7, #20]
   assert_param(IS_GPIO_PIN(GPIO_Init->Pin));
   assert_param(IS_GPIO_MODE(GPIO_Init->Mode));
   assert_param(IS_GPIO_PULL(GPIO_Init->Pull));
 
   /* Configure the port pins */
   while (((GPIO_Init->Pin) >> position) != 0U)
- 8040852:	e158      	b.n	8040b06 <HAL_GPIO_Init+0x2c2>
+ 80407ca:	e158      	b.n	8040a7e <HAL_GPIO_Init+0x2c2>
   {
     /* Get current io position */
     iocurrent = (GPIO_Init->Pin) & (1UL << position);
- 8040854:	683b      	ldr	r3, [r7, #0]
- 8040856:	681a      	ldr	r2, [r3, #0]
- 8040858:	2101      	movs	r1, #1
- 804085a:	697b      	ldr	r3, [r7, #20]
- 804085c:	fa01 f303 	lsl.w	r3, r1, r3
- 8040860:	4013      	ands	r3, r2
- 8040862:	60fb      	str	r3, [r7, #12]
+ 80407cc:	683b      	ldr	r3, [r7, #0]
+ 80407ce:	681a      	ldr	r2, [r3, #0]
+ 80407d0:	2101      	movs	r1, #1
+ 80407d2:	697b      	ldr	r3, [r7, #20]
+ 80407d4:	fa01 f303 	lsl.w	r3, r1, r3
+ 80407d8:	4013      	ands	r3, r2
+ 80407da:	60fb      	str	r3, [r7, #12]
 
     if(iocurrent != 0U)
- 8040864:	68fb      	ldr	r3, [r7, #12]
- 8040866:	2b00      	cmp	r3, #0
- 8040868:	f000 814a 	beq.w	8040b00 <HAL_GPIO_Init+0x2bc>
+ 80407dc:	68fb      	ldr	r3, [r7, #12]
+ 80407de:	2b00      	cmp	r3, #0
+ 80407e0:	f000 814a 	beq.w	8040a78 <HAL_GPIO_Init+0x2bc>
     {
       /*--------------------- GPIO Mode Configuration ------------------------*/
       /* In case of Output or Alternate function mode selection */
       if((GPIO_Init->Mode == GPIO_MODE_OUTPUT_PP) || (GPIO_Init->Mode == GPIO_MODE_AF_PP) ||
- 804086c:	683b      	ldr	r3, [r7, #0]
- 804086e:	685b      	ldr	r3, [r3, #4]
- 8040870:	2b01      	cmp	r3, #1
- 8040872:	d00b      	beq.n	804088c <HAL_GPIO_Init+0x48>
- 8040874:	683b      	ldr	r3, [r7, #0]
- 8040876:	685b      	ldr	r3, [r3, #4]
- 8040878:	2b02      	cmp	r3, #2
- 804087a:	d007      	beq.n	804088c <HAL_GPIO_Init+0x48>
+ 80407e4:	683b      	ldr	r3, [r7, #0]
+ 80407e6:	685b      	ldr	r3, [r3, #4]
+ 80407e8:	2b01      	cmp	r3, #1
+ 80407ea:	d00b      	beq.n	8040804 <HAL_GPIO_Init+0x48>
+ 80407ec:	683b      	ldr	r3, [r7, #0]
+ 80407ee:	685b      	ldr	r3, [r3, #4]
+ 80407f0:	2b02      	cmp	r3, #2
+ 80407f2:	d007      	beq.n	8040804 <HAL_GPIO_Init+0x48>
          (GPIO_Init->Mode == GPIO_MODE_OUTPUT_OD) || (GPIO_Init->Mode == GPIO_MODE_AF_OD))
- 804087c:	683b      	ldr	r3, [r7, #0]
- 804087e:	685b      	ldr	r3, [r3, #4]
+ 80407f4:	683b      	ldr	r3, [r7, #0]
+ 80407f6:	685b      	ldr	r3, [r3, #4]
       if((GPIO_Init->Mode == GPIO_MODE_OUTPUT_PP) || (GPIO_Init->Mode == GPIO_MODE_AF_PP) ||
- 8040880:	2b11      	cmp	r3, #17
- 8040882:	d003      	beq.n	804088c <HAL_GPIO_Init+0x48>
+ 80407f8:	2b11      	cmp	r3, #17
+ 80407fa:	d003      	beq.n	8040804 <HAL_GPIO_Init+0x48>
          (GPIO_Init->Mode == GPIO_MODE_OUTPUT_OD) || (GPIO_Init->Mode == GPIO_MODE_AF_OD))
- 8040884:	683b      	ldr	r3, [r7, #0]
- 8040886:	685b      	ldr	r3, [r3, #4]
- 8040888:	2b12      	cmp	r3, #18
- 804088a:	d130      	bne.n	80408ee <HAL_GPIO_Init+0xaa>
+ 80407fc:	683b      	ldr	r3, [r7, #0]
+ 80407fe:	685b      	ldr	r3, [r3, #4]
+ 8040800:	2b12      	cmp	r3, #18
+ 8040802:	d130      	bne.n	8040866 <HAL_GPIO_Init+0xaa>
       {
         /* Check the Speed parameter */
         assert_param(IS_GPIO_SPEED(GPIO_Init->Speed));
         /* Configure the IO Speed */
         temp = GPIOx->OSPEEDR;
- 804088c:	687b      	ldr	r3, [r7, #4]
- 804088e:	689b      	ldr	r3, [r3, #8]
- 8040890:	613b      	str	r3, [r7, #16]
+ 8040804:	687b      	ldr	r3, [r7, #4]
+ 8040806:	689b      	ldr	r3, [r3, #8]
+ 8040808:	613b      	str	r3, [r7, #16]
         temp &= ~(GPIO_OSPEEDR_OSPEED0 << (position * 2U));
- 8040892:	697b      	ldr	r3, [r7, #20]
- 8040894:	005b      	lsls	r3, r3, #1
- 8040896:	2203      	movs	r2, #3
- 8040898:	fa02 f303 	lsl.w	r3, r2, r3
- 804089c:	43db      	mvns	r3, r3
- 804089e:	693a      	ldr	r2, [r7, #16]
- 80408a0:	4013      	ands	r3, r2
- 80408a2:	613b      	str	r3, [r7, #16]
+ 804080a:	697b      	ldr	r3, [r7, #20]
+ 804080c:	005b      	lsls	r3, r3, #1
+ 804080e:	2203      	movs	r2, #3
+ 8040810:	fa02 f303 	lsl.w	r3, r2, r3
+ 8040814:	43db      	mvns	r3, r3
+ 8040816:	693a      	ldr	r2, [r7, #16]
+ 8040818:	4013      	ands	r3, r2
+ 804081a:	613b      	str	r3, [r7, #16]
         temp |= (GPIO_Init->Speed << (position * 2U));
- 80408a4:	683b      	ldr	r3, [r7, #0]
- 80408a6:	68da      	ldr	r2, [r3, #12]
- 80408a8:	697b      	ldr	r3, [r7, #20]
- 80408aa:	005b      	lsls	r3, r3, #1
- 80408ac:	fa02 f303 	lsl.w	r3, r2, r3
- 80408b0:	693a      	ldr	r2, [r7, #16]
- 80408b2:	4313      	orrs	r3, r2
- 80408b4:	613b      	str	r3, [r7, #16]
+ 804081c:	683b      	ldr	r3, [r7, #0]
+ 804081e:	68da      	ldr	r2, [r3, #12]
+ 8040820:	697b      	ldr	r3, [r7, #20]
+ 8040822:	005b      	lsls	r3, r3, #1
+ 8040824:	fa02 f303 	lsl.w	r3, r2, r3
+ 8040828:	693a      	ldr	r2, [r7, #16]
+ 804082a:	4313      	orrs	r3, r2
+ 804082c:	613b      	str	r3, [r7, #16]
         GPIOx->OSPEEDR = temp;
- 80408b6:	687b      	ldr	r3, [r7, #4]
- 80408b8:	693a      	ldr	r2, [r7, #16]
- 80408ba:	609a      	str	r2, [r3, #8]
+ 804082e:	687b      	ldr	r3, [r7, #4]
+ 8040830:	693a      	ldr	r2, [r7, #16]
+ 8040832:	609a      	str	r2, [r3, #8]
 
         /* Configure the IO Output Type */
         temp = GPIOx->OTYPER;
- 80408bc:	687b      	ldr	r3, [r7, #4]
- 80408be:	685b      	ldr	r3, [r3, #4]
- 80408c0:	613b      	str	r3, [r7, #16]
+ 8040834:	687b      	ldr	r3, [r7, #4]
+ 8040836:	685b      	ldr	r3, [r3, #4]
+ 8040838:	613b      	str	r3, [r7, #16]
         temp &= ~(GPIO_OTYPER_OT0 << position) ;
- 80408c2:	2201      	movs	r2, #1
- 80408c4:	697b      	ldr	r3, [r7, #20]
- 80408c6:	fa02 f303 	lsl.w	r3, r2, r3
- 80408ca:	43db      	mvns	r3, r3
- 80408cc:	693a      	ldr	r2, [r7, #16]
- 80408ce:	4013      	ands	r3, r2
- 80408d0:	613b      	str	r3, [r7, #16]
+ 804083a:	2201      	movs	r2, #1
+ 804083c:	697b      	ldr	r3, [r7, #20]
+ 804083e:	fa02 f303 	lsl.w	r3, r2, r3
+ 8040842:	43db      	mvns	r3, r3
+ 8040844:	693a      	ldr	r2, [r7, #16]
+ 8040846:	4013      	ands	r3, r2
+ 8040848:	613b      	str	r3, [r7, #16]
         temp |= (((GPIO_Init->Mode & GPIO_OUTPUT_TYPE) >> 4) << position);
- 80408d2:	683b      	ldr	r3, [r7, #0]
- 80408d4:	685b      	ldr	r3, [r3, #4]
- 80408d6:	091b      	lsrs	r3, r3, #4
- 80408d8:	f003 0201 	and.w	r2, r3, #1
- 80408dc:	697b      	ldr	r3, [r7, #20]
- 80408de:	fa02 f303 	lsl.w	r3, r2, r3
- 80408e2:	693a      	ldr	r2, [r7, #16]
- 80408e4:	4313      	orrs	r3, r2
- 80408e6:	613b      	str	r3, [r7, #16]
+ 804084a:	683b      	ldr	r3, [r7, #0]
+ 804084c:	685b      	ldr	r3, [r3, #4]
+ 804084e:	091b      	lsrs	r3, r3, #4
+ 8040850:	f003 0201 	and.w	r2, r3, #1
+ 8040854:	697b      	ldr	r3, [r7, #20]
+ 8040856:	fa02 f303 	lsl.w	r3, r2, r3
+ 804085a:	693a      	ldr	r2, [r7, #16]
+ 804085c:	4313      	orrs	r3, r2
+ 804085e:	613b      	str	r3, [r7, #16]
         GPIOx->OTYPER = temp;
- 80408e8:	687b      	ldr	r3, [r7, #4]
- 80408ea:	693a      	ldr	r2, [r7, #16]
- 80408ec:	605a      	str	r2, [r3, #4]
+ 8040860:	687b      	ldr	r3, [r7, #4]
+ 8040862:	693a      	ldr	r2, [r7, #16]
+ 8040864:	605a      	str	r2, [r3, #4]
       }
 
       /* Activate the Pull-up or Pull down resistor for the current IO */
       temp = GPIOx->PUPDR;
- 80408ee:	687b      	ldr	r3, [r7, #4]
- 80408f0:	68db      	ldr	r3, [r3, #12]
- 80408f2:	613b      	str	r3, [r7, #16]
+ 8040866:	687b      	ldr	r3, [r7, #4]
+ 8040868:	68db      	ldr	r3, [r3, #12]
+ 804086a:	613b      	str	r3, [r7, #16]
       temp &= ~(GPIO_PUPDR_PUPD0 << (position * 2U));
+ 804086c:	697b      	ldr	r3, [r7, #20]
+ 804086e:	005b      	lsls	r3, r3, #1
+ 8040870:	2203      	movs	r2, #3
+ 8040872:	fa02 f303 	lsl.w	r3, r2, r3
+ 8040876:	43db      	mvns	r3, r3
+ 8040878:	693a      	ldr	r2, [r7, #16]
+ 804087a:	4013      	ands	r3, r2
+ 804087c:	613b      	str	r3, [r7, #16]
+      temp |= ((GPIO_Init->Pull) << (position * 2U));
+ 804087e:	683b      	ldr	r3, [r7, #0]
+ 8040880:	689a      	ldr	r2, [r3, #8]
+ 8040882:	697b      	ldr	r3, [r7, #20]
+ 8040884:	005b      	lsls	r3, r3, #1
+ 8040886:	fa02 f303 	lsl.w	r3, r2, r3
+ 804088a:	693a      	ldr	r2, [r7, #16]
+ 804088c:	4313      	orrs	r3, r2
+ 804088e:	613b      	str	r3, [r7, #16]
+      GPIOx->PUPDR = temp;
+ 8040890:	687b      	ldr	r3, [r7, #4]
+ 8040892:	693a      	ldr	r2, [r7, #16]
+ 8040894:	60da      	str	r2, [r3, #12]
+
+      /* In case of Alternate function mode selection */
+      if((GPIO_Init->Mode == GPIO_MODE_AF_PP) || (GPIO_Init->Mode == GPIO_MODE_AF_OD))
+ 8040896:	683b      	ldr	r3, [r7, #0]
+ 8040898:	685b      	ldr	r3, [r3, #4]
+ 804089a:	2b02      	cmp	r3, #2
+ 804089c:	d003      	beq.n	80408a6 <HAL_GPIO_Init+0xea>
+ 804089e:	683b      	ldr	r3, [r7, #0]
+ 80408a0:	685b      	ldr	r3, [r3, #4]
+ 80408a2:	2b12      	cmp	r3, #18
+ 80408a4:	d123      	bne.n	80408ee <HAL_GPIO_Init+0x132>
+        /* Check the Alternate function parameters */
+        assert_param(IS_GPIO_AF_INSTANCE(GPIOx));
+        assert_param(IS_GPIO_AF(GPIO_Init->Alternate));
+
+        /* Configure Alternate function mapped with the current IO */
+        temp = GPIOx->AFR[position >> 3U];
+ 80408a6:	697b      	ldr	r3, [r7, #20]
+ 80408a8:	08da      	lsrs	r2, r3, #3
+ 80408aa:	687b      	ldr	r3, [r7, #4]
+ 80408ac:	3208      	adds	r2, #8
+ 80408ae:	f853 3022 	ldr.w	r3, [r3, r2, lsl #2]
+ 80408b2:	613b      	str	r3, [r7, #16]
+        temp &= ~(0x0FUL << ((position & 0x07U) * 4U)) ;
+ 80408b4:	697b      	ldr	r3, [r7, #20]
+ 80408b6:	f003 0307 	and.w	r3, r3, #7
+ 80408ba:	009b      	lsls	r3, r3, #2
+ 80408bc:	220f      	movs	r2, #15
+ 80408be:	fa02 f303 	lsl.w	r3, r2, r3
+ 80408c2:	43db      	mvns	r3, r3
+ 80408c4:	693a      	ldr	r2, [r7, #16]
+ 80408c6:	4013      	ands	r3, r2
+ 80408c8:	613b      	str	r3, [r7, #16]
+        temp |= ((GPIO_Init->Alternate) << ((position & 0x07U) * 4U));
+ 80408ca:	683b      	ldr	r3, [r7, #0]
+ 80408cc:	691a      	ldr	r2, [r3, #16]
+ 80408ce:	697b      	ldr	r3, [r7, #20]
+ 80408d0:	f003 0307 	and.w	r3, r3, #7
+ 80408d4:	009b      	lsls	r3, r3, #2
+ 80408d6:	fa02 f303 	lsl.w	r3, r2, r3
+ 80408da:	693a      	ldr	r2, [r7, #16]
+ 80408dc:	4313      	orrs	r3, r2
+ 80408de:	613b      	str	r3, [r7, #16]
+        GPIOx->AFR[position >> 3U] = temp;
+ 80408e0:	697b      	ldr	r3, [r7, #20]
+ 80408e2:	08da      	lsrs	r2, r3, #3
+ 80408e4:	687b      	ldr	r3, [r7, #4]
+ 80408e6:	3208      	adds	r2, #8
+ 80408e8:	6939      	ldr	r1, [r7, #16]
+ 80408ea:	f843 1022 	str.w	r1, [r3, r2, lsl #2]
+      }
+
+      /* Configure IO Direction mode (Input, Output, Alternate or Analog) */
+      temp = GPIOx->MODER;
+ 80408ee:	687b      	ldr	r3, [r7, #4]
+ 80408f0:	681b      	ldr	r3, [r3, #0]
+ 80408f2:	613b      	str	r3, [r7, #16]
+      temp &= ~(GPIO_MODER_MODE0 << (position * 2U));
  80408f4:	697b      	ldr	r3, [r7, #20]
  80408f6:	005b      	lsls	r3, r3, #1
  80408f8:	2203      	movs	r2, #3
@@ -1382,456 +1465,404 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
  8040900:	693a      	ldr	r2, [r7, #16]
  8040902:	4013      	ands	r3, r2
  8040904:	613b      	str	r3, [r7, #16]
-      temp |= ((GPIO_Init->Pull) << (position * 2U));
- 8040906:	683b      	ldr	r3, [r7, #0]
- 8040908:	689a      	ldr	r2, [r3, #8]
- 804090a:	697b      	ldr	r3, [r7, #20]
- 804090c:	005b      	lsls	r3, r3, #1
- 804090e:	fa02 f303 	lsl.w	r3, r2, r3
- 8040912:	693a      	ldr	r2, [r7, #16]
- 8040914:	4313      	orrs	r3, r2
- 8040916:	613b      	str	r3, [r7, #16]
-      GPIOx->PUPDR = temp;
- 8040918:	687b      	ldr	r3, [r7, #4]
- 804091a:	693a      	ldr	r2, [r7, #16]
- 804091c:	60da      	str	r2, [r3, #12]
-
-      /* In case of Alternate function mode selection */
-      if((GPIO_Init->Mode == GPIO_MODE_AF_PP) || (GPIO_Init->Mode == GPIO_MODE_AF_OD))
- 804091e:	683b      	ldr	r3, [r7, #0]
- 8040920:	685b      	ldr	r3, [r3, #4]
- 8040922:	2b02      	cmp	r3, #2
- 8040924:	d003      	beq.n	804092e <HAL_GPIO_Init+0xea>
- 8040926:	683b      	ldr	r3, [r7, #0]
- 8040928:	685b      	ldr	r3, [r3, #4]
- 804092a:	2b12      	cmp	r3, #18
- 804092c:	d123      	bne.n	8040976 <HAL_GPIO_Init+0x132>
-        /* Check the Alternate function parameters */
-        assert_param(IS_GPIO_AF_INSTANCE(GPIOx));
-        assert_param(IS_GPIO_AF(GPIO_Init->Alternate));
-
-        /* Configure Alternate function mapped with the current IO */
-        temp = GPIOx->AFR[position >> 3U];
- 804092e:	697b      	ldr	r3, [r7, #20]
- 8040930:	08da      	lsrs	r2, r3, #3
- 8040932:	687b      	ldr	r3, [r7, #4]
- 8040934:	3208      	adds	r2, #8
- 8040936:	f853 3022 	ldr.w	r3, [r3, r2, lsl #2]
- 804093a:	613b      	str	r3, [r7, #16]
-        temp &= ~(0x0FUL << ((position & 0x07U) * 4U)) ;
- 804093c:	697b      	ldr	r3, [r7, #20]
- 804093e:	f003 0307 	and.w	r3, r3, #7
- 8040942:	009b      	lsls	r3, r3, #2
- 8040944:	220f      	movs	r2, #15
- 8040946:	fa02 f303 	lsl.w	r3, r2, r3
- 804094a:	43db      	mvns	r3, r3
- 804094c:	693a      	ldr	r2, [r7, #16]
- 804094e:	4013      	ands	r3, r2
- 8040950:	613b      	str	r3, [r7, #16]
-        temp |= ((GPIO_Init->Alternate) << ((position & 0x07U) * 4U));
- 8040952:	683b      	ldr	r3, [r7, #0]
- 8040954:	691a      	ldr	r2, [r3, #16]
- 8040956:	697b      	ldr	r3, [r7, #20]
- 8040958:	f003 0307 	and.w	r3, r3, #7
- 804095c:	009b      	lsls	r3, r3, #2
- 804095e:	fa02 f303 	lsl.w	r3, r2, r3
- 8040962:	693a      	ldr	r2, [r7, #16]
- 8040964:	4313      	orrs	r3, r2
- 8040966:	613b      	str	r3, [r7, #16]
-        GPIOx->AFR[position >> 3U] = temp;
- 8040968:	697b      	ldr	r3, [r7, #20]
- 804096a:	08da      	lsrs	r2, r3, #3
- 804096c:	687b      	ldr	r3, [r7, #4]
- 804096e:	3208      	adds	r2, #8
- 8040970:	6939      	ldr	r1, [r7, #16]
- 8040972:	f843 1022 	str.w	r1, [r3, r2, lsl #2]
-      }
-
-      /* Configure IO Direction mode (Input, Output, Alternate or Analog) */
-      temp = GPIOx->MODER;
- 8040976:	687b      	ldr	r3, [r7, #4]
- 8040978:	681b      	ldr	r3, [r3, #0]
- 804097a:	613b      	str	r3, [r7, #16]
-      temp &= ~(GPIO_MODER_MODE0 << (position * 2U));
- 804097c:	697b      	ldr	r3, [r7, #20]
- 804097e:	005b      	lsls	r3, r3, #1
- 8040980:	2203      	movs	r2, #3
- 8040982:	fa02 f303 	lsl.w	r3, r2, r3
- 8040986:	43db      	mvns	r3, r3
- 8040988:	693a      	ldr	r2, [r7, #16]
- 804098a:	4013      	ands	r3, r2
- 804098c:	613b      	str	r3, [r7, #16]
       temp |= ((GPIO_Init->Mode & GPIO_MODE) << (position * 2U));
- 804098e:	683b      	ldr	r3, [r7, #0]
- 8040990:	685b      	ldr	r3, [r3, #4]
- 8040992:	f003 0203 	and.w	r2, r3, #3
- 8040996:	697b      	ldr	r3, [r7, #20]
- 8040998:	005b      	lsls	r3, r3, #1
- 804099a:	fa02 f303 	lsl.w	r3, r2, r3
- 804099e:	693a      	ldr	r2, [r7, #16]
- 80409a0:	4313      	orrs	r3, r2
- 80409a2:	613b      	str	r3, [r7, #16]
+ 8040906:	683b      	ldr	r3, [r7, #0]
+ 8040908:	685b      	ldr	r3, [r3, #4]
+ 804090a:	f003 0203 	and.w	r2, r3, #3
+ 804090e:	697b      	ldr	r3, [r7, #20]
+ 8040910:	005b      	lsls	r3, r3, #1
+ 8040912:	fa02 f303 	lsl.w	r3, r2, r3
+ 8040916:	693a      	ldr	r2, [r7, #16]
+ 8040918:	4313      	orrs	r3, r2
+ 804091a:	613b      	str	r3, [r7, #16]
       GPIOx->MODER = temp;
- 80409a4:	687b      	ldr	r3, [r7, #4]
- 80409a6:	693a      	ldr	r2, [r7, #16]
- 80409a8:	601a      	str	r2, [r3, #0]
+ 804091c:	687b      	ldr	r3, [r7, #4]
+ 804091e:	693a      	ldr	r2, [r7, #16]
+ 8040920:	601a      	str	r2, [r3, #0]
 
       /*--------------------- EXTI Mode Configuration ------------------------*/
       /* Configure the External Interrupt or event for the current IO */
       if((GPIO_Init->Mode & EXTI_MODE) == EXTI_MODE)
- 80409aa:	683b      	ldr	r3, [r7, #0]
- 80409ac:	685b      	ldr	r3, [r3, #4]
- 80409ae:	f003 5380 	and.w	r3, r3, #268435456	; 0x10000000
- 80409b2:	2b00      	cmp	r3, #0
- 80409b4:	f000 80a4 	beq.w	8040b00 <HAL_GPIO_Init+0x2bc>
+ 8040922:	683b      	ldr	r3, [r7, #0]
+ 8040924:	685b      	ldr	r3, [r3, #4]
+ 8040926:	f003 5380 	and.w	r3, r3, #268435456	; 0x10000000
+ 804092a:	2b00      	cmp	r3, #0
+ 804092c:	f000 80a4 	beq.w	8040a78 <HAL_GPIO_Init+0x2bc>
       {
         temp = EXTI->EXTICR[position >> 2U];
- 80409b8:	4a5a      	ldr	r2, [pc, #360]	; (8040b24 <HAL_GPIO_Init+0x2e0>)
- 80409ba:	697b      	ldr	r3, [r7, #20]
- 80409bc:	089b      	lsrs	r3, r3, #2
- 80409be:	3318      	adds	r3, #24
- 80409c0:	f852 3023 	ldr.w	r3, [r2, r3, lsl #2]
- 80409c4:	613b      	str	r3, [r7, #16]
+ 8040930:	4a5a      	ldr	r2, [pc, #360]	; (8040a9c <HAL_GPIO_Init+0x2e0>)
+ 8040932:	697b      	ldr	r3, [r7, #20]
+ 8040934:	089b      	lsrs	r3, r3, #2
+ 8040936:	3318      	adds	r3, #24
+ 8040938:	f852 3023 	ldr.w	r3, [r2, r3, lsl #2]
+ 804093c:	613b      	str	r3, [r7, #16]
         temp &= ~((0x0FU) << (8U * (position & 0x03U)));
- 80409c6:	697b      	ldr	r3, [r7, #20]
- 80409c8:	f003 0303 	and.w	r3, r3, #3
- 80409cc:	00db      	lsls	r3, r3, #3
- 80409ce:	220f      	movs	r2, #15
- 80409d0:	fa02 f303 	lsl.w	r3, r2, r3
- 80409d4:	43db      	mvns	r3, r3
- 80409d6:	693a      	ldr	r2, [r7, #16]
- 80409d8:	4013      	ands	r3, r2
- 80409da:	613b      	str	r3, [r7, #16]
+ 804093e:	697b      	ldr	r3, [r7, #20]
+ 8040940:	f003 0303 	and.w	r3, r3, #3
+ 8040944:	00db      	lsls	r3, r3, #3
+ 8040946:	220f      	movs	r2, #15
+ 8040948:	fa02 f303 	lsl.w	r3, r2, r3
+ 804094c:	43db      	mvns	r3, r3
+ 804094e:	693a      	ldr	r2, [r7, #16]
+ 8040950:	4013      	ands	r3, r2
+ 8040952:	613b      	str	r3, [r7, #16]
         temp |= (GPIO_GET_INDEX(GPIOx) << (8U * (position & 0x03U)));
- 80409dc:	687b      	ldr	r3, [r7, #4]
- 80409de:	4a52      	ldr	r2, [pc, #328]	; (8040b28 <HAL_GPIO_Init+0x2e4>)
- 80409e0:	4293      	cmp	r3, r2
- 80409e2:	d025      	beq.n	8040a30 <HAL_GPIO_Init+0x1ec>
- 80409e4:	687b      	ldr	r3, [r7, #4]
- 80409e6:	4a51      	ldr	r2, [pc, #324]	; (8040b2c <HAL_GPIO_Init+0x2e8>)
- 80409e8:	4293      	cmp	r3, r2
- 80409ea:	d01f      	beq.n	8040a2c <HAL_GPIO_Init+0x1e8>
- 80409ec:	687b      	ldr	r3, [r7, #4]
- 80409ee:	4a50      	ldr	r2, [pc, #320]	; (8040b30 <HAL_GPIO_Init+0x2ec>)
- 80409f0:	4293      	cmp	r3, r2
- 80409f2:	d019      	beq.n	8040a28 <HAL_GPIO_Init+0x1e4>
- 80409f4:	687b      	ldr	r3, [r7, #4]
- 80409f6:	4a4f      	ldr	r2, [pc, #316]	; (8040b34 <HAL_GPIO_Init+0x2f0>)
- 80409f8:	4293      	cmp	r3, r2
- 80409fa:	d013      	beq.n	8040a24 <HAL_GPIO_Init+0x1e0>
- 80409fc:	687b      	ldr	r3, [r7, #4]
- 80409fe:	4a4e      	ldr	r2, [pc, #312]	; (8040b38 <HAL_GPIO_Init+0x2f4>)
- 8040a00:	4293      	cmp	r3, r2
- 8040a02:	d00d      	beq.n	8040a20 <HAL_GPIO_Init+0x1dc>
- 8040a04:	687b      	ldr	r3, [r7, #4]
- 8040a06:	4a4d      	ldr	r2, [pc, #308]	; (8040b3c <HAL_GPIO_Init+0x2f8>)
- 8040a08:	4293      	cmp	r3, r2
- 8040a0a:	d007      	beq.n	8040a1c <HAL_GPIO_Init+0x1d8>
- 8040a0c:	687b      	ldr	r3, [r7, #4]
- 8040a0e:	4a4c      	ldr	r2, [pc, #304]	; (8040b40 <HAL_GPIO_Init+0x2fc>)
- 8040a10:	4293      	cmp	r3, r2
- 8040a12:	d101      	bne.n	8040a18 <HAL_GPIO_Init+0x1d4>
- 8040a14:	2306      	movs	r3, #6
- 8040a16:	e00c      	b.n	8040a32 <HAL_GPIO_Init+0x1ee>
- 8040a18:	2307      	movs	r3, #7
- 8040a1a:	e00a      	b.n	8040a32 <HAL_GPIO_Init+0x1ee>
- 8040a1c:	2305      	movs	r3, #5
- 8040a1e:	e008      	b.n	8040a32 <HAL_GPIO_Init+0x1ee>
- 8040a20:	2304      	movs	r3, #4
- 8040a22:	e006      	b.n	8040a32 <HAL_GPIO_Init+0x1ee>
- 8040a24:	2303      	movs	r3, #3
- 8040a26:	e004      	b.n	8040a32 <HAL_GPIO_Init+0x1ee>
- 8040a28:	2302      	movs	r3, #2
- 8040a2a:	e002      	b.n	8040a32 <HAL_GPIO_Init+0x1ee>
- 8040a2c:	2301      	movs	r3, #1
- 8040a2e:	e000      	b.n	8040a32 <HAL_GPIO_Init+0x1ee>
- 8040a30:	2300      	movs	r3, #0
- 8040a32:	697a      	ldr	r2, [r7, #20]
- 8040a34:	f002 0203 	and.w	r2, r2, #3
- 8040a38:	00d2      	lsls	r2, r2, #3
- 8040a3a:	4093      	lsls	r3, r2
- 8040a3c:	693a      	ldr	r2, [r7, #16]
- 8040a3e:	4313      	orrs	r3, r2
- 8040a40:	613b      	str	r3, [r7, #16]
+ 8040954:	687b      	ldr	r3, [r7, #4]
+ 8040956:	4a52      	ldr	r2, [pc, #328]	; (8040aa0 <HAL_GPIO_Init+0x2e4>)
+ 8040958:	4293      	cmp	r3, r2
+ 804095a:	d025      	beq.n	80409a8 <HAL_GPIO_Init+0x1ec>
+ 804095c:	687b      	ldr	r3, [r7, #4]
+ 804095e:	4a51      	ldr	r2, [pc, #324]	; (8040aa4 <HAL_GPIO_Init+0x2e8>)
+ 8040960:	4293      	cmp	r3, r2
+ 8040962:	d01f      	beq.n	80409a4 <HAL_GPIO_Init+0x1e8>
+ 8040964:	687b      	ldr	r3, [r7, #4]
+ 8040966:	4a50      	ldr	r2, [pc, #320]	; (8040aa8 <HAL_GPIO_Init+0x2ec>)
+ 8040968:	4293      	cmp	r3, r2
+ 804096a:	d019      	beq.n	80409a0 <HAL_GPIO_Init+0x1e4>
+ 804096c:	687b      	ldr	r3, [r7, #4]
+ 804096e:	4a4f      	ldr	r2, [pc, #316]	; (8040aac <HAL_GPIO_Init+0x2f0>)
+ 8040970:	4293      	cmp	r3, r2
+ 8040972:	d013      	beq.n	804099c <HAL_GPIO_Init+0x1e0>
+ 8040974:	687b      	ldr	r3, [r7, #4]
+ 8040976:	4a4e      	ldr	r2, [pc, #312]	; (8040ab0 <HAL_GPIO_Init+0x2f4>)
+ 8040978:	4293      	cmp	r3, r2
+ 804097a:	d00d      	beq.n	8040998 <HAL_GPIO_Init+0x1dc>
+ 804097c:	687b      	ldr	r3, [r7, #4]
+ 804097e:	4a4d      	ldr	r2, [pc, #308]	; (8040ab4 <HAL_GPIO_Init+0x2f8>)
+ 8040980:	4293      	cmp	r3, r2
+ 8040982:	d007      	beq.n	8040994 <HAL_GPIO_Init+0x1d8>
+ 8040984:	687b      	ldr	r3, [r7, #4]
+ 8040986:	4a4c      	ldr	r2, [pc, #304]	; (8040ab8 <HAL_GPIO_Init+0x2fc>)
+ 8040988:	4293      	cmp	r3, r2
+ 804098a:	d101      	bne.n	8040990 <HAL_GPIO_Init+0x1d4>
+ 804098c:	2306      	movs	r3, #6
+ 804098e:	e00c      	b.n	80409aa <HAL_GPIO_Init+0x1ee>
+ 8040990:	2307      	movs	r3, #7
+ 8040992:	e00a      	b.n	80409aa <HAL_GPIO_Init+0x1ee>
+ 8040994:	2305      	movs	r3, #5
+ 8040996:	e008      	b.n	80409aa <HAL_GPIO_Init+0x1ee>
+ 8040998:	2304      	movs	r3, #4
+ 804099a:	e006      	b.n	80409aa <HAL_GPIO_Init+0x1ee>
+ 804099c:	2303      	movs	r3, #3
+ 804099e:	e004      	b.n	80409aa <HAL_GPIO_Init+0x1ee>
+ 80409a0:	2302      	movs	r3, #2
+ 80409a2:	e002      	b.n	80409aa <HAL_GPIO_Init+0x1ee>
+ 80409a4:	2301      	movs	r3, #1
+ 80409a6:	e000      	b.n	80409aa <HAL_GPIO_Init+0x1ee>
+ 80409a8:	2300      	movs	r3, #0
+ 80409aa:	697a      	ldr	r2, [r7, #20]
+ 80409ac:	f002 0203 	and.w	r2, r2, #3
+ 80409b0:	00d2      	lsls	r2, r2, #3
+ 80409b2:	4093      	lsls	r3, r2
+ 80409b4:	693a      	ldr	r2, [r7, #16]
+ 80409b6:	4313      	orrs	r3, r2
+ 80409b8:	613b      	str	r3, [r7, #16]
         EXTI->EXTICR[position >> 2U] = temp;
- 8040a42:	4938      	ldr	r1, [pc, #224]	; (8040b24 <HAL_GPIO_Init+0x2e0>)
- 8040a44:	697b      	ldr	r3, [r7, #20]
- 8040a46:	089b      	lsrs	r3, r3, #2
- 8040a48:	3318      	adds	r3, #24
- 8040a4a:	693a      	ldr	r2, [r7, #16]
- 8040a4c:	f841 2023 	str.w	r2, [r1, r3, lsl #2]
+ 80409ba:	4938      	ldr	r1, [pc, #224]	; (8040a9c <HAL_GPIO_Init+0x2e0>)
+ 80409bc:	697b      	ldr	r3, [r7, #20]
+ 80409be:	089b      	lsrs	r3, r3, #2
+ 80409c0:	3318      	adds	r3, #24
+ 80409c2:	693a      	ldr	r2, [r7, #16]
+ 80409c4:	f841 2023 	str.w	r2, [r1, r3, lsl #2]
 
         /* Clear EXTI line configuration */
         temp = EXTI->IMR1;
- 8040a50:	4b34      	ldr	r3, [pc, #208]	; (8040b24 <HAL_GPIO_Init+0x2e0>)
- 8040a52:	f8d3 3080 	ldr.w	r3, [r3, #128]	; 0x80
- 8040a56:	613b      	str	r3, [r7, #16]
+ 80409c8:	4b34      	ldr	r3, [pc, #208]	; (8040a9c <HAL_GPIO_Init+0x2e0>)
+ 80409ca:	f8d3 3080 	ldr.w	r3, [r3, #128]	; 0x80
+ 80409ce:	613b      	str	r3, [r7, #16]
         temp &= ~(iocurrent);
- 8040a58:	68fb      	ldr	r3, [r7, #12]
- 8040a5a:	43db      	mvns	r3, r3
- 8040a5c:	693a      	ldr	r2, [r7, #16]
- 8040a5e:	4013      	ands	r3, r2
- 8040a60:	613b      	str	r3, [r7, #16]
+ 80409d0:	68fb      	ldr	r3, [r7, #12]
+ 80409d2:	43db      	mvns	r3, r3
+ 80409d4:	693a      	ldr	r2, [r7, #16]
+ 80409d6:	4013      	ands	r3, r2
+ 80409d8:	613b      	str	r3, [r7, #16]
         if((GPIO_Init->Mode & GPIO_MODE_IT) == GPIO_MODE_IT)
- 8040a62:	683b      	ldr	r3, [r7, #0]
- 8040a64:	685b      	ldr	r3, [r3, #4]
- 8040a66:	f403 3380 	and.w	r3, r3, #65536	; 0x10000
- 8040a6a:	2b00      	cmp	r3, #0
- 8040a6c:	d003      	beq.n	8040a76 <HAL_GPIO_Init+0x232>
+ 80409da:	683b      	ldr	r3, [r7, #0]
+ 80409dc:	685b      	ldr	r3, [r3, #4]
+ 80409de:	f403 3380 	and.w	r3, r3, #65536	; 0x10000
+ 80409e2:	2b00      	cmp	r3, #0
+ 80409e4:	d003      	beq.n	80409ee <HAL_GPIO_Init+0x232>
         {
           temp |= iocurrent;
- 8040a6e:	693a      	ldr	r2, [r7, #16]
- 8040a70:	68fb      	ldr	r3, [r7, #12]
- 8040a72:	4313      	orrs	r3, r2
- 8040a74:	613b      	str	r3, [r7, #16]
+ 80409e6:	693a      	ldr	r2, [r7, #16]
+ 80409e8:	68fb      	ldr	r3, [r7, #12]
+ 80409ea:	4313      	orrs	r3, r2
+ 80409ec:	613b      	str	r3, [r7, #16]
         }
         EXTI->IMR1 = temp;
- 8040a76:	4a2b      	ldr	r2, [pc, #172]	; (8040b24 <HAL_GPIO_Init+0x2e0>)
- 8040a78:	693b      	ldr	r3, [r7, #16]
- 8040a7a:	f8c2 3080 	str.w	r3, [r2, #128]	; 0x80
+ 80409ee:	4a2b      	ldr	r2, [pc, #172]	; (8040a9c <HAL_GPIO_Init+0x2e0>)
+ 80409f0:	693b      	ldr	r3, [r7, #16]
+ 80409f2:	f8c2 3080 	str.w	r3, [r2, #128]	; 0x80
 
         temp = EXTI->EMR1;
- 8040a7e:	4b29      	ldr	r3, [pc, #164]	; (8040b24 <HAL_GPIO_Init+0x2e0>)
- 8040a80:	f8d3 3084 	ldr.w	r3, [r3, #132]	; 0x84
- 8040a84:	613b      	str	r3, [r7, #16]
+ 80409f6:	4b29      	ldr	r3, [pc, #164]	; (8040a9c <HAL_GPIO_Init+0x2e0>)
+ 80409f8:	f8d3 3084 	ldr.w	r3, [r3, #132]	; 0x84
+ 80409fc:	613b      	str	r3, [r7, #16]
         temp &= ~(iocurrent);
- 8040a86:	68fb      	ldr	r3, [r7, #12]
- 8040a88:	43db      	mvns	r3, r3
- 8040a8a:	693a      	ldr	r2, [r7, #16]
- 8040a8c:	4013      	ands	r3, r2
- 8040a8e:	613b      	str	r3, [r7, #16]
+ 80409fe:	68fb      	ldr	r3, [r7, #12]
+ 8040a00:	43db      	mvns	r3, r3
+ 8040a02:	693a      	ldr	r2, [r7, #16]
+ 8040a04:	4013      	ands	r3, r2
+ 8040a06:	613b      	str	r3, [r7, #16]
         if((GPIO_Init->Mode & GPIO_MODE_EVT) == GPIO_MODE_EVT)
- 8040a90:	683b      	ldr	r3, [r7, #0]
- 8040a92:	685b      	ldr	r3, [r3, #4]
- 8040a94:	f403 3300 	and.w	r3, r3, #131072	; 0x20000
- 8040a98:	2b00      	cmp	r3, #0
- 8040a9a:	d003      	beq.n	8040aa4 <HAL_GPIO_Init+0x260>
+ 8040a08:	683b      	ldr	r3, [r7, #0]
+ 8040a0a:	685b      	ldr	r3, [r3, #4]
+ 8040a0c:	f403 3300 	and.w	r3, r3, #131072	; 0x20000
+ 8040a10:	2b00      	cmp	r3, #0
+ 8040a12:	d003      	beq.n	8040a1c <HAL_GPIO_Init+0x260>
         {
           temp |= iocurrent;
- 8040a9c:	693a      	ldr	r2, [r7, #16]
- 8040a9e:	68fb      	ldr	r3, [r7, #12]
- 8040aa0:	4313      	orrs	r3, r2
- 8040aa2:	613b      	str	r3, [r7, #16]
+ 8040a14:	693a      	ldr	r2, [r7, #16]
+ 8040a16:	68fb      	ldr	r3, [r7, #12]
+ 8040a18:	4313      	orrs	r3, r2
+ 8040a1a:	613b      	str	r3, [r7, #16]
         }
         EXTI->EMR1 = temp;
- 8040aa4:	4a1f      	ldr	r2, [pc, #124]	; (8040b24 <HAL_GPIO_Init+0x2e0>)
- 8040aa6:	693b      	ldr	r3, [r7, #16]
- 8040aa8:	f8c2 3084 	str.w	r3, [r2, #132]	; 0x84
+ 8040a1c:	4a1f      	ldr	r2, [pc, #124]	; (8040a9c <HAL_GPIO_Init+0x2e0>)
+ 8040a1e:	693b      	ldr	r3, [r7, #16]
+ 8040a20:	f8c2 3084 	str.w	r3, [r2, #132]	; 0x84
 
         /* Clear Rising Falling edge configuration */
         temp = EXTI->RTSR1;
- 8040aac:	4b1d      	ldr	r3, [pc, #116]	; (8040b24 <HAL_GPIO_Init+0x2e0>)
- 8040aae:	681b      	ldr	r3, [r3, #0]
- 8040ab0:	613b      	str	r3, [r7, #16]
+ 8040a24:	4b1d      	ldr	r3, [pc, #116]	; (8040a9c <HAL_GPIO_Init+0x2e0>)
+ 8040a26:	681b      	ldr	r3, [r3, #0]
+ 8040a28:	613b      	str	r3, [r7, #16]
         temp &= ~(iocurrent);
- 8040ab2:	68fb      	ldr	r3, [r7, #12]
- 8040ab4:	43db      	mvns	r3, r3
- 8040ab6:	693a      	ldr	r2, [r7, #16]
- 8040ab8:	4013      	ands	r3, r2
- 8040aba:	613b      	str	r3, [r7, #16]
+ 8040a2a:	68fb      	ldr	r3, [r7, #12]
+ 8040a2c:	43db      	mvns	r3, r3
+ 8040a2e:	693a      	ldr	r2, [r7, #16]
+ 8040a30:	4013      	ands	r3, r2
+ 8040a32:	613b      	str	r3, [r7, #16]
         if((GPIO_Init->Mode & RISING_EDGE) == RISING_EDGE)
- 8040abc:	683b      	ldr	r3, [r7, #0]
- 8040abe:	685b      	ldr	r3, [r3, #4]
- 8040ac0:	f403 1380 	and.w	r3, r3, #1048576	; 0x100000
- 8040ac4:	2b00      	cmp	r3, #0
- 8040ac6:	d003      	beq.n	8040ad0 <HAL_GPIO_Init+0x28c>
+ 8040a34:	683b      	ldr	r3, [r7, #0]
+ 8040a36:	685b      	ldr	r3, [r3, #4]
+ 8040a38:	f403 1380 	and.w	r3, r3, #1048576	; 0x100000
+ 8040a3c:	2b00      	cmp	r3, #0
+ 8040a3e:	d003      	beq.n	8040a48 <HAL_GPIO_Init+0x28c>
         {
           temp |= iocurrent;
- 8040ac8:	693a      	ldr	r2, [r7, #16]
- 8040aca:	68fb      	ldr	r3, [r7, #12]
- 8040acc:	4313      	orrs	r3, r2
- 8040ace:	613b      	str	r3, [r7, #16]
+ 8040a40:	693a      	ldr	r2, [r7, #16]
+ 8040a42:	68fb      	ldr	r3, [r7, #12]
+ 8040a44:	4313      	orrs	r3, r2
+ 8040a46:	613b      	str	r3, [r7, #16]
         }
         EXTI->RTSR1 = temp;
- 8040ad0:	4a14      	ldr	r2, [pc, #80]	; (8040b24 <HAL_GPIO_Init+0x2e0>)
- 8040ad2:	693b      	ldr	r3, [r7, #16]
- 8040ad4:	6013      	str	r3, [r2, #0]
+ 8040a48:	4a14      	ldr	r2, [pc, #80]	; (8040a9c <HAL_GPIO_Init+0x2e0>)
+ 8040a4a:	693b      	ldr	r3, [r7, #16]
+ 8040a4c:	6013      	str	r3, [r2, #0]
 
         temp = EXTI->FTSR1;
- 8040ad6:	4b13      	ldr	r3, [pc, #76]	; (8040b24 <HAL_GPIO_Init+0x2e0>)
- 8040ad8:	685b      	ldr	r3, [r3, #4]
- 8040ada:	613b      	str	r3, [r7, #16]
+ 8040a4e:	4b13      	ldr	r3, [pc, #76]	; (8040a9c <HAL_GPIO_Init+0x2e0>)
+ 8040a50:	685b      	ldr	r3, [r3, #4]
+ 8040a52:	613b      	str	r3, [r7, #16]
         temp &= ~(iocurrent);
- 8040adc:	68fb      	ldr	r3, [r7, #12]
- 8040ade:	43db      	mvns	r3, r3
- 8040ae0:	693a      	ldr	r2, [r7, #16]
- 8040ae2:	4013      	ands	r3, r2
- 8040ae4:	613b      	str	r3, [r7, #16]
+ 8040a54:	68fb      	ldr	r3, [r7, #12]
+ 8040a56:	43db      	mvns	r3, r3
+ 8040a58:	693a      	ldr	r2, [r7, #16]
+ 8040a5a:	4013      	ands	r3, r2
+ 8040a5c:	613b      	str	r3, [r7, #16]
         if((GPIO_Init->Mode & FALLING_EDGE) == FALLING_EDGE)
- 8040ae6:	683b      	ldr	r3, [r7, #0]
- 8040ae8:	685b      	ldr	r3, [r3, #4]
- 8040aea:	f403 1300 	and.w	r3, r3, #2097152	; 0x200000
- 8040aee:	2b00      	cmp	r3, #0
- 8040af0:	d003      	beq.n	8040afa <HAL_GPIO_Init+0x2b6>
+ 8040a5e:	683b      	ldr	r3, [r7, #0]
+ 8040a60:	685b      	ldr	r3, [r3, #4]
+ 8040a62:	f403 1300 	and.w	r3, r3, #2097152	; 0x200000
+ 8040a66:	2b00      	cmp	r3, #0
+ 8040a68:	d003      	beq.n	8040a72 <HAL_GPIO_Init+0x2b6>
         {
           temp |= iocurrent;
- 8040af2:	693a      	ldr	r2, [r7, #16]
- 8040af4:	68fb      	ldr	r3, [r7, #12]
- 8040af6:	4313      	orrs	r3, r2
- 8040af8:	613b      	str	r3, [r7, #16]
+ 8040a6a:	693a      	ldr	r2, [r7, #16]
+ 8040a6c:	68fb      	ldr	r3, [r7, #12]
+ 8040a6e:	4313      	orrs	r3, r2
+ 8040a70:	613b      	str	r3, [r7, #16]
         }
         EXTI->FTSR1 = temp;
- 8040afa:	4a0a      	ldr	r2, [pc, #40]	; (8040b24 <HAL_GPIO_Init+0x2e0>)
- 8040afc:	693b      	ldr	r3, [r7, #16]
- 8040afe:	6053      	str	r3, [r2, #4]
+ 8040a72:	4a0a      	ldr	r2, [pc, #40]	; (8040a9c <HAL_GPIO_Init+0x2e0>)
+ 8040a74:	693b      	ldr	r3, [r7, #16]
+ 8040a76:	6053      	str	r3, [r2, #4]
       }
     }
 
     position++;
- 8040b00:	697b      	ldr	r3, [r7, #20]
- 8040b02:	3301      	adds	r3, #1
- 8040b04:	617b      	str	r3, [r7, #20]
+ 8040a78:	697b      	ldr	r3, [r7, #20]
+ 8040a7a:	3301      	adds	r3, #1
+ 8040a7c:	617b      	str	r3, [r7, #20]
   while (((GPIO_Init->Pin) >> position) != 0U)
- 8040b06:	683b      	ldr	r3, [r7, #0]
- 8040b08:	681a      	ldr	r2, [r3, #0]
- 8040b0a:	697b      	ldr	r3, [r7, #20]
- 8040b0c:	fa22 f303 	lsr.w	r3, r2, r3
- 8040b10:	2b00      	cmp	r3, #0
- 8040b12:	f47f ae9f 	bne.w	8040854 <HAL_GPIO_Init+0x10>
+ 8040a7e:	683b      	ldr	r3, [r7, #0]
+ 8040a80:	681a      	ldr	r2, [r3, #0]
+ 8040a82:	697b      	ldr	r3, [r7, #20]
+ 8040a84:	fa22 f303 	lsr.w	r3, r2, r3
+ 8040a88:	2b00      	cmp	r3, #0
+ 8040a8a:	f47f ae9f 	bne.w	80407cc <HAL_GPIO_Init+0x10>
   }
 }
- 8040b16:	bf00      	nop
- 8040b18:	bf00      	nop
- 8040b1a:	371c      	adds	r7, #28
- 8040b1c:	46bd      	mov	sp, r7
- 8040b1e:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8040b22:	4770      	bx	lr
- 8040b24:	4002f400 	.word	0x4002f400
- 8040b28:	42020000 	.word	0x42020000
- 8040b2c:	42020400 	.word	0x42020400
- 8040b30:	42020800 	.word	0x42020800
- 8040b34:	42020c00 	.word	0x42020c00
- 8040b38:	42021000 	.word	0x42021000
- 8040b3c:	42021400 	.word	0x42021400
- 8040b40:	42021800 	.word	0x42021800
+ 8040a8e:	bf00      	nop
+ 8040a90:	bf00      	nop
+ 8040a92:	371c      	adds	r7, #28
+ 8040a94:	46bd      	mov	sp, r7
+ 8040a96:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8040a9a:	4770      	bx	lr
+ 8040a9c:	4002f400 	.word	0x4002f400
+ 8040aa0:	42020000 	.word	0x42020000
+ 8040aa4:	42020400 	.word	0x42020400
+ 8040aa8:	42020800 	.word	0x42020800
+ 8040aac:	42020c00 	.word	0x42020c00
+ 8040ab0:	42021000 	.word	0x42021000
+ 8040ab4:	42021400 	.word	0x42021400
+ 8040ab8:	42021800 	.word	0x42021800
 
-08040b44 <HAL_GPIO_WritePin>:
+08040abc <HAL_GPIO_WritePin>:
   *            @arg GPIO_PIN_RESET: to clear the port pin
   *            @arg GPIO_PIN_SET: to set the port pin
   * @retval None
   */
 void HAL_GPIO_WritePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, GPIO_PinState PinState)
 {
- 8040b44:	b480      	push	{r7}
- 8040b46:	b083      	sub	sp, #12
- 8040b48:	af00      	add	r7, sp, #0
- 8040b4a:	6078      	str	r0, [r7, #4]
- 8040b4c:	460b      	mov	r3, r1
- 8040b4e:	807b      	strh	r3, [r7, #2]
- 8040b50:	4613      	mov	r3, r2
- 8040b52:	707b      	strb	r3, [r7, #1]
+ 8040abc:	b480      	push	{r7}
+ 8040abe:	b083      	sub	sp, #12
+ 8040ac0:	af00      	add	r7, sp, #0
+ 8040ac2:	6078      	str	r0, [r7, #4]
+ 8040ac4:	460b      	mov	r3, r1
+ 8040ac6:	807b      	strh	r3, [r7, #2]
+ 8040ac8:	4613      	mov	r3, r2
+ 8040aca:	707b      	strb	r3, [r7, #1]
   /* Check the parameters */
   assert_param(IS_GPIO_PIN(GPIO_Pin));
   assert_param(IS_GPIO_PIN_ACTION(PinState));
 
   if (PinState != GPIO_PIN_RESET)
- 8040b54:	787b      	ldrb	r3, [r7, #1]
- 8040b56:	2b00      	cmp	r3, #0
- 8040b58:	d003      	beq.n	8040b62 <HAL_GPIO_WritePin+0x1e>
+ 8040acc:	787b      	ldrb	r3, [r7, #1]
+ 8040ace:	2b00      	cmp	r3, #0
+ 8040ad0:	d003      	beq.n	8040ada <HAL_GPIO_WritePin+0x1e>
   {
     GPIOx->BSRR = (uint32_t)GPIO_Pin;
- 8040b5a:	887a      	ldrh	r2, [r7, #2]
- 8040b5c:	687b      	ldr	r3, [r7, #4]
- 8040b5e:	619a      	str	r2, [r3, #24]
+ 8040ad2:	887a      	ldrh	r2, [r7, #2]
+ 8040ad4:	687b      	ldr	r3, [r7, #4]
+ 8040ad6:	619a      	str	r2, [r3, #24]
   }
   else
   {
     GPIOx->BRR = (uint32_t)GPIO_Pin;
   }
 }
- 8040b60:	e002      	b.n	8040b68 <HAL_GPIO_WritePin+0x24>
+ 8040ad8:	e002      	b.n	8040ae0 <HAL_GPIO_WritePin+0x24>
     GPIOx->BRR = (uint32_t)GPIO_Pin;
- 8040b62:	887a      	ldrh	r2, [r7, #2]
- 8040b64:	687b      	ldr	r3, [r7, #4]
- 8040b66:	629a      	str	r2, [r3, #40]	; 0x28
+ 8040ada:	887a      	ldrh	r2, [r7, #2]
+ 8040adc:	687b      	ldr	r3, [r7, #4]
+ 8040ade:	629a      	str	r2, [r3, #40]	; 0x28
 }
- 8040b68:	bf00      	nop
- 8040b6a:	370c      	adds	r7, #12
- 8040b6c:	46bd      	mov	sp, r7
- 8040b6e:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8040b72:	4770      	bx	lr
+ 8040ae0:	bf00      	nop
+ 8040ae2:	370c      	adds	r7, #12
+ 8040ae4:	46bd      	mov	sp, r7
+ 8040ae6:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8040aea:	4770      	bx	lr
 
-08040b74 <__libc_init_array>:
- 8040b74:	b570      	push	{r4, r5, r6, lr}
- 8040b76:	4d0d      	ldr	r5, [pc, #52]	; (8040bac <__libc_init_array+0x38>)
- 8040b78:	2600      	movs	r6, #0
- 8040b7a:	4c0d      	ldr	r4, [pc, #52]	; (8040bb0 <__libc_init_array+0x3c>)
- 8040b7c:	1b64      	subs	r4, r4, r5
- 8040b7e:	10a4      	asrs	r4, r4, #2
- 8040b80:	42a6      	cmp	r6, r4
- 8040b82:	d109      	bne.n	8040b98 <__libc_init_array+0x24>
- 8040b84:	4d0b      	ldr	r5, [pc, #44]	; (8040bb4 <__libc_init_array+0x40>)
- 8040b86:	2600      	movs	r6, #0
- 8040b88:	4c0b      	ldr	r4, [pc, #44]	; (8040bb8 <__libc_init_array+0x44>)
- 8040b8a:	f000 f817 	bl	8040bbc <_init>
- 8040b8e:	1b64      	subs	r4, r4, r5
- 8040b90:	10a4      	asrs	r4, r4, #2
- 8040b92:	42a6      	cmp	r6, r4
- 8040b94:	d105      	bne.n	8040ba2 <__libc_init_array+0x2e>
- 8040b96:	bd70      	pop	{r4, r5, r6, pc}
- 8040b98:	f855 3b04 	ldr.w	r3, [r5], #4
- 8040b9c:	3601      	adds	r6, #1
- 8040b9e:	4798      	blx	r3
- 8040ba0:	e7ee      	b.n	8040b80 <__libc_init_array+0xc>
- 8040ba2:	f855 3b04 	ldr.w	r3, [r5], #4
- 8040ba6:	3601      	adds	r6, #1
- 8040ba8:	4798      	blx	r3
- 8040baa:	e7f2      	b.n	8040b92 <__libc_init_array+0x1e>
- 8040bac:	08040c18 	.word	0x08040c18
- 8040bb0:	08040c18 	.word	0x08040c18
- 8040bb4:	08040c18 	.word	0x08040c18
- 8040bb8:	08040c1c 	.word	0x08040c1c
+08040aec <__libc_init_array>:
+ 8040aec:	b570      	push	{r4, r5, r6, lr}
+ 8040aee:	4d0d      	ldr	r5, [pc, #52]	; (8040b24 <__libc_init_array+0x38>)
+ 8040af0:	2600      	movs	r6, #0
+ 8040af2:	4c0d      	ldr	r4, [pc, #52]	; (8040b28 <__libc_init_array+0x3c>)
+ 8040af4:	1b64      	subs	r4, r4, r5
+ 8040af6:	10a4      	asrs	r4, r4, #2
+ 8040af8:	42a6      	cmp	r6, r4
+ 8040afa:	d109      	bne.n	8040b10 <__libc_init_array+0x24>
+ 8040afc:	4d0b      	ldr	r5, [pc, #44]	; (8040b2c <__libc_init_array+0x40>)
+ 8040afe:	2600      	movs	r6, #0
+ 8040b00:	4c0b      	ldr	r4, [pc, #44]	; (8040b30 <__libc_init_array+0x44>)
+ 8040b02:	f000 f817 	bl	8040b34 <_init>
+ 8040b06:	1b64      	subs	r4, r4, r5
+ 8040b08:	10a4      	asrs	r4, r4, #2
+ 8040b0a:	42a6      	cmp	r6, r4
+ 8040b0c:	d105      	bne.n	8040b1a <__libc_init_array+0x2e>
+ 8040b0e:	bd70      	pop	{r4, r5, r6, pc}
+ 8040b10:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8040b14:	3601      	adds	r6, #1
+ 8040b16:	4798      	blx	r3
+ 8040b18:	e7ee      	b.n	8040af8 <__libc_init_array+0xc>
+ 8040b1a:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8040b1e:	3601      	adds	r6, #1
+ 8040b20:	4798      	blx	r3
+ 8040b22:	e7f2      	b.n	8040b0a <__libc_init_array+0x1e>
+ 8040b24:	08040fc0 	.word	0x08040fc0
+ 8040b28:	08040fc0 	.word	0x08040fc0
+ 8040b2c:	08040fc0 	.word	0x08040fc0
+ 8040b30:	08040fc4 	.word	0x08040fc4
 
-08040bbc <_init>:
- 8040bbc:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
- 8040bbe:	bf00      	nop
- 8040bc0:	bcf8      	pop	{r3, r4, r5, r6, r7}
- 8040bc2:	bc08      	pop	{r3}
- 8040bc4:	469e      	mov	lr, r3
- 8040bc6:	4770      	bx	lr
+08040b34 <_init>:
+ 8040b34:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8040b36:	bf00      	nop
+ 8040b38:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8040b3a:	bc08      	pop	{r3}
+ 8040b3c:	469e      	mov	lr, r3
+ 8040b3e:	4770      	bx	lr
 
-08040bc8 <_fini>:
- 8040bc8:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
- 8040bca:	bf00      	nop
- 8040bcc:	bcf8      	pop	{r3, r4, r5, r6, r7}
- 8040bce:	bc08      	pop	{r3}
- 8040bd0:	469e      	mov	lr, r3
- 8040bd2:	4770      	bx	lr
- 8040bd4:	0000      	movs	r0, r0
+08040b40 <_fini>:
+ 8040b40:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8040b42:	bf00      	nop
+ 8040b44:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8040b46:	bc08      	pop	{r3}
+ 8040b48:	469e      	mov	lr, r3
+ 8040b4a:	4770      	bx	lr
+ 8040b4c:	0000      	movs	r0, r0
 	...
 
-08040bd8 <__SECURE_run_attestation_wait_mode_veneer>:
- 8040bd8:	b401      	push	{r0}
- 8040bda:	4802      	ldr	r0, [pc, #8]	; (8040be4 <__SECURE_run_attestation_wait_mode_veneer+0xc>)
- 8040bdc:	4684      	mov	ip, r0
- 8040bde:	bc01      	pop	{r0}
- 8040be0:	4760      	bx	ip
- 8040be2:	bf00      	nop
- 8040be4:	0c03e051 	.word	0x0c03e051
+08040b50 <__SECURE_log_ret_veneer>:
+ 8040b50:	b401      	push	{r0}
+ 8040b52:	4802      	ldr	r0, [pc, #8]	; (8040b5c <__SECURE_log_ret_veneer+0xc>)
+ 8040b54:	4684      	mov	ip, r0
+ 8040b56:	bc01      	pop	{r0}
+ 8040b58:	4760      	bx	ip
+ 8040b5a:	bf00      	nop
+ 8040b5c:	0c03e039 	.word	0x0c03e039
 
-08040be8 <__SECURE_record_output_data_veneer>:
- 8040be8:	b401      	push	{r0}
- 8040bea:	4802      	ldr	r0, [pc, #8]	; (8040bf4 <__SECURE_record_output_data_veneer+0xc>)
- 8040bec:	4684      	mov	ip, r0
- 8040bee:	bc01      	pop	{r0}
- 8040bf0:	4760      	bx	ip
- 8040bf2:	bf00      	nop
- 8040bf4:	0c03e019 	.word	0x0c03e019
+08040b60 <__SECURE_SystemCoreClockUpdate_veneer>:
+ 8040b60:	b401      	push	{r0}
+ 8040b62:	4802      	ldr	r0, [pc, #8]	; (8040b6c <__SECURE_SystemCoreClockUpdate_veneer+0xc>)
+ 8040b64:	4684      	mov	ip, r0
+ 8040b66:	bc01      	pop	{r0}
+ 8040b68:	4760      	bx	ip
+ 8040b6a:	bf00      	nop
+ 8040b6c:	0c03e001 	.word	0x0c03e001
 
-08040bf8 <__SECURE_SystemCoreClockUpdate_veneer>:
- 8040bf8:	b401      	push	{r0}
- 8040bfa:	4802      	ldr	r0, [pc, #8]	; (8040c04 <__SECURE_SystemCoreClockUpdate_veneer+0xc>)
- 8040bfc:	4684      	mov	ip, r0
- 8040bfe:	bc01      	pop	{r0}
- 8040c00:	4760      	bx	ip
- 8040c02:	bf00      	nop
- 8040c04:	0c03e001 	.word	0x0c03e001
+08040b70 <__SECURE_RegisterCallback_veneer>:
+ 8040b70:	b401      	push	{r0}
+ 8040b72:	4802      	ldr	r0, [pc, #8]	; (8040b7c <__SECURE_RegisterCallback_veneer+0xc>)
+ 8040b74:	4684      	mov	ip, r0
+ 8040b76:	bc01      	pop	{r0}
+ 8040b78:	4760      	bx	ip
+ 8040b7a:	bf00      	nop
+ 8040b7c:	0c03e049 	.word	0x0c03e049
 
-08040c08 <__SECURE_RegisterCallback_veneer>:
- 8040c08:	b401      	push	{r0}
- 8040c0a:	4802      	ldr	r0, [pc, #8]	; (8040c14 <__SECURE_RegisterCallback_veneer+0xc>)
- 8040c0c:	4684      	mov	ip, r0
- 8040c0e:	bc01      	pop	{r0}
- 8040c10:	4760      	bx	ip
- 8040c12:	bf00      	nop
- 8040c14:	0c03e049 	.word	0x0c03e049
+08040b80 <__SECURE_run_attestation_wait_mode_veneer>:
+ 8040b80:	b401      	push	{r0}
+ 8040b82:	4802      	ldr	r0, [pc, #8]	; (8040b8c <__SECURE_run_attestation_wait_mode_veneer+0xc>)
+ 8040b84:	4684      	mov	ip, r0
+ 8040b86:	bc01      	pop	{r0}
+ 8040b88:	4760      	bx	ip
+ 8040b8a:	bf00      	nop
+ 8040b8c:	0c03e051 	.word	0x0c03e051
+
+08040b90 <__SECURE_log_cond_br_not_taken_veneer>:
+ 8040b90:	b401      	push	{r0}
+ 8040b92:	4802      	ldr	r0, [pc, #8]	; (8040b9c <__SECURE_log_cond_br_not_taken_veneer+0xc>)
+ 8040b94:	4684      	mov	ip, r0
+ 8040b96:	bc01      	pop	{r0}
+ 8040b98:	4760      	bx	ip
+ 8040b9a:	bf00      	nop
+ 8040b9c:	0c03e021 	.word	0x0c03e021
+
+08040ba0 <__SECURE_record_output_data_veneer>:
+ 8040ba0:	b401      	push	{r0}
+ 8040ba2:	4802      	ldr	r0, [pc, #8]	; (8040bac <__SECURE_record_output_data_veneer+0xc>)
+ 8040ba4:	4684      	mov	ip, r0
+ 8040ba6:	bc01      	pop	{r0}
+ 8040ba8:	4760      	bx	ip
+ 8040baa:	bf00      	nop
+ 8040bac:	0c03e019 	.word	0x0c03e019
+
+08040bb0 <__SECURE_log_cond_br_taken_veneer>:
+ 8040bb0:	b401      	push	{r0}
+ 8040bb2:	4802      	ldr	r0, [pc, #8]	; (8040bbc <__SECURE_log_cond_br_taken_veneer+0xc>)
+ 8040bb4:	4684      	mov	ip, r0
+ 8040bb6:	bc01      	pop	{r0}
+ 8040bb8:	4760      	bx	ip
+ 8040bba:	bf00      	nop
+ 8040bbc:	0c03e041 	.word	0x0c03e041

@@ -67,6 +67,8 @@ class ProtocolConfig:
     app_start_addr = ""
     start_time = 0
     end_time = 0
+    mode = ''
+    cflog = None
     @property
     def aermin():
         aux = [0xe0, 0x00] #aer_min = 0xe000
@@ -209,8 +211,6 @@ def hash_memory():
 
 ### Verifier ###################
 def verify_report():
-    verify_time_start = time.perf_counter()
-
     print("------------- VERIFY ---------------")
     ## For debug
     # h_report = sha256(cfa_report.report_bytes)
@@ -247,45 +247,47 @@ def verify_report():
         print("INVALID MAC")
     
     ####################
-    print("Validating CFLog...")
+    if pconfig.mode == 'aud':
+        print("Validating CFLog...")
 
-    cflog = parse_cflog("../cflogs/"+str(pconfig.report_num)+".cflog")
-    
-    cfg = load("objects/cfg.bin")
+        cflog = parse_cflog("../cflogs/"+str(pconfig.report_num)+".cflog")
 
-    valid_cflog, current_node, offending_node, cflog_index, shadow_stack_violation, shadow_stack_addr = verify(cfg, cflog, pconfig.app_start_addr)
+        cfg = load("objects/cfg.bin")
 
-    if valid_cflog:
-        print("VALID CFLOG")
-    else:
-        print("INVALID CFLOG")
-        print(f"Offending CFLog entry  ({current_node.type}): ({cflog_index})")
-        print("Logged destination: "+str(offending_node.dest_addr))
-        if shadow_stack_violation:
-            print("Valid destination: "+str(shadow_stack_addr))
+        valid_cflog, current_node, offending_node, cflog_index, shadow_stack_violation, shadow_stack_addr = verify(cfg, cflog, pconfig.app_start_addr)
+        
+        printblue("-----------------------------------------------------------")
+        printblue(f"CFLOG SIZE: {len(cflog)} entries = {len(cflog)*4} Bytes")
+        printblue("-----------------------------------------------------------")
+
+        if valid_cflog:
+            print("VALID CFLOG")
         else:
-            print("Valid destinations: "+str(current_node.successors))
-        return comm_protocol_messages.HEAL_DEVICE
+            print("INVALID CFLOG")
+            print(f"Offending CFLog entry  ({current_node.type}): ({cflog_index})")
+            print("Logged destination: "+str(offending_node.dest_addr))
+            if shadow_stack_violation:
+                print("Valid destination: "+str(shadow_stack_addr))
+            else:
+                print("Valid destinations: "+str(current_node.successors))
+            return comm_protocol_messages.HEAL_DEVICE
+    else:
+        valid_cflog = True
 
     # except BadSignatureError:
     #     print("FAILED VERIFICATION: invalid signature")
     #     # return comm_protocol_messages.HEAL_DEVICE
-    
-
-    verify_time_stop = time.perf_counter()
-    printblue("-----------------------------------------------------------")
-    printblue(f"CFLOG SIZE: {len(cflog)} entries = {len(cflog)*4} Bytes")
-    printblue("Time for Vrf to verify the attestation report: "+str(1000*(verify_time_stop - verify_time_start))+"ms")
-    printblue("-----------------------------------------------------------")
-
-    return comm_protocol_messages.CONTINUE_APPLICATION
+    if cfa_report.IsFinal == comm_protocol_messages.END_OF_APPLICATION or pconfig.mode == 'sense':
+        return comm_protocol_messages.ACCEPTED_REPORT
+    else:
+        return comm_protocol_messages.CONTINUE_APPLICATION
 
 def generate_response():
     print("------------- USE PRIV KEY TO SIGN ---------------")
-    sk_str = b'\x89\x8b\x0c\xde\xab\xb5\x86\x97<\r\xa9\x15\x8e\x01\x84\xe7C\xf7|5\xb9\xc2\xb8\xf7\x93b\x92\x87\xcaY\x8b\xb2'
+    # sk_str = b'\x89\x8b\x0c\xde\xab\xb5\x86\x97<\r\xa9\x15\x8e\x01\x84\xe7C\xf7|5\xb9\xc2\xb8\xf7\x93b\x92\x87\xcaY\x8b\xb2'
 
-    sk = SigningKey.from_string(sk_str, curve=NIST256p, hashfunc=sha256)
-    print("sk "+str(type(sk))+" : \n"+str(sk.to_string()))
+    # sk = SigningKey.from_string(sk_str, curve=NIST256p, hashfunc=sha256)
+    # print("sk "+str(type(sk))+" : \n"+str(sk.to_string()))
     
     # add challenge    
     cfa_response.New_Chal = pconfig.challenge
@@ -346,7 +348,7 @@ def send_response():
     # pconfig.comm_time += comm_end - comm_start
 
     # pconfig.prv_verify_resp_time = pconfig.serial.read(4)
-    print("pconfig.prv_verify_resp_time: "+str(pconfig.prv_verify_resp_time))
+    print(f"send_response time: {1000*(comm_end-comm_start)}")
     print(" ")
     return
 
@@ -375,57 +377,64 @@ def read_report():
             uint16_t    Number of the log; // init = 0
             uint32_t    CFLog [MAX_CF_LOG_SIZE];
     '''
+    prv_exec_start = time.perf_counter()
+    # pconfig.serial.read_until(comm_protocol_messages.BEGGINING_OF_REPORT)
+    msg = pconfig.serial.read(4)
+    while msg != comm_protocol_messages.BEGGINING_OF_REPORT:
+        print(msg)
+    print(msg)
+    prv_exec_end = time.perf_counter()
+    prv_exec_time = 1000*(prv_exec_end-prv_exec_start)
 
-    pconfig.serial.read_until(comm_protocol_messages.BEGGINING_OF_REPORT)
-    cfa_report.signature = pconfig.serial.read(64)
+    receive_report_start = time.perf_counter()
+
+    
     # print("cfa_report.signature: ")#+str(cfa_report.signature))
     # print_bytes_as_hex(cfa_report.signature)
     # print(" ")
 
-    ##### Baseline APP
-    '''
-    output_data = pconfig.serial.read(4)
-    print("output_data : "+str(output_data))
-    cfa_report.report_bytes = output_data
-    '''
+    if pconfig.mode == 'sense':
+        ##### Baseline APP
+        #'''
+        output_data = pconfig.serial.read(4)
+        print("output_data : "+str(output_data))
+        cfa_report.report_bytes = output_data
+        cfa_report.signature = pconfig.serial.read(64)
+        #'''
+    elif pconfig.mode == 'aud':
+        ##### CFA / TRACES only
+        #'''
+        cfa_report.signature = pconfig.serial.read(64)
 
-    ##### CFA / TRACES only
-    # '''
-    cfa_report.IsFinal = pconfig.serial.read(2)
-    cfa_report.report_bytes = cfa_report.IsFinal
-    cfa_report.IsFinal = chr(int.from_bytes(cfa_report.IsFinal, "little"))
-    print("cfa_report.IsFinal: "+str(cfa_report.IsFinal))
-    # print(" ")
-    
-    # cfa_report.hash_memory = pconfig.serial.read(32)
-    # cfa_report.report_bytes += cfa_report.hash_memory
-    cfa_report.report_bytes += pconfig.hash_memory
-    # print("cfa_report.hash_memory: ")#+str(cfa_report.hash_memory))
-    # print_bytes_as_hex(cfa_report.hash_memory)
-    # print(" ")
-    cfa_report.CFA_Log_Size = pconfig.serial.read(2)
-    cfa_report.report_bytes += cfa_report.CFA_Log_Size
-    print_bytes_as_hex(cfa_report.CFA_Log_Size)
-    cfa_report.CFA_Log_Size = int.from_bytes(cfa_report.CFA_Log_Size, "little") 
-    print("cfa_report.CFA_Log_Size: "+str(cfa_report.CFA_Log_Size))
-    print(" ")
-    cfa_report.CFA_Log = pconfig.serial.read(4*cfa_report.CFA_Log_Size)
-    cfa_report.report_bytes += cfa_report.CFA_Log
-    # print("cfa_report.CFA_Log: ")#+str(cfa_report.CFA_Log))
-    # print_bytes_as_hex(cfa_report.CFA_Log)
-    # print(" ")
-    #'''
-    #
-    # pconfig.prv_sign_rep_time = pconfig.serial.read(4)
-    # print("pconfig.prv_sign_rep_time: "+str(pconfig.prv_sign_rep_time))
-    # print(" ")
-    #
-    # print("cfa_report.report_bytes: ")#+str(cfa_report.report_bytes))
-    # print_bytes_as_hex(cfa_report.report_bytes)
-    # print(" ")
+        cfa_report.IsFinal = pconfig.serial.read(2)
+        cfa_report.report_bytes = cfa_report.IsFinal
+        cfa_report.IsFinal = chr(int.from_bytes(cfa_report.IsFinal, "little"))
+        print("cfa_report.IsFinal: "+str(cfa_report.IsFinal))
+        # print(" ")
+        
+        # cfa_report.hash_memory = pconfig.serial.read(32)
+        # cfa_report.report_bytes += cfa_report.hash_memory
+        cfa_report.report_bytes += pconfig.hash_memory
+        # print("cfa_report.hash_memory: ")#+str(cfa_report.hash_memory))
+        # print_bytes_as_hex(cfa_report.hash_memory)
+        # print(" ")
+        cfa_report.CFA_Log_Size = pconfig.serial.read(2)
+        cfa_report.report_bytes += cfa_report.CFA_Log_Size
+        print_bytes_as_hex(cfa_report.CFA_Log_Size)
+        cfa_report.CFA_Log_Size = int.from_bytes(cfa_report.CFA_Log_Size, "little") 
+        print("cfa_report.CFA_Log_Size: "+str(cfa_report.CFA_Log_Size))
+        print(" ")
+        cfa_report.CFA_Log = pconfig.serial.read(4*cfa_report.CFA_Log_Size)
+        cfa_report.report_bytes += cfa_report.CFA_Log
+        # print("cfa_report.CFA_Log: ")#+str(cfa_report.CFA_Log))
+        # print_bytes_as_hex(cfa_report.CFA_Log)
+        # print(" ")
+        #'''
+        process_cflog_bytes(cfa_report.CFA_Log, cfa_report.CFA_Log_Size, cfa_report.log_number) 
 
-    process_cflog_bytes(cfa_report.CFA_Log, cfa_report.CFA_Log_Size, cfa_report.log_number)
-    return 
+    receive_report_end = time.perf_counter()
+    receive_report_time = receive_report_end-receive_report_start
+    return prv_exec_time, receive_report_time
 
 def process_cflog_bytes(CFLog_bytes, CFLog_size, log_number):
     f = open("../cflogs/"+str(pconfig.report_num)+".cflog", "w")
@@ -471,19 +480,15 @@ def process_cflog_bytes(CFLog_bytes, CFLog_size, log_number):
 
 def receive_report(count):
     printyellow(f"----------- WAITING FOR REPORT {count} -----------\n")
-    # TIME MEASURING
-    comm_start = time.perf_counter()
-    read_report()
-    # TIME MEASURING
-    comm_end = time.perf_counter()
+    prv_exec_time, receive_report_time = read_report()
     # pconfig.comm_time += comm_end - comm_start
     print(" ")
     printgreen(f"----------- REPORT {count} RECEIVED -----------\n")
     print_report()
     if cfa_report.IsFinal == comm_protocol_messages.END_OF_APPLICATION:
-        return 0
+        return 0, prv_exec_time, receive_report_time
     else:
-        return 1
+        return 1, prv_exec_time, receive_report_time
 
 # 80413f0
 # 804144a
@@ -500,47 +505,91 @@ def receive_report(count):
 def start_protocol():
     
     count = 0
-    printgreen("Sending Initial Message ...\n")
-    send_initial_message()
-    pconfig.start_time = time.perf_counter()
-    printgreen("\nSending Challenge ...\n")
-    generate_response()
-    send_response()
+    send_resp_time=0
+    gen_resp_time=0
+    verify_time = 0
     isFinal = 1
-    app_run_time = 0
     verify_decision = 1
-    while (receive_report(count)): # while receive partial reports
-    # while (count != 1 and isFinal): # while receive partial reports
-        # isFinal = receive_report()
+
+    printgreen("Sending Initial Message ...\n")
+    print("Starting timer...")
+    pconfig.start_time = time.perf_counter()
+    send_initial_message()
+    
+    printgreen("\nSending Challenge ...\n")
+
+    gen_resp_start = time.perf_counter()
+    generate_response()
+    gen_resp_end = time.perf_counter()
+    gen_resp_time += 1000*(gen_resp_end-gen_resp_start)
+
+    send_resp_start = time.perf_counter()
+    send_response()
+    send_resp_end = time.perf_counter()
+    send_resp_time += 1000*(send_resp_end-send_resp_start)
+
+    isFinal, prv_exec_round_time, receive_report_round_time = receive_report(count)
+    prv_exec_time = prv_exec_round_time
+    receive_report_time = receive_report_round_time
+
+    if pconfig.mode == 'sense':
+        isFinal = False
+
+    while (isFinal): # while receive partial reports
         
         printgreen("\nPartial Report Received ...\n")
+        verify_time_start = time.perf_counter()
         verify_decision = verify_report()
-        pconfig.report_num += 1
-        pconfig.challenge = update_challenge(pconfig.report_num,pconfig.challenge)
+        verify_time_stop = time.perf_counter()
+        verify_time += 1000*(verify_time_stop-verify_time_start)
 
         ## clean serial buffer
         pconfig.serial.reset_input_buffer()  
 
         ## Send continue request or heal command
-        send(verify_decision)
-
+        gen_resp_start = time.perf_counter()
+        pconfig.report_num += 1
+        pconfig.challenge = update_challenge(pconfig.report_num,pconfig.challenge)
         generate_response()
+        gen_resp_end = time.perf_counter()
+        gen_resp_time += 1000*(gen_resp_end-gen_resp_start)
+
+        send_resp_start = time.perf_counter()
+        send(verify_decision)
         send_response()
+        send_resp_end = time.perf_counter()
+        send_resp_time += 1000*(send_resp_end-send_resp_start)
+
         count += 1
 
         if verify_decision == comm_protocol_messages.HEAL_DEVICE:
             break
 
+        isFinal, prv_exec_round_time, receive_report_round_time = receive_report(count)
+        prv_exec_time += prv_exec_round_time
+        receive_report_time += receive_report_round_time
+    
     if verify_decision != comm_protocol_messages.HEAL_DEVICE:
-        print(f"Total App runtime (ms) {app_run_time}")
         printgreen("\nFinal Report Received ...\n")
         
+        verify_time_start = time.perf_counter()
         verify_decision = verify_report()
+        verify_time_stop = time.perf_counter()
+        verify_time += 1000*(verify_time_stop-verify_time_start)
 
-        ## Send continue request or heal command
+        ## Send end request
+        send_resp_start = time.perf_counter()
         send(verify_decision)
-    
-    return verify_decision
+        send_resp_end = time.perf_counter()
+        send_resp_time += 1000*(send_resp_end-send_resp_start)
+        
+        last_part = 1000*(verify_time_stop-verify_time_start)+1000*(send_resp_end-send_resp_start)
+        print(f'Last part: {last_part} ms')
+
+    pconfig.end_time = time.perf_counter()
+
+    print()
+    return verify_decision, prv_exec_time, receive_report_time, send_resp_time, gen_resp_time, verify_time
 
 ################################################################
 
@@ -564,6 +613,13 @@ def init_global_variables():
 
 
 if __name__ == "__main__":
+    dir_name = "../cflogs/"
+    test = os.listdir(dir_name)
+
+    for item in test:
+        if item.endswith(".cflog"):
+            os.remove(os.path.join(dir_name, item))
+
     path_str = ""
     for p in sys.path:
         path_str += p
@@ -572,21 +628,24 @@ if __name__ == "__main__":
     generate_initial_data()
     hash_memory()
 
+    pconfig.mode = 'aud'
+
     # # build cfg
-    prv_file_path = "../../prv/NonSecure/Debug/TRACES_NonSecure.list"
-    asm_lines = read_file(prv_file_path)
-    cfg = create_cfg(set_arch("armv8-m33"), asm_lines)
-    pconfig.app_start_addr = cfg.label_addr_map['application']
-    print(f'Start_addr: { pconfig.app_start_addr}')
-    cfg = set_cfg_head(cfg, pconfig.app_start_addr)
-    dump(cfg, "objects/cfg.bin")
+    if pconfig.mode == 'aud':
+        prv_file_path = "../../prv/NonSecure/Debug/TRACES_NonSecure.list"
+        asm_lines = read_file(prv_file_path)
+        cfg = create_cfg(set_arch("armv8-m33"), asm_lines)
+        pconfig.app_start_addr = cfg.label_addr_map['application']
+        print(f'Start_addr: { pconfig.app_start_addr}')
+        cfg = set_cfg_head(cfg, pconfig.app_start_addr)
+        dump(cfg, "objects/cfg.bin")
 
     in_cmd = ""
     global end_to_end_time
     end_to_end_time = 0
     global total_comm
     total_comm = 0
-    # pconfig.comm_time = 0
+    
     verify_decision = ""
     while(in_cmd != 's' and verify_decision != comm_protocol_messages.HEAL_DEVICE and cfa_report.IsFinal != comm_protocol_messages.END_OF_APPLICATION):
         printcyan("--------------------------- NEW PROTOCOL ------------------------------")
@@ -599,13 +658,24 @@ if __name__ == "__main__":
         printgreen(f'Starting protocol ...\n')
 
         # START PROTOCOL
-        verify_decision = start_protocol()  
-        # TIME MEASURING
-        pconfig.end_time = time.perf_counter()
+        verify_decision, prv_exec_time, receive_report_time, send_resp_time, gen_resp_time, verify_time = start_protocol()  
+        
         # printblue('Elapsed time : '+str(end - start)+'s or ' + str((end - start)*1000)+'ms\n')
         pconfig.report_num += 1
         pconfig.challenge = update_challenge(pconfig.report_num,pconfig.challenge)
+        ## use prv side since something is up here...
         # total_comm += pconfig.comm_time
-        end_to_end_time += (pconfig.end_time - pconfig.start_time)
-        printblue('Total time : '+str(end_to_end_time)+'s or ' + str((end_to_end_time)*1000)+'ms\n')
+        end_to_end_time += 1000*(pconfig.end_time-pconfig.start_time)
+        printblue(f'mode: {pconfig.mode}')
+        printblue(f'Waiting for prv: {prv_exec_time} ms')
+        printblue(f'Receive report time: {receive_report_time} ms')
+        printblue(f'Verify Report Time: {verify_time} ms')
+        printblue(f'Gen. response time: {gen_resp_time}')
+        printblue(f'Send response time: {send_resp_time}')
+        printblue(f'Total time: {end_to_end_time}ms\n')
+        print('---------------------------------------------')
+        cf_events, cflog_entries = get_total_cflog_size('../cflogs/')
+        print(f'Total CF events: {cf_events}') # cflog size if no loops
+        print(f'Total CFlog bytes: {4*cflog_entries}')
+        
     

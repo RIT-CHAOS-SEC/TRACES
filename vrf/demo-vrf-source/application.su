@@ -1,5 +1,3 @@
-application.c:16:6:divides	16	static
-application.c:20:6:even	16	static
-application.c:24:6:prime	24	static
-application.c:35:6:swap	24	static
-application.c:45:6:application	8	static
+application.c:284:1:rand_beebs	4	static
+application.c:293:7:crc32pseudo	24	static
+application.c:308:6:application	16	static

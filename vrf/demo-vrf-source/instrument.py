@@ -276,12 +276,12 @@ def instrment_asm(directory, input_file, output_file):
 					while not ('mov' in lines[j] and comp_reg in lines[j]) and not ('mov' in lines[j] and comp_base in lines[j]):
 						j -= 1
 					loop_start_l = j
-					# assumed format of (comp_reg, comp_base), but was actually (comp_base, comp_reg)
-					if ('mov' in lines[j] and comp_base in lines[j]):
-						tmp = comp_reg
-						comp_reg = comp_base
-						comp_base = tmp 
-					# print(f'Found in lines at {j}: {lines[j]}')
+					# # assumed format of (comp_reg, comp_base), but was actually (comp_base, comp_reg)
+					# if ('mov' in lines[j] and comp_base in lines[j]):
+					# 	tmp = comp_reg
+					# 	comp_reg = comp_base
+					# 	comp_base = tmp 
+					print(f'Found in lines at {j}: {lines[j]}')
 					dec = 0
 					while not ('mov' in new_lines[dec] and comp_reg in new_lines[dec]) and not ('mov' in new_lines[dec] and comp_base in new_lines[dec]):
 						dec -=1
@@ -289,7 +289,7 @@ def instrment_asm(directory, input_file, output_file):
 					# print(f'len(new_lines): {len(new_lines)}')
 					# print(f'dec: {dec}')
 					
-					# print(f'Found in new_lines at {dec}: {new_lines[dec]}')
+					print(f'Found in new_lines at {dec}: {new_lines[dec]}')
 					if '#' in comp_base:
 						# a = input()
 						## insert instrumentation to log the br-taken address and loop condition
@@ -301,18 +301,31 @@ def instrment_asm(directory, input_file, output_file):
 					else:
 						## loop base is a reg. check if it is also modified in the loop
 						notModified = True
-						for j in range(loop_start_l, loop_end_l-1):
+						load_args = None
+						idxs = list(range(loop_start_l+1, loop_end_l-1))[::-1]
+						for j in idxs:
+							print(lines[j])
 							if (comp_base in lines[j] and ('str' not in lines[j] and 'ldr' not in lines[j])):
 								notModified = False
+								print(f'modified here')
+							if (comp_base in lines[j] and 'ldr' in lines[j]):
+								_, _, load_args = lines[j].split('\t')
+								load_args = load_args.replace(comp_base+',', '')
+								break
+								# print(f"load_args: {load_args}")
+								# a = input()
 								# print(lines[j])
-						# print(f'{comp_base} not Modified? --> {notModified}')	
+						print(f'{comp_base} not Modified? --> {notModified}')	
 					
 						if notModified:
 							# if not modified, log the initial value
 							## add the optimized version
 							inserted = []
 							inserted.append(f'\tadr\tr10, {label}')
-							inserted.append(f'\tmov\tr11, {comp_base}')
+							if load_args is not None:
+								inserted.append(f'\tldr\tr11, {load_args}')
+							else:
+								inserted.append(f'\tmov\tr11, {comp_base}')
 							inserted.append(f'\tbl\t{trampoline}_log_loop_cond')
 							new_lines = new_lines[:dec] + inserted + new_lines[dec:] + [x]
 						else:
