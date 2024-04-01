@@ -24,7 +24,7 @@ def verify(cfg, cflog, cflog_startaddr):
     shadow_stack_addr = ''
 
     app_entry = 0
-    print(f'cfg.first_verify: {cfg.first_verify}')
+    # print(f'cfg.first_verify: {cfg.first_verify}')
     if cfg.first_verify:
         verifyFile = open("logs/verify.log", "w")
         cfg.first_verify = False

@@ -148,7 +148,7 @@ def parse_nodes(arch,assembly_functions,cfg):
                 node.end_addr = func.instr_list[i].addr
                 if secure_ret or (func.instr_list[i].instr in arch.return_instrs) or ret_via_pop:
                     node.type = 'ret'
-                    print(f'Ret node has {node.instrs} instrs')
+                    # print(f'Ret node has {node.instrs} instrs')
                 elif func.instr_list[i].instr in arch.conditional_br_instrs:
                     node.type = 'cond'
                 elif func.instr_list[i].instr in arch.unconditional_br_instrs:

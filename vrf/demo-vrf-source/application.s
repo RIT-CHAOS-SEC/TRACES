@@ -11,355 +11,702 @@
 	.eabi_attribute 34, 1
 	.eabi_attribute 18, 4
 	.file	"application.c"
-	.section	.rodata.crc_32_tab,"a",%progbits
+	.global	input
+	.section	.data.input,"aw",%progbits
 	.align	2
-	.type	crc_32_tab, %object
-	.size	crc_32_tab, 1024
-crc_32_tab:
-	.word	0
-	.word	1996959894
-	.word	-301047508
-	.word	-1727442502
-	.word	124634137
-	.word	1886057615
-	.word	-379345611
-	.word	-1637575261
-	.word	249268274
-	.word	2044508324
-	.word	-522852066
-	.word	-1747789432
-	.word	162941995
-	.word	2125561021
-	.word	-407360249
-	.word	-1866523247
-	.word	498536548
-	.word	1789927666
-	.word	-205950648
-	.word	-2067906082
-	.word	450548861
-	.word	1843258603
-	.word	-187386543
-	.word	-2083289657
-	.word	325883990
-	.word	1684777152
-	.word	-43845254
-	.word	-1973040660
-	.word	335633487
-	.word	1661365465
-	.word	-99664541
-	.word	-1928851979
-	.word	997073096
-	.word	1281953886
-	.word	-715111964
-	.word	-1570279054
-	.word	1006888145
-	.word	1258607687
-	.word	-770865667
-	.word	-1526024853
-	.word	901097722
-	.word	1119000684
-	.word	-608450090
-	.word	-1396901568
-	.word	853044451
-	.word	1172266101
-	.word	-589951537
-	.word	-1412350631
-	.word	651767980
-	.word	1373503546
-	.word	-925412992
-	.word	-1076862698
-	.word	565507253
-	.word	1454621731
-	.word	-809855591
-	.word	-1195530993
-	.word	671266974
-	.word	1594198024
-	.word	-972236366
-	.word	-1324619484
-	.word	795835527
-	.word	1483230225
-	.word	-1050600021
-	.word	-1234817731
-	.word	1994146192
-	.word	31158534
-	.word	-1731059524
-	.word	-271249366
-	.word	1907459465
-	.word	112637215
-	.word	-1614814043
-	.word	-390540237
-	.word	2013776290
-	.word	251722036
-	.word	-1777751922
-	.word	-519137256
-	.word	2137656763
-	.word	141376813
-	.word	-1855689577
-	.word	-429695999
-	.word	1802195444
-	.word	476864866
-	.word	-2056965928
-	.word	-228458418
-	.word	1812370925
-	.word	453092731
-	.word	-2113342271
-	.word	-183516073
-	.word	1706088902
-	.word	314042704
-	.word	-1950435094
-	.word	-54949764
-	.word	1658658271
-	.word	366619977
-	.word	-1932296973
-	.word	-69972891
-	.word	1303535960
-	.word	984961486
-	.word	-1547960204
-	.word	-725929758
-	.word	1256170817
-	.word	1037604311
-	.word	-1529756563
-	.word	-740887301
-	.word	1131014506
-	.word	879679996
-	.word	-1385723834
-	.word	-631195440
-	.word	1141124467
-	.word	855842277
-	.word	-1442165665
-	.word	-586318647
-	.word	1342533948
-	.word	654459306
-	.word	-1106571248
-	.word	-921952122
-	.word	1466479909
-	.word	544179635
-	.word	-1184443383
-	.word	-832445281
-	.word	1591671054
-	.word	702138776
-	.word	-1328506846
-	.word	-942167884
-	.word	1504918807
-	.word	783551873
-	.word	-1212326853
-	.word	-1061524307
-	.word	-306674912
-	.word	-1698712650
-	.word	62317068
-	.word	1957810842
-	.word	-355121351
-	.word	-1647151185
-	.word	81470997
-	.word	1943803523
-	.word	-480048366
-	.word	-1805370492
-	.word	225274430
-	.word	2053790376
-	.word	-468791541
-	.word	-1828061283
-	.word	167816743
-	.word	2097651377
-	.word	-267414716
-	.word	-2029476910
-	.word	503444072
-	.word	1762050814
-	.word	-144550051
-	.word	-2140837941
-	.word	426522225
-	.word	1852507879
-	.word	-19653770
-	.word	-1982649376
-	.word	282753626
-	.word	1742555852
-	.word	-105259153
-	.word	-1900089351
-	.word	397917763
-	.word	1622183637
-	.word	-690576408
-	.word	-1580100738
-	.word	953729732
-	.word	1340076626
-	.word	-776247311
-	.word	-1497606297
-	.word	1068828381
-	.word	1219638859
-	.word	-670225446
-	.word	-1358292148
-	.word	906185462
-	.word	1090812512
-	.word	-547295293
-	.word	-1469587627
-	.word	829329135
-	.word	1181335161
-	.word	-882789492
-	.word	-1134132454
-	.word	628085408
-	.word	1382605366
-	.word	-871598187
-	.word	-1156888829
-	.word	570562233
-	.word	1426400815
-	.word	-977650754
-	.word	-1296233688
-	.word	733239954
-	.word	1555261956
-	.word	-1026031705
-	.word	-1244606671
-	.word	752459403
-	.word	1541320221
-	.word	-1687895376
-	.word	-328994266
-	.word	1969922972
-	.word	40735498
-	.word	-1677130071
-	.word	-351390145
-	.word	1913087877
-	.word	83908371
-	.word	-1782625662
-	.word	-491226604
-	.word	2075208622
-	.word	213261112
-	.word	-1831694693
-	.word	-438977011
-	.word	2094854071
-	.word	198958881
-	.word	-2032938284
-	.word	-237706686
-	.word	1759359992
-	.word	534414190
-	.word	-2118248755
-	.word	-155638181
-	.word	1873836001
-	.word	414664567
-	.word	-2012718362
-	.word	-15766928
-	.word	1711684554
-	.word	285281116
-	.word	-1889165569
-	.word	-127750551
-	.word	1634467795
-	.word	376229701
-	.word	-1609899400
-	.word	-686959890
-	.word	1308918612
-	.word	956543938
-	.word	-1486412191
-	.word	-799009033
-	.word	1231636301
-	.word	1047427035
-	.word	-1362007478
-	.word	-640263460
-	.word	1088359270
-	.word	936918000
-	.word	-1447252397
-	.word	-558129467
-	.word	1202900863
-	.word	817233897
-	.word	-1111625188
-	.word	-893730166
-	.word	1404277552
-	.word	615818150
-	.word	-1160759803
-	.word	-841546093
-	.word	1423857449
-	.word	601450431
-	.word	-1285129682
-	.word	-1000256840
-	.word	1567103746
-	.word	711928724
-	.word	-1274298825
-	.word	-1022587231
-	.word	1510334235
-	.word	755167117
-	.section	.bss.seed,"aw",%nobits
+	.type	input, %object
+	.size	input, 4
+input:
+	.byte	117
+	.byte	0
+	.byte	16
+	.byte	58
+	.global	data
+	.section	.bss.data,"aw",%nobits
 	.align	2
-	.type	seed, %object
-	.size	seed, 4
-seed:
-	.space	4
-	.section	.text.rand_beebs,"ax",%progbits
+	.type	data, %object
+	.size	data, 16
+data:
+	.space	16
+	.global	temp_data
+	.section	.bss.temp_data,"aw",%nobits
+	.align	2
+	.type	temp_data, %object
+	.size	temp_data, 5
+temp_data:
+	.space	5
+	.global	valid_reading
+	.section	.bss.valid_reading,"aw",%nobits
+	.type	valid_reading, %object
+	.size	valid_reading, 1
+valid_reading:
+	.space	1
+	.comm	ult_runs,4,4
+	.comm	temp_runs,4,4
+	.comm	hum_runs,4,4
+	.comm	seq_runs,4,4
+	.comm	runs,4,4
+	.section	.text.delay,"ax",%progbits
 	.align	1
+	.global	delay
 	.syntax unified
 	.thumb
 	.thumb_func
 	.fpu fpv5-sp-d16
-	.type	rand_beebs, %function
-rand_beebs:
-	@ args = 0, pretend = 0, frame = 0
+	.type	delay, %function
+delay:
+	@ args = 0, pretend = 0, frame = 16
 	@ frame_needed = 1, uses_anonymous_args = 0
 	@ link register save eliminated.
 	push	{r7}
+	sub	sp, sp, #20
 	add	r7, sp, #0
-	ldr	r3, .L3
-	ldr	r3, [r3]
-	ldr	r2, .L3+4
-	mul	r3, r2, r3
-	add	r3, r3, #12288
-	adds	r3, r3, #57
-	bic	r3, r3, #-2147483648
-	ldr	r2, .L3
-	str	r3, [r2]
-	ldr	r3, .L3
-	ldr	r3, [r3]
-	asrs	r3, r3, #16
-	mov	r0, r3
+	str	r0, [r7, #4]
+	movs	r3, #0
+	str	r3, [r7, #12]
+	b	.L2
+.L3:
+	ldr	r3, [r7, #12]
+	adds	r3, r3, #1
+	str	r3, [r7, #12]
+.L2:
+	ldr	r2, [r7, #12]
+	ldr	r3, [r7, #4]
+	cmp	r2, r3
+	bcc	.L3
+	nop
+	adds	r7, r7, #20
 	mov	sp, r7
 	@ sp needed
 	ldr	r7, [sp], #4
 	bx	lr
-.L4:
-	.align	2
-.L3:
-	.word	seed
-	.word	1103515245
-	.size	rand_beebs, .-rand_beebs
-	.section	.text.crc32pseudo,"ax",%progbits
+	.size	delay, .-delay
+	.section	.text.read_data,"ax",%progbits
 	.align	1
-	.global	crc32pseudo
+	.global	read_data
 	.syntax unified
 	.thumb
 	.thumb_func
 	.fpu fpv5-sp-d16
-	.type	crc32pseudo, %function
-crc32pseudo:
+	.type	read_data, %function
+read_data:
 	@ args = 0, pretend = 0, frame = 8
 	@ frame_needed = 1, uses_anonymous_args = 0
-	push	{r4, r7, lr}
+	push	{r7, lr}
+	sub	sp, sp, #8
+	add	r7, sp, #0
+	movs	r3, #0
+	strb	r3, [r7, #7]
+	movs	r3, #0
+	strh	r3, [r7, #4]	@ movhi
+	ldr	r3, .L11
+	mov	r2, #256
+	str	r2, [r3, #40]
+	movs	r0, #250
+	bl	delay
+	ldr	r3, .L11
+	mov	r2, #256
+	str	r2, [r3, #24]
+	movs	r0, #20
+	bl	delay
+	ldr	r3, .L11
+	mov	r2, #256
+	str	r2, [r3, #40]
+	movs	r0, #40
+	bl	delay
+	movs	r3, #0
+	strh	r3, [r7, #2]	@ movhi
+	b	.L5
+.L8:
+	ldr	r3, .L11
+	ldr	r3, [r3, #16]
+	lsrs	r3, r3, #8
+	and	r3, r3, #1
+	uxtb	r2, r3
+	ldrb	r3, [r7, #7]
+	add	r3, r3, r2
+	strb	r3, [r7, #7]
+	ldrh	r3, [r7, #2]
+	cmp	r3, #3
+	bls	.L6
+	ldrh	r3, [r7, #2]
+	and	r3, r3, #1
+	cmp	r3, #0
+	bne	.L6
+	ldrh	r3, [r7, #4]
+	lsrs	r3, r3, #3
+	uxth	r3, r3
+	mov	r2, r3
+	ldrh	r3, [r7, #4]
+	lsrs	r3, r3, #3
+	uxth	r3, r3
+	mov	r1, r3
+	ldr	r3, .L11+4
+	ldrb	r3, [r3, r1]	@ zero_extendqisi2
+	lsls	r3, r3, #1
+	uxtb	r1, r3
+	ldr	r3, .L11+4
+	strb	r1, [r3, r2]
+	ldrb	r3, [r7, #7]	@ zero_extendqisi2
+	cmp	r3, #6
+	bls	.L7
+	ldrh	r3, [r7, #4]
+	lsrs	r3, r3, #3
+	uxth	r3, r3
+	mov	r1, r3
+	ldrh	r3, [r7, #4]
+	lsrs	r3, r3, #3
+	uxth	r3, r3
+	mov	r2, r3
+	ldr	r3, .L11+8
+	ldr	r3, [r3, r2, lsl #2]
+	orr	r3, r3, #1
+	ldr	r2, .L11+8
+	str	r3, [r2, r1, lsl #2]
+.L7:
+	ldrh	r3, [r7, #4]
+	adds	r3, r3, #1
+	strh	r3, [r7, #4]	@ movhi
+.L6:
+	ldrh	r3, [r7, #2]
+	adds	r3, r3, #1
+	strh	r3, [r7, #2]	@ movhi
+.L5:
+	ldrh	r3, [r7, #2]
+	cmp	r3, #82
+	bls	.L8
+	ldrh	r3, [r7, #4]
+	cmp	r3, #39
+	bls	.L9
+	ldr	r3, .L11+4
+	ldrb	r3, [r3, #4]	@ zero_extendqisi2
+	mov	r1, r3
+	ldr	r3, .L11+4
+	ldrb	r3, [r3]	@ zero_extendqisi2
+	mov	r2, r3
+	ldr	r3, .L11+4
+	ldrb	r3, [r3, #1]	@ zero_extendqisi2
+	add	r3, r3, r2
+	ldr	r2, .L11+4
+	ldrb	r2, [r2, #2]	@ zero_extendqisi2
+	add	r3, r3, r2
+	ldr	r2, .L11+4
+	ldrb	r2, [r2, #3]	@ zero_extendqisi2
+	add	r3, r3, r2
+	uxtb	r3, r3
+	cmp	r1, r3
+	bne	.L9
+	ldr	r3, .L11+12
+	movs	r2, #1
+	strb	r2, [r3]
+	b	.L10
+.L9:
+	ldr	r3, .L11+12
+	movs	r2, #0
+	strb	r2, [r3]
+.L10:
+	nop
+	adds	r7, r7, #8
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, pc}
+.L12:
+	.align	2
+.L11:
+	.word	1107427328
+	.word	temp_data
+	.word	data
+	.word	valid_reading
+	.size	read_data, .-read_data
+	.section	.text.get_temperature,"ax",%progbits
+	.align	1
+	.global	get_temperature
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	get_temperature, %function
+get_temperature:
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #8
+	add	r7, sp, #0
+	bl	read_data
+	ldr	r3, .L15
+	ldrb	r3, [r3, #2]	@ zero_extendqisi2
+	strh	r3, [r7, #6]	@ movhi
+	ldr	r3, .L15
+	ldrb	r3, [r3, #3]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	sxth	r2, r3
+	ldrsh	r3, [r7, #6]
+	orrs	r3, r3, r2
+	sxth	r3, r3
+	strh	r3, [r7, #6]	@ movhi
+	ldrh	r3, [r7, #6]
+	mov	r0, r3
+	adds	r7, r7, #8
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, pc}
+.L16:
+	.align	2
+.L15:
+	.word	temp_data
+	.size	get_temperature, .-get_temperature
+	.section	.text.get_humidity,"ax",%progbits
+	.align	1
+	.global	get_humidity
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	get_humidity, %function
+get_humidity:
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #8
+	add	r7, sp, #0
+	bl	read_data
+	ldr	r3, .L19
+	ldrb	r3, [r3]	@ zero_extendqisi2
+	strh	r3, [r7, #6]	@ movhi
+	ldr	r3, .L19
+	ldrb	r3, [r3, #1]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	sxth	r2, r3
+	ldrsh	r3, [r7, #6]
+	orrs	r3, r3, r2
+	sxth	r3, r3
+	strh	r3, [r7, #6]	@ movhi
+	ldrh	r3, [r7, #6]
+	mov	r0, r3
+	adds	r7, r7, #8
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, pc}
+.L20:
+	.align	2
+.L19:
+	.word	temp_data
+	.size	get_humidity, .-get_humidity
+	.section	.text.pulseIn,"ax",%progbits
+	.align	1
+	.global	pulseIn
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	pulseIn, %function
+pulseIn:
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	@ link register save eliminated.
+	push	{r7}
 	sub	sp, sp, #12
 	add	r7, sp, #0
-	mov	r4, #-1
 	movs	r3, #0
 	str	r3, [r7, #4]
-	b	.L6
-.L7:
-	bl	rand_beebs
-	mov	r3, r0
-	uxtb	r3, r3
-	eors	r3, r3, r4
-	uxtb	r3, r3
-	ldr	r2, .L9
-	ldr	r2, [r2, r3, lsl #2]
-	lsrs	r3, r4, #8
-	eor	r4, r2, r3
-	ldr	r3, [r7, #4]
-	adds	r3, r3, #1
+	movs	r3, #0
+	str	r3, [r7]
+	b	.L22
+.L23:
+	ldr	r3, .L25
+	ldr	r3, [r3, #16]
+	lsrs	r3, r3, #8
+	and	r3, r3, #2
+	ldr	r2, [r7, #4]
+	add	r3, r3, r2
 	str	r3, [r7, #4]
-.L6:
+	ldr	r3, [r7]
+	adds	r3, r3, #1
+	str	r3, [r7]
+.L22:
+	ldr	r3, [r7]
+	cmp	r3, #1000
+	blt	.L23
 	ldr	r3, [r7, #4]
-	cmp	r3, #1024
-	blt	.L7
-	mvns	r3, r4
 	mov	r0, r3
 	adds	r7, r7, #12
 	mov	sp, r7
 	@ sp needed
-	pop	{r4, r7, pc}
-.L10:
+	ldr	r7, [sp], #4
+	bx	lr
+.L26:
 	.align	2
-.L9:
-	.word	crc_32_tab
-	.size	crc32pseudo, .-crc32pseudo
+.L25:
+	.word	1107427328
+	.size	pulseIn, .-pulseIn
+	.section	.text.getUltrasonicReading,"ax",%progbits
+	.align	1
+	.global	getUltrasonicReading
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	getUltrasonicReading, %function
+getUltrasonicReading:
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #8
+	add	r7, sp, #0
+	ldr	r3, .L29
+	mov	r2, #512
+	str	r2, [r3, #24]
+	movs	r0, #2
+	bl	delay
+	ldr	r3, .L29
+	mov	r2, #512
+	str	r2, [r3, #40]
+	movs	r0, #5
+	bl	delay
+	ldr	r3, .L29
+	mov	r2, #512
+	str	r2, [r3, #24]
+	bl	pulseIn
+	str	r0, [r7, #4]
+	ldr	r3, [r7, #4]
+	mov	r0, r3
+	adds	r7, r7, #8
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, pc}
+.L30:
+	.align	2
+.L29:
+	.word	1107427328
+	.size	getUltrasonicReading, .-getUltrasonicReading
+	.section	.text.run_ultrasonic,"ax",%progbits
+	.align	1
+	.global	run_ultrasonic
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	run_ultrasonic, %function
+run_ultrasonic:
+	@ args = 0, pretend = 0, frame = 16
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #16
+	add	r7, sp, #0
+	str	r0, [r7, #4]
+	movs	r3, #0
+	str	r3, [r7, #8]
+	movs	r3, #0
+	str	r3, [r7, #12]
+	b	.L32
+.L33:
+	bl	getUltrasonicReading
+	mov	r2, r0
+	ldr	r3, [r7, #4]
+	sdiv	r3, r2, r3
+	ldr	r2, [r7, #8]
+	add	r3, r3, r2
+	str	r3, [r7, #8]
+	ldr	r3, [r7, #12]
+	adds	r3, r3, #1
+	str	r3, [r7, #12]
+.L32:
+	ldr	r2, [r7, #12]
+	ldr	r3, [r7, #4]
+	cmp	r2, r3
+	blt	.L33
+	ldr	r3, [r7, #8]
+	mov	r0, r3
+	adds	r7, r7, #16
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, pc}
+	.size	run_ultrasonic, .-run_ultrasonic
+	.section	.text.run_temperature,"ax",%progbits
+	.align	1
+	.global	run_temperature
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	run_temperature, %function
+run_temperature:
+	@ args = 0, pretend = 0, frame = 16
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #16
+	add	r7, sp, #0
+	str	r0, [r7, #4]
+	movs	r3, #0
+	str	r3, [r7, #8]
+	movs	r3, #0
+	str	r3, [r7, #12]
+	b	.L36
+.L37:
+	bl	get_temperature
+	mov	r3, r0
+	mov	r2, r3
+	ldr	r3, [r7, #4]
+	sdiv	r3, r2, r3
+	ldr	r2, [r7, #8]
+	add	r3, r3, r2
+	str	r3, [r7, #8]
+	ldr	r3, [r7, #12]
+	adds	r3, r3, #1
+	str	r3, [r7, #12]
+.L36:
+	ldr	r2, [r7, #12]
+	ldr	r3, [r7, #4]
+	cmp	r2, r3
+	blt	.L37
+	ldr	r3, [r7, #8]
+	mov	r0, r3
+	adds	r7, r7, #16
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, pc}
+	.size	run_temperature, .-run_temperature
+	.section	.text.run_humidity,"ax",%progbits
+	.align	1
+	.global	run_humidity
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	run_humidity, %function
+run_humidity:
+	@ args = 0, pretend = 0, frame = 16
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r7, lr}
+	sub	sp, sp, #16
+	add	r7, sp, #0
+	str	r0, [r7, #4]
+	movs	r3, #0
+	str	r3, [r7, #8]
+	movs	r3, #0
+	str	r3, [r7, #12]
+	b	.L40
+.L41:
+	bl	get_humidity
+	mov	r3, r0
+	mov	r2, r3
+	ldr	r3, [r7, #4]
+	sdiv	r3, r2, r3
+	ldr	r2, [r7, #8]
+	add	r3, r3, r2
+	str	r3, [r7, #8]
+	ldr	r3, [r7, #12]
+	adds	r3, r3, #1
+	str	r3, [r7, #12]
+.L40:
+	ldr	r2, [r7, #12]
+	ldr	r3, [r7, #4]
+	cmp	r2, r3
+	blt	.L41
+	ldr	r3, [r7, #8]
+	mov	r0, r3
+	adds	r7, r7, #16
+	mov	sp, r7
+	@ sp needed
+	pop	{r7, pc}
+	.size	run_humidity, .-run_humidity
+	.comm	send_data,4,4
+	.section	.text.read_command,"ax",%progbits
+	.align	1
+	.global	read_command
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	read_command, %function
+read_command:
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	@ link register save eliminated.
+	push	{r7}
+	sub	sp, sp, #12
+	add	r7, sp, #0
+	str	r0, [r7, #4]
+	str	r1, [r7]
+	b	.L44
+.L45:
+	ldr	r3, [r7]
+	ldrb	r2, [r3]	@ zero_extendqisi2
+	ldr	r3, [r7, #4]
+	strb	r2, [r3]
+	ldr	r3, [r7, #4]
+	adds	r3, r3, #1
+	str	r3, [r7, #4]
+	ldr	r3, [r7]
+	adds	r3, r3, #1
+	str	r3, [r7]
+.L44:
+	ldr	r3, [r7]
+	ldrb	r3, [r3]	@ zero_extendqisi2
+	cmp	r3, #58
+	bne	.L45
+	nop
+	adds	r7, r7, #12
+	mov	sp, r7
+	@ sp needed
+	ldr	r7, [sp], #4
+	bx	lr
+	.size	read_command, .-read_command
+	.comm	cmd,1,1
+	.section	.rodata
+	.align	2
+.LC0:
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.byte	97
+	.section	.text.process_command,"ax",%progbits
+	.align	1
+	.global	process_command
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	process_command, %function
+process_command:
+	@ args = 0, pretend = 0, frame = 16
+	@ frame_needed = 1, uses_anonymous_args = 0
+	push	{r4, r7, lr}
+	sub	sp, sp, #20
+	add	r7, sp, #0
+	ldr	r3, .L53
+	mov	r4, r7
+	ldm	r3, {r0, r1, r2, r3}
+	stm	r4, {r0, r1, r2, r3}
+	mov	r3, r7
+	ldr	r1, .L53+4
+	mov	r0, r3
+	bl	read_command
+	ldrb	r3, [r7]	@ zero_extendqisi2
+	cmp	r3, #116
+	beq	.L48
+	cmp	r3, #117
+	beq	.L49
+	cmp	r3, #97
+	beq	.L50
+	b	.L52
+.L49:
+	ldrb	r3, [r7, #1]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #2]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L53+8
+	str	r3, [r2]
+	b	.L51
+.L48:
+	ldrb	r3, [r7, #1]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #2]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L53+12
+	str	r3, [r2]
+	ldr	r3, .L53+12
+	ldr	r3, [r3]
+	mov	r0, r3
+	bl	SECURE_record_output_data
+	ldrb	r3, [r7, #4]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #5]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L53+16
+	str	r3, [r2]
+	ldr	r3, .L53+16
+	ldr	r3, [r3]
+	mov	r0, r3
+	bl	SECURE_record_output_data
+	b	.L51
+.L50:
+	ldrb	r3, [r7, #1]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #2]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L53+20
+	str	r3, [r2]
+	ldrb	r3, [r7, #4]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #5]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L53+8
+	str	r3, [r2]
+	ldrb	r3, [r7, #7]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #8]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L53+12
+	str	r3, [r2]
+	ldrb	r3, [r7, #10]	@ zero_extendqisi2
+	lsls	r3, r3, #8
+	ldrb	r2, [r7, #11]	@ zero_extendqisi2
+	orrs	r3, r3, r2
+	ldr	r2, .L53+16
+	str	r3, [r2]
+.L52:
+	nop
+.L51:
+	ldrb	r2, [r7]	@ zero_extendqisi2
+	ldr	r3, .L53+24
+	strb	r2, [r3]
+	nop
+	adds	r7, r7, #20
+	mov	sp, r7
+	@ sp needed
+	pop	{r4, r7, pc}
+.L54:
+	.align	2
+.L53:
+	.word	.LC0
+	.word	input
+	.word	ult_runs
+	.word	temp_runs
+	.word	hum_runs
+	.word	seq_runs
+	.word	cmd
+	.size	process_command, .-process_command
+	.comm	sensor_action,4,4
+	.section	.text.record_output_data,"ax",%progbits
+	.align	1
+	.global	record_output_data
+	.syntax unified
+	.thumb
+	.thumb_func
+	.fpu fpv5-sp-d16
+	.type	record_output_data, %function
+record_output_data:
+	@ args = 0, pretend = 0, frame = 8
+	@ frame_needed = 1, uses_anonymous_args = 0
+	@ link register save eliminated.
+	push	{r7}
+	sub	sp, sp, #12
+	add	r7, sp, #0
+	mov	r3, r0
+	strb	r3, [r7, #7]
+	ldrb	r3, [r7, #7]
+	mvns	r3, r3
+	uxtb	r3, r3
+	mov	r0, r3
+	adds	r7, r7, #12
+	mov	sp, r7
+	@ sp needed
+	ldr	r7, [sp], #4
+	bx	lr
+	.size	record_output_data, .-record_output_data
 	.section	.text.application,"ax",%progbits
 	.align	1
 	.global	application
@@ -369,20 +716,83 @@ crc32pseudo:
 	.fpu fpv5-sp-d16
 	.type	application, %function
 application:
-	@ args = 0, pretend = 0, frame = 8
+	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0
 	push	{r7, lr}
-	sub	sp, sp, #8
 	add	r7, sp, #0
-	bl	crc32pseudo
-	str	r0, [r7, #4]
-	ldr	r3, [r7, #4]
-	mov	r0, r3
-	bl	SECURE_record_output_data
+	bl	process_command
+	ldr	r3, .L63
+	ldrb	r3, [r3]	@ zero_extendqisi2
+	cmp	r3, #116
+	beq	.L59
+	cmp	r3, #117
+	beq	.L60
+	cmp	r3, #97
+	beq	.L61
+	b	.L62
+.L60:
+	movs	r0, #117
+	bl	record_output_data
+	mov	r2, r0
+	ldr	r3, .L63+4
+	str	r2, [r3]
+	ldr	r3, .L63+8
+	ldr	r2, .L63+12
+	str	r2, [r3]
+	ldr	r3, .L63+16
+	ldr	r3, [r3]
+	ldr	r2, .L63+4
+	str	r3, [r2]
+	b	.L62
+.L59:
+	movs	r0, #116
+	bl	record_output_data
+	mov	r2, r0
+	ldr	r3, .L63+4
+	str	r2, [r3]
+	ldr	r3, .L63+8
+	ldr	r2, .L63+20
+	str	r2, [r3]
+	ldr	r3, .L63+24
+	ldr	r3, [r3]
+	ldr	r2, .L63+4
+	str	r3, [r2]
+	b	.L62
+.L61:
+	movs	r0, #97
+	bl	record_output_data
+	mov	r2, r0
+	ldr	r3, .L63+4
+	str	r2, [r3]
+	ldr	r3, .L63+8
+	ldr	r2, .L63+28
+	str	r2, [r3]
+	ldr	r3, .L63+32
+	ldr	r3, [r3]
+	ldr	r2, .L63+4
+	str	r3, [r2]
 	nop
-	adds	r7, r7, #8
-	mov	sp, r7
-	@ sp needed
+.L62:
+	ldr	r3, .L63+8
+	ldr	r3, [r3]
+	ldr	r2, .L63+4
+	ldr	r2, [r2]
+	uxtb	r2, r2
+	mov	r0, r2
+	blx	r3
+	nop
 	pop	{r7, pc}
+.L64:
+	.align	2
+.L63:
+	.word	cmd
+	.word	runs
+	.word	sensor_action
+	.word	run_ultrasonic
+	.word	ult_runs
+	.word	run_temperature
+	.word	temp_runs
+	.word	run_humidity
+	.word	hum_runs
 	.size	application, .-application
 	.ident	"GCC: (15:6.3.1+svn253039-1build1) 6.3.1 20170620"

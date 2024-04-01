@@ -31,23 +31,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  13 .ARM.attributes 00000036  00000000  00000000  0002e060  2**0
                   CONTENTS, READONLY
- 14 .debug_info   000173e2  00000000  00000000  0002e096  2**0
+ 14 .debug_info   00017370  00000000  00000000  0002e096  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_abbrev 000036fb  00000000  00000000  00045478  2**0
+ 15 .debug_abbrev 000036fb  00000000  00000000  00045406  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_aranges 00001510  00000000  00000000  00048b78  2**3
+ 16 .debug_aranges 00001510  00000000  00000000  00048b08  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_ranges 000013a8  00000000  00000000  0004a088  2**3
+ 17 .debug_ranges 000013a8  00000000  00000000  0004a018  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_macro  0000665d  00000000  00000000  0004b430  2**0
+ 18 .debug_macro  0000665d  00000000  00000000  0004b3c0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_line   00018d1e  00000000  00000000  00051a8d  2**0
+ 19 .debug_line   00018d1e  00000000  00000000  00051a1d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_str    001111b8  00000000  00000000  0006a7ab  2**0
+ 20 .debug_str    00111155  00000000  00000000  0006a73b  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .comment      00000050  00000000  00000000  0017b963  2**0
+ 21 .comment      00000050  00000000  00000000  0017b890  2**0
                   CONTENTS, READONLY
- 22 .debug_frame  000056ec  00000000  00000000  0017b9b4  2**2
+ 22 .debug_frame  000056ec  00000000  00000000  0017b8e0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -3875,8 +3875,6 @@ void record_output_data(uint32_t value){
  c002114:	30004224 	.word	0x30004224
 
 0c002118 <CFA_ENGINE_start>:
-}
-#endif
 
 /* -------------  NON SECURE CALLABLES */
 
@@ -4820,7 +4818,7 @@ void _attest_memory(){
  c002700:	6013      	str	r3, [r2, #0]
 	// Compute sigle hash of non-secure memory
 	Hacl_SHA2_256_hash(report_secure.mem_hash, (uint8_t*)(NONSECURE_FLASH_START), NONSECURE_FLASH_SIZE);
- c002702:	f640 6258 	movw	r2, #3672	; 0xe58
+ c002702:	f640 6298 	movw	r2, #3736	; 0xe98
  c002706:	490a      	ldr	r1, [pc, #40]	; (c002730 <_attest_memory+0x3c>)
  c002708:	480a      	ldr	r0, [pc, #40]	; (c002734 <_attest_memory+0x40>)
  c00270a:	f7ff fc18 	bl	c001f3e <Hacl_SHA2_256_hash>

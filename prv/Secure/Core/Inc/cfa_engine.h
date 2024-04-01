@@ -90,7 +90,7 @@ typedef funcptr funcptr_NS;
 
 // Update by inspecting objdump output
 #define NONSECURE_FLASH_START			0x080401f8
-#define	NONSECURE_FLASH_END				0x0804104c
+#define	NONSECURE_FLASH_END				0x0804108c
 #define ENDS_IN_WORD					1
 #define	NONSECURE_FLASH_SIZE			NONSECURE_FLASH_END-NONSECURE_FLASH_START+2+ENDS_IN_WORD*2
 

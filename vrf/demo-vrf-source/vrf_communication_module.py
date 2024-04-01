@@ -283,7 +283,7 @@ def verify_report():
         return comm_protocol_messages.CONTINUE_APPLICATION
 
 def generate_response():
-    print("------------- USE PRIV KEY TO SIGN ---------------")
+    # print("------------- USE PRIV KEY TO SIGN ---------------")
     # sk_str = b'\x89\x8b\x0c\xde\xab\xb5\x86\x97<\r\xa9\x15\x8e\x01\x84\xe7C\xf7|5\xb9\xc2\xb8\xf7\x93b\x92\x87\xcaY\x8b\xb2'
 
     # sk = SigningKey.from_string(sk_str, curve=NIST256p, hashfunc=sha256)
@@ -291,12 +291,12 @@ def generate_response():
     
     # add challenge    
     cfa_response.New_Chal = pconfig.challenge
-    print("cfa_response.New_Chal: "+str(cfa_response.New_Chal))
+    # print("cfa_response.New_Chal: "+str(cfa_response.New_Chal))
     cfa_response.response_bytes = cfa_response.New_Chal
 
     # Verification result
     cfa_response.VerifyResult = b'\x01'
-    print("cfa_response.VerifyResult: "+str(cfa_response.VerifyResult))
+    # print("cfa_response.VerifyResult: "+str(cfa_response.VerifyResult))
     cfa_response.response_bytes += cfa_response.VerifyResult
 
     # Signature
@@ -305,7 +305,7 @@ def generate_response():
     key = sk[:32]
     cfa_response.Signature = hmac.new(key, msg=cfa_response.response_bytes, digestmod=hashlib.sha256).digest()
     # cfa_response.Signature += cfa_response.Signature
-    print("cfa_response.Signature: "+str(cfa_response.Signature))
+    # print("cfa_response.Signature: "+str(cfa_response.Signature))
 
 
 def send_serial(data):
@@ -330,17 +330,17 @@ def send_initial_message():
 
 def send_response():
     comm_start = time.perf_counter()
-    printyellow("Sending new challange ...")
-    print(str(pconfig.challenge))
+    # printyellow("Sending new challange ...")
+    # print(str(pconfig.challenge))
     send_serial(pconfig.challenge)
-    printyellow("Waiting prv response ...")
+    # printyellow("Waiting prv response ...")
     # pconfig.serial.read_until(comm_protocol_messages.BEGGINING_OF_CHAL)
     # prv_chal = pconfig.serial.read(pconfig.CHAL_SIZE)
     # printgreen("\nPrv Challange:")
     # print(str(prv_chal)+" ("+str(type(prv_chal))+")"+'\n')
     # cfa_report.Prv_Chl = prv_chal
 
-    printyellow("Sending Verifier Signature")
+    # printyellow("Sending Verifier Signature")
     send_serial(cfa_response.Signature)
     # echo = pconfig.serial.read(pconfig.SIGNATURE_SIZE)
     # print("echo: "+str(echo))
@@ -348,7 +348,7 @@ def send_response():
     # pconfig.comm_time += comm_end - comm_start
 
     # pconfig.prv_verify_resp_time = pconfig.serial.read(4)
-    print(f"send_response time: {1000*(comm_end-comm_start)}")
+    # print(f"send_response time: {1000*(comm_end-comm_start)}")
     print(" ")
     return
 
@@ -584,7 +584,7 @@ def start_protocol():
         send_resp_time += 1000*(send_resp_end-send_resp_start)
         
         last_part = 1000*(verify_time_stop-verify_time_start)+1000*(send_resp_end-send_resp_start)
-        print(f'Last part: {last_part} ms')
+        # print(f'Last part: {last_part} ms')
 
     pconfig.end_time = time.perf_counter()
 
