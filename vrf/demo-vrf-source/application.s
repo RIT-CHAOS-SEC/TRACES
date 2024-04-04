@@ -15,11 +15,40 @@
 	.section	.data.input,"aw",%progbits
 	.align	2
 	.type	input, %object
-	.size	input, 4
+	.size	input, 33
 input:
-	.byte	117
-	.byte	0
-	.byte	16
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	98
+	.byte	-76
+	.byte	6
+	.byte	4
+	.byte	8
+	.byte	-16
+	.byte	-1
+	.byte	3
+	.byte	32
+	.byte	-51
+	.byte	5
+	.byte	4
+	.byte	8
 	.byte	58
 	.global	data
 	.section	.bss.data,"aw",%nobits

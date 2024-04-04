@@ -212,7 +212,8 @@ def instrment_asm(directory, input_file, output_file):
 	# print(f"bt = {bt}")
 	i = 0
 	new_lines = []
-	while i < len(lines):
+	debug_continue = True
+	while i < len(lines) and debug_continue:
 		x = lines[i]
 		parsed = x.split('\t')
 		if ".file" in x or 'nop' in x:
@@ -249,6 +250,7 @@ def instrment_asm(directory, input_file, output_file):
 				new_lines.append(x)
 				conditional_dests.remove(label)
 			elif label in conditional_dests:
+
 				# is a loop
 				label = parsed[0].split(":")[0]
 				j = i+1
@@ -265,76 +267,93 @@ def instrment_asm(directory, input_file, output_file):
 				# print(f'Label line: {lines[j]}')
 				# print(f'Cond line: {lines[j-1]}')
 				# a = input()
-
+			
 				if empty_Loop:
 					_, inst, args = lines[j-1].split('\t')
 					comp_reg, comp_base = args.split(', ')
 					
+					if label == '.L45':
+						print(f'{comp_reg, comp_base}')
 					# traverse back until find where comp_reg is first written
 					# print(f'comp_reg: {comp_reg}')
 					loop_end_l = j
-					while not ('mov' in lines[j] and comp_reg in lines[j]) and not ('mov' in lines[j] and comp_base in lines[j]):
+					while not ('mov' in lines[j] and comp_reg in lines[j]) and not ('mov' in lines[j] and comp_base in lines[j]) and not ('push' in lines[j]):
 						j -= 1
 					loop_start_l = j
-					# # assumed format of (comp_reg, comp_base), but was actually (comp_base, comp_reg)
-					# if ('mov' in lines[j] and comp_base in lines[j]):
-					# 	tmp = comp_reg
-					# 	comp_reg = comp_base
-					# 	comp_base = tmp 
-					print(f'Found in lines at {j}: {lines[j]}')
-					dec = 0
-					while not ('mov' in new_lines[dec] and comp_reg in new_lines[dec]) and not ('mov' in new_lines[dec] and comp_base in new_lines[dec]):
-						dec -=1
-					dec = len(new_lines)+dec
-					# print(f'len(new_lines): {len(new_lines)}')
-					# print(f'dec: {dec}')
-					
-					print(f'Found in new_lines at {dec}: {new_lines[dec]}')
-					if '#' in comp_base:
-						# a = input()
-						## insert instrumentation to log the br-taken address and loop condition
-						inserted = []
-						inserted.append(f'\tadr\tr10, {label}')
-						inserted.append(f'\tmov\tr11, {comp_base}')
-						inserted.append(f'\tbl\t{trampoline}_log_loop_cond')
-						new_lines = new_lines[:dec] + inserted + new_lines[dec:] + [x]
+					if 'push' in lines[j]:
+						# is modified or input, so can't optimize
+						empty_Loop = False
+
 					else:
-						## loop base is a reg. check if it is also modified in the loop
-						notModified = True
-						load_args = None
-						idxs = list(range(loop_start_l+1, loop_end_l-1))[::-1]
-						for j in idxs:
-							print(lines[j])
-							if (comp_base in lines[j] and ('str' not in lines[j] and 'ldr' not in lines[j])):
-								notModified = False
-								print(f'modified here')
-							if (comp_base in lines[j] and 'ldr' in lines[j]):
-								_, _, load_args = lines[j].split('\t')
-								load_args = load_args.replace(comp_base+',', '')
-								break
-								# print(f"load_args: {load_args}")
-								# a = input()
-								# print(lines[j])
-						print(f'{comp_base} not Modified? --> {notModified}')	
-					
-						if notModified:
-							# if not modified, log the initial value
-							## add the optimized version
+						# # assumed format of (comp_reg, comp_base), but was actually (comp_base, comp_reg)
+						# if ('mov' in lines[j] and comp_base in lines[j]):
+						# 	tmp = comp_reg
+						# 	comp_reg = comp_base
+						# 	comp_base = tmp 
+						# print(f'Found in lines at {j}: {lines[j]}')
+						dec = 0
+						while not ('mov' in new_lines[dec] and comp_reg in new_lines[dec]) and not ('mov' in new_lines[dec] and comp_base in new_lines[dec]) and not ('push' in lines[j]):
+							dec -=1
+						dec = len(new_lines)+dec
+						# print(f'len(new_lines): {len(new_lines)}')
+						# print(f'dec: {dec}')
+						
+						# print(f'Found in new_lines at {dec}: {new_lines[dec]}')
+						if '#' in comp_base:
+							print(dec)
+							# a = input()
+							## insert instrumentation to log the br-taken address and loop condition
 							inserted = []
 							inserted.append(f'\tadr\tr10, {label}')
-							if load_args is not None:
-								inserted.append(f'\tldr\tr11, {load_args}')
-							else:
-								inserted.append(f'\tmov\tr11, {comp_base}')
+							inserted.append(f'\tmov\tr11, {comp_base}')
 							inserted.append(f'\tbl\t{trampoline}_log_loop_cond')
 							new_lines = new_lines[:dec] + inserted + new_lines[dec:] + [x]
+							# print('GOT HERE')
+							# if label == '.L45':
+							# 	print(len(new_lines))
+							# 	debug_continue = False
 						else:
-							# if modified, log normally
-							new_lines.append(x)
-							new_lines.append("\tbl\t"+trampoline_cond_br+'_taken')
-						# a = input()
-		
-				else:
+							## loop base is a reg. check if it is also modified in the loop
+							notModified = True
+							load_args = None
+							idxs = list(range(loop_start_l+1, loop_end_l-1))[::-1]
+							print(idxs)
+							for j in idxs:
+								print(lines[j])
+								if (comp_base in lines[j] and ('str' not in lines[j] and 'ldr' not in lines[j])):
+									notModified = False
+									print(f'modified here')
+								if (comp_base in lines[j] and 'ldr' in lines[j]):
+									_, _, load_args = lines[j].split('\t')
+									load_args = load_args.replace(comp_base+',', '')
+									break
+									# print(f"load_args: {load_args}")
+									# a = input()
+									# print(lines[j])
+							print(f'{comp_base} not Modified? --> {notModified}')	
+							print(f'load_args: {load_args}')
+							if notModified:
+								# if not modified, log the initial value
+								## add the optimized version
+								inserted = []
+								inserted.append(f'\tadr\tr10, {label}')
+								if load_args is not None:
+									inserted.append(f'\tldr\tr11, {load_args}')
+								else:
+									inserted.append(f'\tmov\tr11, {comp_base}')
+								inserted.append(f'\tbl\t{trampoline}_log_loop_cond')
+								print('inserted: ')
+								for isr in inserted:
+									print(isr)
+								print(f'dec: {dec}')
+								new_lines = new_lines[:dec] + inserted + new_lines[dec:] + [x]
+							else:
+								# if modified, log normally
+								new_lines.append(x)
+								new_lines.append("\tbl\t"+trampoline_cond_br+'_taken')
+							# a = input()
+			
+				if not empty_Loop:
 					# there is internal branching, so instrument in typical manner
 					debug_print("------ instrumenting cond branch dest ("+x+")", file=outfile)
 					# print(x, file=outfile)
@@ -350,6 +369,7 @@ def instrment_asm(directory, input_file, output_file):
 			# print(x, file=outfile)	
 		i += 1
 	outfile = open(outfile_name, "w")
+	print(len(new_lines))
 	for line in new_lines:
 	    outfile.write(line + "\n")
 	outfile.close()

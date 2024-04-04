@@ -255,10 +255,6 @@ def verify_report():
         cfg = load("objects/cfg.bin")
 
         valid_cflog, current_node, offending_node, cflog_index, shadow_stack_violation, shadow_stack_addr = verify(cfg, cflog, pconfig.app_start_addr)
-        
-        printblue("-----------------------------------------------------------")
-        printblue(f"CFLOG SIZE: {len(cflog)} entries = {len(cflog)*4} Bytes")
-        printblue("-----------------------------------------------------------")
 
         if valid_cflog:
             print("VALID CFLOG")
