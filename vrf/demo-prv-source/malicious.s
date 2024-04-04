@@ -44,7 +44,7 @@ input:
 	.byte	-1
 	.byte	3
 	.byte	32
-	.byte	-43
+	.byte	-51
 	.byte	5
 	.byte	4
 	.byte	8
@@ -565,9 +565,6 @@ run_humidity:
 	blt	.L41
 	bl	SECURE_log_cond_br_not_taken
 	ldr	r3, [r7, #8]
-	adr	r10, .L45
-	mov	r11, #58
-	bl	SECURE_log_loop_cond
 	mov	r0, r3
 	adds	r7, r7, #16
 	mov	sp, r7
@@ -595,6 +592,7 @@ read_command:
 	str	r1, [r7]
 	b	.L44
 .L45:
+	bl	SECURE_log_cond_br_taken
 	ldr	r3, [r7]
 	ldrb	r2, [r3]	@ zero_extendqisi2
 	ldr	r3, [r7, #4]
