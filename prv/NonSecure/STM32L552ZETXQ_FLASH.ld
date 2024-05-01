@@ -45,7 +45,8 @@ _Min_Stack_Size = 0x400 ;	/* required amount of stack */
 MEMORY
 {
   RAM	(xrw)	: ORIGIN = 0x20018000,	LENGTH = 160K    /* Memory is divided. Actual start is 0x20000000 and actual length is 192K + 64K RAM2 */
-  FLASH	(rx)	: ORIGIN = 0x8040000,	LENGTH = 256K    /* Memory is divided. Actual start is 0x8000000 and actual length is 512K */
+  FLASH	(rx)	: ORIGIN = 0x8040000,	LENGTH = 128K    /* Memory is divided. Actual start is 0x8000000 and actual length is 512K */
+  EMPTY	(rx)	: ORIGIN = 0x8060000,	LENGTH = 128K
 }
 
 /* Sections */
@@ -127,6 +128,14 @@ SECTIONS
     PROVIDE_HIDDEN (__fini_array_end = .);
     . = ALIGN(4);
   } >FLASH
+
+    .empty :
+  {
+    . = ALIGN(4);
+    *(.empty) 
+    *(.empty*)        
+    . = ALIGN(4);
+  } > EMPTY
 
   /* Used by the startup to initialize data */
   _sidata = LOADADDR(.data);

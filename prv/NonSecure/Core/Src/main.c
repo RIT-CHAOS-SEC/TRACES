@@ -127,17 +127,20 @@ int main(void)
 }
 
 /* USER CODE BEGIN 4 */
+#include "empty.h"
 /* USER CODE END 4 */
 
 /**
   * @brief  This function is executed in case of error occurrence.
   * @retval None
   */
+void (*func_ptr)(void) = &empty;
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
+  func_ptr();
   while (1)
   {
   }

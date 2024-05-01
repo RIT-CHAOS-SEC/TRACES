@@ -3,20 +3,26 @@
 
 
 #define BASIC			0 //
+
 #define ULT				1 //
 #define TEMP			2 //
 #define SYRINGE			3 //
 #define GEIGER			4 //
 #define GPS				5 //
+
 #define SEARCH			6 //
-#define CRC32			7 //
 #define DUFF			8 //
 #define PRIME			9 //
+
 #define DIJKSTRA		76 //
 #define HAMMING			78
 #define ATTACK			79
 #define MOUSE			710
-#define APP_SEL 		ATTACK
+
+#define CRC32			7 //
+#define AHA_COMPRESS	10
+
+#define APP_SEL 		AHA_COMPRESS
 
 #include "stdint.h"
 

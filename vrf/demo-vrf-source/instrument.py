@@ -280,7 +280,8 @@ def instrment_asm(directory, input_file, output_file):
 					while not ('mov' in lines[j] and comp_reg in lines[j]) and not ('mov' in lines[j] and comp_base in lines[j]) and not ('push' in lines[j]):
 						j -= 1
 					loop_start_l = j
-					if 'push' in lines[j]:
+					# if 'push' in lines[j]:
+					if True:
 						# is modified or input, so can't optimize
 						empty_Loop = False
 
