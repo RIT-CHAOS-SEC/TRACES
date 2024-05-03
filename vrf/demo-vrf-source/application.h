@@ -11,18 +11,24 @@
 #define GPS				5 //
 
 #define SEARCH			6 //
-#define DUFF			8 //
-#define PRIME			9 //
+#define DUFF			7 //
+#define PRIME			8 //
 
 #define DIJKSTRA		76 //
 #define HAMMING			78
 #define ATTACK			79
 #define MOUSE			710
 
-#define CRC32			7 //
-#define AHA_COMPRESS	10
+#define CRC32			9 //
+#define LIBBS			10 //
+#define FIBCALL			11  //
+#define COVER			12  //
+#define LCDNUM			13  //
+#define JFDCTINT	    14  //
+#define AHA_COMPRESS	15 ///
 
-#define APP_SEL 		AHA_COMPRESS
+
+#define APP_SEL 		JFDCTINT
 
 #include "stdint.h"
 
@@ -97,6 +103,40 @@ long run_temperature(int);
 long run_humidity(int);
 void process_command(void);
 int record_output_data(char data);
+#endif
+
+#if APP_SEL == JFDCTINT
+#define DCT_ISLOW_SUPPORTED
+#define DCTSIZE 8
+#define BITS_IN_JSAMPLE 8
+#define MULTIPLY16C16(var,const)  ((var) * (const))
+#define DCTELEM int
+#define INT32   int
+#define GLOBAL
+#define RIGHT_SHIFT(x,shft)	((x) >> (shft))
+#define ONE	((INT32) 1)
+#define DESCALE(x,n)  RIGHT_SHIFT((x) + (ONE << ((n)-1)), n)
+#define SHIFT_TEMPS
+#define FIX_0_298631336  ((INT32)  2446)	/* FIX(0.298631336) */
+#define FIX_0_390180644  ((INT32)  3196)	/* FIX(0.390180644) */
+#define FIX_0_541196100  ((INT32)  4433)	/* FIX(0.541196100) */
+#define FIX_0_765366865  ((INT32)  6270)	/* FIX(0.765366865) */
+#define FIX_0_899976223  ((INT32)  7373)	/* FIX(0.899976223) */
+#define FIX_1_175875602  ((INT32)  9633)	/* FIX(1.175875602) */
+#define FIX_1_501321110  ((INT32)  12299)	/* FIX(1.501321110) */
+#define FIX_1_847759065  ((INT32)  15137)	/* FIX(1.847759065) */
+#define FIX_1_961570560  ((INT32)  16069)	/* FIX(1.961570560) */
+#define FIX_2_053119869  ((INT32)  16819)	/* FIX(2.053119869) */
+#define FIX_2_562915447  ((INT32)  20995)	/* FIX(2.562915447) */
+#define FIX_3_072711026  ((INT32)  25172)	/* FIX(3.072711026) */
+// bits_in_jsample == 8
+#define CONST_BITS  13
+#define PASS1_BITS  2
+#define MULTIPLY(var,const)  MULTIPLY16C16(var,const)
+//else
+// #define CONST_BITS  13
+// #define PASS1_BITS  1		/* lose a little precision to avoid overflow */
+// #define MULTIPLY(var,const)  ((var) * (const))
 #endif
 
 void application();

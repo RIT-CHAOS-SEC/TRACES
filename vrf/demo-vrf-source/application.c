@@ -4,6 +4,733 @@
 #include "stm32l5xx_hal_tim.h"
 #include "core_cm33.h"
 
+#if APP_SEL == JFDCTINT
+
+DCTELEM data[64];
+
+char user_input[89] =  {0x12, 0x34, 0x12, 0x34,
+                        0x00, 0x00, 0x00, 0x00,
+                        0x07, 0x00, 0x00, 0x00,
+                        0x04, 0x00, 0x00, 0xFF,
+                        0xA8, 0x6C, 0xE7, 0x05,
+                        0xB0, 0xFF, 0x03, 0x20,
+                        0xDC, 0xFF, 0x03, 0x20,
+                        0x00, 0x00, 0x02, 0x42,
+                        0x07, 0x00, 0x00, 0x00,
+                        0x00, 0x02, 0x00, 0x00,
+                        0xFF, 0xFF, 0xF7, 0xAB,
+                        0x0A, 0x00, 0x00, 0x00,
+                        0xD0, 0xFF, 0x03, 0x20,
+                        0xD0, 0xFF, 0x03, 0x20,
+                        0x04, 0xE4, 0x44, 0xB3,
+                        0x00, 0x00, 0x00, 0x00,
+                        0x38, 0x07, 0x04, 0x08,
+                        0xC1, 0x22, 0xA1, 0xAE,
+                        0x40, 0x00, 0x00, 0x00,
+                        0x00, 0x00, 0x00, 0x00,
+                        0xF0, 0xFF, 0x03, 0x20,
+                        0x41, 0x07, 0x04, 0x08, // address 8040740+1
+                        1};
+
+void read_data(char * entry){
+    // simulate receive
+    int  i = 0;
+    while(user_input[i] != 1){
+        // save read value
+        entry[i] = user_input[i];
+        i++;
+    }
+}
+
+
+GLOBAL void
+jpeg_fdct_islow ()
+{
+
+  char buffer[4];
+  read_data(buffer);
+
+  INT32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
+  INT32 tmp10, tmp11, tmp12, tmp13;
+  INT32 z1, z2, z3, z4, z5;
+  DCTELEM *dataptr;
+  int ctr;
+  SHIFT_TEMPS
+
+  /* Pass 1: process rows. */
+  /* Note results are scaled up by sqrt(8) compared to a true DCT; */
+  /* furthermore, we scale the results by 2**PASS1_BITS. */
+
+  dataptr = data;
+  for (ctr = DCTSIZE-1; ctr >= 0; ctr--) {
+    tmp0 = dataptr[0] + dataptr[7];
+    tmp7 = dataptr[0] - dataptr[7];
+    tmp1 = dataptr[1] + dataptr[6];
+    tmp6 = dataptr[1] - dataptr[6];
+    tmp2 = dataptr[2] + dataptr[5];
+    tmp5 = dataptr[2] - dataptr[5];
+    tmp3 = dataptr[3] + dataptr[4];
+    tmp4 = dataptr[3] - dataptr[4];
+
+    /* Even part per LL&M figure 1 --- note that published figure is faulty;
+     * rotator "sqrt(2)*c1" should be "sqrt(2)*c6".
+     */
+
+    tmp10 = tmp0 + tmp3;
+    tmp13 = tmp0 - tmp3;
+    tmp11 = tmp1 + tmp2;
+    tmp12 = tmp1 - tmp2;
+
+    dataptr[0] = (DCTELEM) ((tmp10 + tmp11) << PASS1_BITS);
+    dataptr[4] = (DCTELEM) ((tmp10 - tmp11) << PASS1_BITS);
+
+    z1 = MULTIPLY(tmp12 + tmp13, FIX_0_541196100);
+    dataptr[2] = (DCTELEM) DESCALE(z1 + MULTIPLY(tmp13, FIX_0_765366865),
+           CONST_BITS-PASS1_BITS);
+    dataptr[6] = (DCTELEM) DESCALE(z1 + MULTIPLY(tmp12, - FIX_1_847759065),
+           CONST_BITS-PASS1_BITS);
+
+    /* Odd part per figure 8 --- note paper omits factor of sqrt(2).
+     * cK represents cos(K*pi/16).
+     * i0..i3 in the paper are tmp4..tmp7 here.
+     */
+
+    z1 = tmp4 + tmp7;
+    z2 = tmp5 + tmp6;
+    z3 = tmp4 + tmp6;
+    z4 = tmp5 + tmp7;
+    z5 = MULTIPLY(z3 + z4, FIX_1_175875602); /* sqrt(2) * c3 */
+
+    tmp4 = MULTIPLY(tmp4, FIX_0_298631336); /* sqrt(2) * (-c1+c3+c5-c7) */
+    tmp5 = MULTIPLY(tmp5, FIX_2_053119869); /* sqrt(2) * ( c1+c3-c5+c7) */
+    tmp6 = MULTIPLY(tmp6, FIX_3_072711026); /* sqrt(2) * ( c1+c3+c5-c7) */
+    tmp7 = MULTIPLY(tmp7, FIX_1_501321110); /* sqrt(2) * ( c1+c3-c5-c7) */
+    z1 = MULTIPLY(z1, - FIX_0_899976223); /* sqrt(2) * (c7-c3) */
+    z2 = MULTIPLY(z2, - FIX_2_562915447); /* sqrt(2) * (-c1-c3) */
+    z3 = MULTIPLY(z3, - FIX_1_961570560); /* sqrt(2) * (-c3-c5) */
+    z4 = MULTIPLY(z4, - FIX_0_390180644); /* sqrt(2) * (c5-c3) */
+
+    z3 += z5;
+    z4 += z5;
+
+    dataptr[7] = (DCTELEM) DESCALE(tmp4 + z1 + z3, CONST_BITS-PASS1_BITS);
+    dataptr[5] = (DCTELEM) DESCALE(tmp5 + z2 + z4, CONST_BITS-PASS1_BITS);
+    dataptr[3] = (DCTELEM) DESCALE(tmp6 + z2 + z3, CONST_BITS-PASS1_BITS);
+    dataptr[1] = (DCTELEM) DESCALE(tmp7 + z1 + z4, CONST_BITS-PASS1_BITS);
+
+    dataptr += DCTSIZE;   /* advance pointer to next row */
+  }
+
+  /* Pass 2: process columns.
+   * We remove the PASS1_BITS scaling, but leave the results scaled up
+   * by an overall factor of 8.
+   */
+
+  dataptr = data;
+  for (ctr = DCTSIZE-1; ctr >= 0; ctr--) {
+    tmp0 = dataptr[DCTSIZE*0] + dataptr[DCTSIZE*7];
+    tmp7 = dataptr[DCTSIZE*0] - dataptr[DCTSIZE*7];
+    tmp1 = dataptr[DCTSIZE*1] + dataptr[DCTSIZE*6];
+    tmp6 = dataptr[DCTSIZE*1] - dataptr[DCTSIZE*6];
+    tmp2 = dataptr[DCTSIZE*2] + dataptr[DCTSIZE*5];
+    tmp5 = dataptr[DCTSIZE*2] - dataptr[DCTSIZE*5];
+    tmp3 = dataptr[DCTSIZE*3] + dataptr[DCTSIZE*4];
+    tmp4 = dataptr[DCTSIZE*3] - dataptr[DCTSIZE*4];
+
+    /* Even part per LL&M figure 1 --- note that published figure is faulty;
+     * rotator "sqrt(2)*c1" should be "sqrt(2)*c6".
+     */
+
+    tmp10 = tmp0 + tmp3;
+    tmp13 = tmp0 - tmp3;
+    tmp11 = tmp1 + tmp2;
+    tmp12 = tmp1 - tmp2;
+
+    dataptr[DCTSIZE*0] = (DCTELEM) DESCALE(tmp10 + tmp11, PASS1_BITS);
+    dataptr[DCTSIZE*4] = (DCTELEM) DESCALE(tmp10 - tmp11, PASS1_BITS);
+
+    z1 = MULTIPLY(tmp12 + tmp13, FIX_0_541196100);
+    dataptr[DCTSIZE*2] = (DCTELEM) DESCALE(z1 + MULTIPLY(tmp13, FIX_0_765366865),
+             CONST_BITS+PASS1_BITS);
+    dataptr[DCTSIZE*6] = (DCTELEM) DESCALE(z1 + MULTIPLY(tmp12, - FIX_1_847759065),
+             CONST_BITS+PASS1_BITS);
+
+    /* Odd part per figure 8 --- note paper omits factor of sqrt(2).
+     * cK represents cos(K*pi/16).
+     * i0..i3 in the paper are tmp4..tmp7 here.
+     */
+
+    z1 = tmp4 + tmp7;
+    z2 = tmp5 + tmp6;
+    z3 = tmp4 + tmp6;
+    z4 = tmp5 + tmp7;
+    z5 = MULTIPLY(z3 + z4, FIX_1_175875602); /* sqrt(2) * c3 */
+
+    tmp4 = MULTIPLY(tmp4, FIX_0_298631336); /* sqrt(2) * (-c1+c3+c5-c7) */
+    tmp5 = MULTIPLY(tmp5, FIX_2_053119869); /* sqrt(2) * ( c1+c3-c5+c7) */
+    tmp6 = MULTIPLY(tmp6, FIX_3_072711026); /* sqrt(2) * ( c1+c3+c5-c7) */
+    tmp7 = MULTIPLY(tmp7, FIX_1_501321110); /* sqrt(2) * ( c1+c3-c5-c7) */
+    z1 = MULTIPLY(z1, - FIX_0_899976223); /* sqrt(2) * (c7-c3) */
+    z2 = MULTIPLY(z2, - FIX_2_562915447); /* sqrt(2) * (-c1-c3) */
+    z3 = MULTIPLY(z3, - FIX_1_961570560); /* sqrt(2) * (-c3-c5) */
+    z4 = MULTIPLY(z4, - FIX_0_390180644); /* sqrt(2) * (c5-c3) */
+
+    z3 += z5;
+    z4 += z5;
+
+    dataptr[DCTSIZE*7] = (DCTELEM) DESCALE(tmp4 + z1 + z3,
+             CONST_BITS+PASS1_BITS);
+    dataptr[DCTSIZE*5] = (DCTELEM) DESCALE(tmp5 + z2 + z4,
+             CONST_BITS+PASS1_BITS);
+    dataptr[DCTSIZE*3] = (DCTELEM) DESCALE(tmp6 + z2 + z3,
+             CONST_BITS+PASS1_BITS);
+    dataptr[DCTSIZE*1] = (DCTELEM) DESCALE(tmp7 + z1 + z4,
+             CONST_BITS+PASS1_BITS);
+
+    dataptr++;      /* advance pointer to next column */
+  }
+}
+
+void initialise_benchmark() {
+  int i, seed;
+
+  /* Worst case settings */
+  /* Set array to random values */
+  seed = 1;
+  for (i = 0; i < 64; i++) {
+    seed = (int)((seed * 133) + 81);// % 65535;
+    data[i] = seed;
+  }
+}
+
+void application()
+{
+  initialise_benchmark();
+  jpeg_fdct_islow();
+  SECURE_record_output_data(1);
+}
+#endif
+
+#if APP_SEL == LCDNUM
+unsigned char num_to_lcd(unsigned char a)
+{
+  /*   -0-            1            01
+   *  1   2         2   4        02  04
+   *   -3-    i.e.    8     i.e.   08
+   *  4   5        16   32       10  20
+   *   -6-           64            40
+   *
+   */
+  switch(a)
+    {
+    case 0x00: return 0;
+    case 0x01: return 0x24;
+    case 0x02: return 1+4+8+16+64;
+    case 0x03: return 1+4+8+32+64;
+    case 0x04: return 2+4+8+32;
+    case 0x05: return 1+4+8+16+64;
+    case 0x06: return 1+2+8+16+32+64;
+    case 0x07: return 1+4+32;
+    case 0x08: return 0x7F;     /* light all */
+    case 0x09: return 0x0F + 32 + 64;
+    case 0x0A: return 0x0F + 16 + 32;
+    case 0x0B: return 2+8+16+32+64;
+    case 0x0C: return 1+2+16+64;
+    case 0x0D: return 4+8+16+32+64;
+    case 0x0E: return 1+2+8+16+64;
+    case 0x0F: return 1+2+8+16;
+    }
+  return 0;
+}
+
+char user_input[33] = {0x11, 0x22, 0x33, 0x44,
+                      0x00, 0x00, 0x00, 0x00,
+                      0x00, 0x00, 0x00, 0x00,
+                      0x00, 0x02, 0x00, 0x00,
+                      0x02, 0x00, 0x00, 0x00,
+                      0x00, 0x00, 0x00, 0x00,
+                      0xf0, 0xff, 0x03, 0x20,
+                      0x21, 0x04, 0x04, 0x08, // address 8040420+1
+                      1};
+
+void read_data(char * entry){
+    // simulate receive
+    int  i = 0;
+    while(user_input[i] != 1){
+        // save read value
+        entry[i] = user_input[i];
+        i++;
+    }
+}
+
+
+void benchmark()
+{
+  char buffer[4];
+  read_data(buffer);
+
+  int           i;
+  unsigned char a;
+  /*volatile*/ int  n; /* JG */
+
+  n = 10;
+  for(i=0; i< n; i++)
+  {
+    a = (GPIOA->IDR & GPIO_PIN_8);                   /* scan port */
+    if(i<5)
+    {
+      a = a &0x0F;
+      GPIOA->BRR = (uint32_t)(num_to_lcd(a));
+    }
+  }
+
+}
+
+void application(){
+  benchmark();
+  SECURE_record_output_data(1); // send 1 = done
+}
+#endif
+
+#if APP_SEL == COVER
+
+char user_input[17] = {0x11, 0x22, 0x33, 0x44,
+                      0x00, 0x00, 0x00, 0x00,
+                      0xe8, 0xff, 0x03, 0x20,
+                      0x71, 0x14, 0x04, 0x08, // address 8041470+1
+                      1};
+
+void read_data(char * entry){
+    // simulate receive
+    int  i = 0;
+    while(user_input[i] != 1){
+        // save read value
+        entry[i] = user_input[i];
+        i++;
+    }
+}
+
+int swi120(int c)
+{
+  
+  char buffer[4];
+  read_data(buffer);
+
+  int i;
+
+  for (i=0; i<120; i++) {
+    switch (i) {
+      case 0: c++; break;
+      case 1: c++; break;
+      case 2: c++; break;
+      case 3: c++; break;
+      case 4: c++; break;
+      case 5: c++; break;
+      case 6: c++; break;
+      case 7: c++; break;
+      case 8: c++; break;
+      case 9: c++; break;
+      case 10: c++; break;
+      case 11: c++; break;
+      case 12: c++; break;
+      case 13: c++; break;
+      case 14: c++; break;
+      case 15: c++; break;
+      case 16: c++; break;
+      case 17: c++; break;
+      case 18: c++; break;
+      case 19: c++; break;
+      case 20: c++; break;
+      case 21: c++; break;
+      case 22: c++; break;
+      case 23: c++; break;
+      case 24: c++; break;
+      case 25: c++; break;
+      case 26: c++; break;
+      case 27: c++; break;
+      case 28: c++; break;
+      case 29: c++; break;
+      case 30: c++; break;
+      case 31: c++; break;
+      case 32: c++; break;
+      case 33: c++; break;
+      case 34: c++; break;
+      case 35: c++; break;
+      case 36: c++; break;
+      case 37: c++; break;
+      case 38: c++; break;
+      case 39: c++; break;
+      case 40: c++; break;
+      case 41: c++; break;
+      case 42: c++; break;
+      case 43: c++; break;
+      case 44: c++; break;
+      case 45: c++; break;
+      case 46: c++; break;
+      case 47: c++; break;
+      case 48: c++; break;
+      case 49: c++; break;
+      case 50: c++; break;
+      case 51: c++; break;
+      case 52: c++; break;
+      case 53: c++; break;
+      case 54: c++; break;
+      case 55: c++; break;
+      case 56: c++; break;
+      case 57: c++; break;
+      case 58: c++; break;
+      case 59: c++; break;
+      case 60: c++; break;
+      case 61: c++; break;
+      case 62: c++; break;
+      case 63: c++; break;
+      case 64: c++; break;
+      case 65: c++; break;
+      case 66: c++; break;
+      case 67: c++; break;
+      case 68: c++; break;
+      case 69: c++; break;
+      case 70: c++; break;
+      case 71: c++; break;
+      case 72: c++; break;
+      case 73: c++; break;
+      case 74: c++; break;
+      case 75: c++; break;
+      case 76: c++; break;
+      case 77: c++; break;
+      case 78: c++; break;
+      case 79: c++; break;
+      case 80: c++; break;
+      case 81: c++; break;
+      case 82: c++; break;
+      case 83: c++; break;
+      case 84: c++; break;
+      case 85: c++; break;
+      case 86: c++; break;
+      case 87: c++; break;
+      case 88: c++; break;
+      case 89: c++; break;
+      case 90: c++; break;
+      case 91: c++; break;
+      case 92: c++; break;
+      case 93: c++; break;
+      case 94: c++; break;
+      case 95: c++; break;
+      case 96: c++; break;
+      case 97: c++; break;
+      case 98: c++; break;
+      case 99: c++; break;
+      case 100: c++; break;
+      case 101: c++; break;
+      case 102: c++; break;
+      case 103: c++; break;
+      case 104: c++; break;
+      case 105: c++; break;
+      case 106: c++; break;
+      case 107: c++; break;
+      case 108: c++; break;
+      case 109: c++; break;
+      case 110: c++; break;
+      case 111: c++; break;
+      case 112: c++; break;
+      case 113: c++; break;
+      case 114: c++; break;
+      case 115: c++; break;
+      case 116: c++; break;
+      case 117: c++; break;
+      case 118: c++; break;
+      case 119: c++; break;
+      default: c--; break;
+    }
+  }
+  return c;
+}
+
+int swi50(int c)
+{
+  int i;
+  for (i=0; i<50; i++) {
+    switch (i) {
+      case 0: c++; break;
+      case 1: c++; break;
+      case 2: c++; break;
+      case 3: c++; break;
+      case 4: c++; break;
+      case 5: c++; break;
+      case 6: c++; break;
+      case 7: c++; break;
+      case 8: c++; break;
+      case 9: c++; break;
+      case 10: c++; break;
+      case 11: c++; break;
+      case 12: c++; break;
+      case 13: c++; break;
+      case 14: c++; break;
+      case 15: c++; break;
+      case 16: c++; break;
+      case 17: c++; break;
+      case 18: c++; break;
+      case 19: c++; break;
+      case 20: c++; break;
+      case 21: c++; break;
+      case 22: c++; break;
+      case 23: c++; break;
+      case 24: c++; break;
+      case 25: c++; break;
+      case 26: c++; break;
+      case 27: c++; break;
+      case 28: c++; break;
+      case 29: c++; break;
+      case 30: c++; break;
+      case 31: c++; break;
+      case 32: c++; break;
+      case 33: c++; break;
+      case 34: c++; break;
+      case 35: c++; break;
+      case 36: c++; break;
+      case 37: c++; break;
+      case 38: c++; break;
+      case 39: c++; break;
+      case 40: c++; break;
+      case 41: c++; break;
+      case 42: c++; break;
+      case 43: c++; break;
+      case 44: c++; break;
+      case 45: c++; break;
+      case 46: c++; break;
+      case 47: c++; break;
+      case 48: c++; break;
+      case 49: c++; break;
+      case 50: c++; break;
+      case 51: c++; break;
+      case 52: c++; break;
+      case 53: c++; break;
+      case 54: c++; break;
+      case 55: c++; break;
+      case 56: c++; break;
+      case 57: c++; break;
+      case 58: c++; break;
+      case 59: c++; break;
+      default: c--; break;
+    }
+  }
+  return c;
+}
+
+
+int swi10(int c)
+{
+  int i;
+  for (i=0; i<10; i++) {
+    switch (i) {
+      case 0: c++; break;
+      case 1: c++; break;
+      case 2: c++; break;
+      case 3: c++; break;
+      case 4: c++; break;
+      case 5: c++; break;
+      case 6: c++; break;
+      case 7: c++; break;
+      case 8: c++; break;
+      case 9: c++; break;
+      default: c--; break;
+    }
+  }
+  return c;
+}
+
+int benchmark()
+{
+  volatile int cnt=0;
+
+  cnt=swi10(cnt);
+  cnt=swi50(cnt);
+  cnt=swi120(cnt);
+
+  /* printf("cnt: %d\n", cnt); */
+
+  return cnt;
+
+}
+
+int verify_benchmark(int r)
+{
+  int expected = 180;
+  if (r != expected)
+    return 0;
+  return 1;
+}
+
+int output, result;
+void application(){
+  output = benchmark();
+  result = verify_benchmark(output);
+  SECURE_record_output_data(result);
+}
+#endif
+
+#if APP_SEL == FIBCALL
+int fib(int n)
+{
+  int  i, Fnew, Fold, temp,ans;
+
+    Fnew = 1;  Fold = 0;
+    for ( i = 2;
+    i <= 30 && i <= n;          /* apsim_loop 1 0 */
+    i++ )
+    {
+      temp = Fnew;
+      Fnew = Fnew + Fold;
+      Fold = temp;
+    }
+    ans = Fnew;
+  return ans;
+}
+
+int verify_benchmark(int r)
+{
+  int exp = 832040;
+  if (r != exp)
+    return 0;
+  return 1;
+}
+
+char user_input[21] = {0x11, 0x22, 0x33, 0x44,
+                      0x00, 0x00, 0x00, 0x00,
+                      0x02, 0x00, 0x00, 0x00,
+                      0xe8, 0xff, 0x03, 0x20,
+                      0x47, 0x03, 0x04, 0x08, // address 8040346+1
+                      1};
+
+
+void read_data(char * entry){
+    // simulate receive
+    int  i = 0;
+    while(user_input[i] != 1){
+        // save read value
+        entry[i] = user_input[i];
+        i++;
+    }
+}
+
+int benchmark(){
+  char buffer[4];
+  read_data(buffer);
+
+  int a;
+  int r;
+
+  a = 30;
+  r = fib(a);
+  return r;
+}
+
+int result;
+void application(){
+  int r = benchmark();
+
+  result = verify_benchmark(r); 
+  SECURE_record_output_data(result);
+}
+
+#endif
+
+#if APP_SEL == LIBBS
+
+struct DATA {
+  int  key;
+  int  value;
+}  ;
+
+struct DATA data[15] = { {1, 100},
+       {5,200},
+       {6, 300},
+       {7, 700},
+       {8, 900},
+       {9, 250},
+       {10, 400},
+       {11, 600},
+       {12, 800},
+       {13, 1500},
+       {14, 1200},
+       {15, 110},
+       {16, 140},
+       {17, 133},
+       {18, 10} };
+
+char user_input[29] = {0x11, 0x22, 0x33, 0x44,
+                      0x00, 0x00, 0x00, 0x00,
+                      0x00, 0x02, 0x00, 0x00,
+                      0x02, 0x00, 0x00, 0x00,
+                      0x00, 0x00, 0x00, 0x00,
+                      0xf0, 0xff, 0x03, 0x20,
+                      0x25, 0x03, 0x04, 0x08, // address 8040324+1
+                      1};
+
+void read_data(char * entry){
+    // simulate receive
+    int  i = 0;
+    while(user_input[i] != 1){
+        // save read value
+        entry[i] = user_input[i];
+        i++;
+    }
+}
+
+int
+binary_search(int x)
+{
+  char buffer[4];
+  read_data(buffer);
+
+  int fvalue, mid, up, low ;
+
+  low = 0;
+  up = 14;
+  fvalue = -1 /* all data are positive */ ;
+  while (low <= up) {
+    mid = (low + up) >> 1;
+    if ( data[mid].key == x ) {  /*  found  */
+      up = low - 1;
+      fvalue = data[mid].value;
+    }
+    else  /* not found */
+      if ( data[mid].key > x )  {
+        up = mid - 1;
+      }
+      else   {
+        low = mid + 1;
+      }
+  }
+  return fvalue;
+}
+
+
+/* This benchmark does not support verification */
+
+int
+verify_benchmark (int res __attribute ((unused)) )
+{
+  return -1;
+}
+
+
+void
+initialise_benchmark (void)
+{
+}
+
+int result;
+void application()
+{
+  result = binary_search(8);
+  
+  SECURE_record_output_data(result);
+}
+
+
+#endif
+
 #if APP_SEL == AHA_COMPRESS
 
 unsigned int compress1(unsigned int x, unsigned int mask) {
@@ -1352,61 +2079,58 @@ void application() {
 }
 #endif
 
-#if APP_SEL == BASIC
+// #if APP_SEL == BASIC
+// // int test = 0;
+// int data = 0;
 
+// // void fun1() { test = 1; } 
+// // void fun2() { test = 2; } 
 
-// int test = 0;
-int data = 0;
+// int start_value(){
+//   int init = 1;
+//   return init;
+// }
 
-// void fun1() { test = 1; } 
-// void fun2() { test = 2; } 
+// void reset_then_evaluate(){
+//   data = 0;
+//   evaluate(data);
+// }
 
-int start_value(){
-  int init = 1;
-  return init;
-}
+// void evaluate(int value){
+//   if ((value & 1) == 1){
+//       if (value == 1){
+//         data++;
+//       }
+//       data++;
+//   } else{
+//       data = data + 2;
+//   }
+// }
 
-void reset_then_evaluate(){
-  data = 0;
-  evaluate(data);
-}
+// uint8_t bad_input[8] = {'a', 'a', 'a', 'a', 'a', 'a', 'a', ':'}; 
+// void read_data(){
+//   int i=0;
+//   while(bad_input[i] != ':'){
+//     buffer[i] = bad_input[i];
+//   }
+// }
 
-void evaluate(int value){
-  if ((value & 1) == 1){
-      if (value == 1){
-        data++;
-      }
-      data++;
-  } else{
-      data = data + 2;
-  }
-}
+// void application(){
+//   void (*fun)();
+//   int init = start_value();
+//   uint8_t buffer[4];
 
-uint8_t bad_input[8] = {'a', 'a', 'a', 'a', 'a', 'a', 'a', ':'}; 
-void read_data(){
-  int i=0;
-  while(bad_input[i] != ':'){
-    buffer[i] = bad_input[i];
-  }
-}
+//   read_data(buffer);
 
-void application(){
-  void (*fun)();
-  int init = start_value();
-  uint8_t buffer[4];
+//   if (init){
+//     fun = &reset_then_evaluate;
+//   } else {
+//     fun = &evaluate;
+//   }
 
-  read_data(buffer);
-
-  if (init){
-    fun = &reset_then_evaluate;
-  } else {
-    fun = &evaluate;
-  }
-
-  fun();
-}
-
-#endif
+//   fun();
+// }
+// #endif
 
 /******************* SYRINGE APP *********************/
 
