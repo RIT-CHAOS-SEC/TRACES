@@ -43,11 +43,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  19 .debug_line   00018d1e  00000000  00000000  00051a1d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_str    00111155  00000000  00000000  0006a73b  2**0
+ 20 .debug_str    00111159  00000000  00000000  0006a73b  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .comment      00000050  00000000  00000000  0017b890  2**0
+ 21 .comment      00000050  00000000  00000000  0017b894  2**0
                   CONTENTS, READONLY
- 22 .debug_frame  000056ec  00000000  00000000  0017b8e0  2**2
+ 22 .debug_frame  000056ec  00000000  00000000  0017b8e4  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -6391,9 +6391,9 @@ CMSE_NS_ENTRY __attribute ((naked)) void SECURE_log_ret(){
 }
  c00311a:	bf00      	nop
 
-0c00311c <__acle_se_SECURE_log_call>:
+0c00311c <__acle_se_SECURE_log_indr_fwd>:
 
-CMSE_NS_ENTRY __attribute ((naked)) void SECURE_log_call(uint32_t addr){
+CMSE_NS_ENTRY __attribute ((naked)) void SECURE_log_indr_fwd(uint32_t addr){
 	__asm__ volatile("push	{r0, r1, r2, r3, r4, r7, r10}");
  c00311c:	e92d 049f 	stmdb	sp!, {r0, r1, r2, r3, r4, r7, sl}
 	__asm__ volatile("sub	sp, sp, #28");
@@ -19019,13 +19019,13 @@ Disassembly of section .gnu.sgstubs:
  c03e008:	e97f e97f 	sg
  c03e00c:	f7c4 bf84 	b.w	c002f18 <__acle_se_SECURE_RunCallback>
 
-0c03e010 <SECURE_log_call>:
+0c03e010 <SECURE_record_output_data>:
  c03e010:	e97f e97f 	sg
- c03e014:	f7c5 b882 	b.w	c00311c <__acle_se_SECURE_log_call>
+ c03e014:	f7c5 b9f7 	b.w	c003406 <__acle_se_SECURE_record_output_data>
 
-0c03e018 <SECURE_record_output_data>:
+0c03e018 <SECURE_log_indr_fwd>:
  c03e018:	e97f e97f 	sg
- c03e01c:	f7c5 b9f3 	b.w	c003406 <__acle_se_SECURE_record_output_data>
+ c03e01c:	f7c5 b87e 	b.w	c00311c <__acle_se_SECURE_log_indr_fwd>
 
 0c03e020 <SECURE_log_cond_br_not_taken>:
  c03e020:	e97f e97f 	sg

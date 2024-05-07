@@ -139,7 +139,7 @@ CMSE_NS_ENTRY __attribute ((naked)) void SECURE_log_ret(){
 	__asm__ volatile("bxns	lr");
 }
 
-CMSE_NS_ENTRY __attribute ((naked)) void SECURE_log_call(uint32_t addr){
+CMSE_NS_ENTRY __attribute ((naked)) void SECURE_log_indr_fwd(uint32_t addr){
 	__asm__ volatile("push	{r0, r1, r2, r3, r4, r7, r10}");
 	__asm__ volatile("sub	sp, sp, #28");
 	__asm__ volatile("add	r7, sp, #0");

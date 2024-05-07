@@ -28,7 +28,7 @@
 #define AHA_COMPRESS	15 ///
 
 
-#define APP_SEL 		JFDCTINT
+#define APP_SEL 		COVER
 
 #include "stdint.h"
 

@@ -1,4 +1,7 @@
-application.c:35:6:read_data	24	static
-application.c:47:1:jpeg_fdct_islow	88	static
-application.c:194:6:initialise_benchmark	16	static
-application.c:206:6:application	8	static
+application.c:303:6:read_data	24	static
+application.c:313:5:swi120	24	static
+application.c:449:5:swi50	24	static
+application.c:521:5:swi10	24	static
+application.c:542:5:benchmark	16	static
+application.c:556:5:verify_benchmark	24	static
+application.c:565:6:application	8	static

@@ -41,10 +41,14 @@ def instrment_asm(directory, input_file, output_file):
 	conditional_dests = []
 	forward_cond_dests = []
 
+	write_ops = ['mov', 'movs', 'ldr']
+
 	trampoline = "SECURE"
 	trampoline_cond_br = "SECURE_log_cond_br"
-	trampoline_call = "SECURE_log_call"
 	trampoline_ret = "SECURE_log_ret"
+	# trampoline_call = "SECURE_log_call"
+	# trampoline_indr_jmp = "SECURE_log_indr_jmp"
+	trampoline_indr_fwd = "SECURE_log_indr_fwd"
 
 	offset = 0
 
@@ -152,6 +156,8 @@ def instrment_asm(directory, input_file, output_file):
 			detect_ret_via_pop = (inst == 'pop') and ('pc' in args)
 			detect_call_inst = (inst in call_instrs)
 
+			detect_indr_jump = (inst in write_ops) and ('pc' in args)
+
 			if detect_call_inst:
 				case = 2
 				debug_print("------ instrumenting call ("+inst+" "+args+")", file=outfile)
@@ -161,7 +167,7 @@ def instrment_asm(directory, input_file, output_file):
 				elif inst == 'blx': # indirect call, can use mov
 					case = 4
 					print("\tmov\tr10, "+args, file=outfile)
-				print("\tbl\t"+trampoline_call, file=outfile)
+				print("\tbl\t"+trampoline_indr_fwd, file=outfile)
 
 			elif detect_cond_branch:
 				case = 5
@@ -183,6 +189,11 @@ def instrment_asm(directory, input_file, output_file):
 				debug_print("------ instrumenting ret via bx ("+inst+") "+args, file=outfile)
 				print("\tb\t"+trampoline_ret, file=outfile)
 
+			elif detect_indr_jump:
+				debug_print("------ instrumenting indr jump ("+inst+") "+args, file=outfile)
+				# replace r10 with 
+				print((f"\t{inst}\t{args}").replace("pc", "r10"), file=outfile)
+				print("\tb\t"+trampoline_indr_fwd, file=outfile)
 			else:
 				case = 7
 				print(x, file=outfile)
