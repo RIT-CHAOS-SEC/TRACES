@@ -1,7 +1,7 @@
-application.c:303:6:read_data	24	static
-application.c:313:5:swi120	24	static
-application.c:449:5:swi50	24	static
-application.c:521:5:swi10	24	static
-application.c:542:5:benchmark	16	static
-application.c:556:5:verify_benchmark	24	static
-application.c:565:6:application	8	static
+application.c:683:6:read_data	24	static
+application.c:694:1:binary_search	40	static
+application.c:725:1:verify_benchmark	16	static
+application.c:732:1:initialise_benchmark	4	static
+application.c:739:6:func1	4	static
+application.c:744:6:func2	4	static
+application.c:749:6:application	16	static

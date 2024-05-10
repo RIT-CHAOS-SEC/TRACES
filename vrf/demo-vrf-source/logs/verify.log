@@ -1,67 +1,241 @@
  
 Current node
-start_addr: 0x8040ce0
-end_addr: 0x8040ce4
-type: call
-instrs: 3
-successors: ['0x8040c70']
-adj_instr: 0x8040ce8
-log_node.dest_addr: 0x8040bb2
-PUSH to shadow stack: 0x8040ce8
+start_addr: 0x8040358
+end_addr: 0x8040364
+type: cond
+instrs: 7
+successors: ['0x8040370']
+adj_instr: 0x8040366
+log_node.dest_addr: 0x8040366
  
 Current node
-start_addr: 0x8040c70
-end_addr: 0x8040c7e
+start_addr: 0x8040366
+end_addr: 0x804036e
+type: uncond
+instrs: 4
+successors: ['0x8040378']
+adj_instr: 0x8040370
+log_node.dest_addr: 0x8040246
+-----
+changed node
+start_addr: 0x8040378
+end_addr: 0x804037a
 type: call
-instrs: 8
-successors: ['0x8040ba4']
-adj_instr: 0x8040c82
-log_node.dest_addr: 0x8040bb2
-PUSH to shadow stack: 0x8040c82
+instrs: 2
+successors: ['0x8040280']
+adj_instr: 0x804037e
+-----
+PUSH to shadow stack: 0x804037e
  
 Current node
-start_addr: 0x8040ba4
-end_addr: 0x8040bb0
+start_addr: 0x8040280
+end_addr: 0x804028e
+type: call
+instrs: 7
+successors: ['0x8040238']
+adj_instr: 0x8040292
+log_node.dest_addr: 0x8040246
+PUSH to shadow stack: 0x8040292
+ 
+Current node
+start_addr: 0x8040238
+end_addr: 0x8040244
 type: uncond
 instrs: 7
-successors: ['0x8040c54']
-adj_instr: 0x8040bb2
-log_node.dest_addr: 0x8040bb2
+successors: ['0x8040260']
+adj_instr: 0x8040246
+log_node.dest_addr: 0x8040246
 -----
 changed node
-start_addr: 0x8040c54
-end_addr: 0x8040c58
-type: cond
-instrs: 3
-successors: ['0x8040bb2']
-adj_instr: 0x8040c5a
------
- 
-Current node
-start_addr: 0x8040bb2
-end_addr: 0x8040bba
-type: cond
-instrs: 4
-successors: ['0x8040c44']
-adj_instr: 0x8040bbc
-log_node.dest_addr: 0x8040bbc
- 
-Current node
-start_addr: 0x8040bbc
-end_addr: 0x8040bfa
-type: uncond
-instrs: 8
-successors: ['0x8040c4e']
-adj_instr: 0x8040bfc
-log_node.dest_addr: 0x8040bf4
------
-changed node
-start_addr: 0x8040c4e
-end_addr: 0x8040c58
+start_addr: 0x8040260
+end_addr: 0x804026a
 type: cond
 instrs: 6
-successors: ['0x8040bb2']
-adj_instr: 0x8040c5a
+successors: ['0x8040246']
+adj_instr: 0x804026c
 -----
+ 
+Current node
+start_addr: 0x8040246
+end_addr: 0x804026a
+type: cond
+instrs: 18
+successors: ['0x8040246']
+adj_instr: 0x804026c
+log_node.dest_addr: 0x804026c
+ 
+Current node
+start_addr: 0x804026c
+end_addr: 0x8040278
+type: ret
+instrs: 5
+successors: []
+adj_instr: 0x8040280
+log_node.dest_addr: 0x8040292
+POP from shadow stack: 0x8040292
+ 
+Current node
+start_addr: 0x8040292
+end_addr: 0x80402a0
+type: uncond
+instrs: 7
+successors: ['0x80402fe']
+adj_instr: 0x80402a2
+log_node.dest_addr: 0x80402a2
+-----
+changed node
+start_addr: 0x80402fe
+end_addr: 0x8040304
+type: cond
+instrs: 4
+successors: ['0x80402a2']
+adj_instr: 0x8040306
+-----
+ 
+Current node
+start_addr: 0x80402a2
+end_addr: 0x80402bc
+type: cond
+instrs: 12
+successors: ['0x80402d6']
+adj_instr: 0x80402be
+log_node.dest_addr: 0x80402d6
+ 
+Current node
+start_addr: 0x80402d6
+end_addr: 0x80402e6
+type: cond
+instrs: 7
+successors: ['0x80402f4']
+adj_instr: 0x80402e8
+log_node.dest_addr: 0x80402e8
+ 
+Current node
+start_addr: 0x80402e8
+end_addr: 0x80402f2
+type: uncond
+instrs: 5
+successors: ['0x80402fe']
+adj_instr: 0x80402f4
+log_node.dest_addr: 0x80402a2
+-----
+changed node
+start_addr: 0x80402fe
+end_addr: 0x8040304
+type: cond
+instrs: 4
+successors: ['0x80402a2']
+adj_instr: 0x8040306
+-----
+ 
+Current node
+start_addr: 0x80402a2
+end_addr: 0x80402bc
+type: cond
+instrs: 12
+successors: ['0x80402d6']
+adj_instr: 0x80402be
+log_node.dest_addr: 0x80402d6
+ 
+Current node
+start_addr: 0x80402d6
+end_addr: 0x80402e6
+type: cond
+instrs: 7
+successors: ['0x80402f4']
+adj_instr: 0x80402e8
+log_node.dest_addr: 0x80402f4
+ 
+Current node
+start_addr: 0x80402f4
+end_addr: 0x8040304
+type: cond
+instrs: 8
+successors: ['0x80402a2']
+adj_instr: 0x8040306
+log_node.dest_addr: 0x80402a2
+ 
+Current node
+start_addr: 0x80402a2
+end_addr: 0x80402bc
+type: cond
+instrs: 12
+successors: ['0x80402d6']
+adj_instr: 0x80402be
+log_node.dest_addr: 0x80402d6
+ 
+Current node
+start_addr: 0x80402d6
+end_addr: 0x80402e6
+type: cond
+instrs: 7
+successors: ['0x80402f4']
+adj_instr: 0x80402e8
+log_node.dest_addr: 0x80402e8
+ 
+Current node
+start_addr: 0x80402e8
+end_addr: 0x80402f2
+type: uncond
+instrs: 5
+successors: ['0x80402fe']
+adj_instr: 0x80402f4
+log_node.dest_addr: 0x80402a2
+-----
+changed node
+start_addr: 0x80402fe
+end_addr: 0x8040304
+type: cond
+instrs: 4
+successors: ['0x80402a2']
+adj_instr: 0x8040306
+-----
+ 
+Current node
+start_addr: 0x80402a2
+end_addr: 0x80402bc
+type: cond
+instrs: 12
+successors: ['0x80402d6']
+adj_instr: 0x80402be
+log_node.dest_addr: 0x80402be
+ 
+Current node
+start_addr: 0x80402be
+end_addr: 0x80402d4
+type: uncond
+instrs: 11
+successors: ['0x80402fe']
+adj_instr: 0x80402d6
+log_node.dest_addr: 0x8040306
+-----
+changed node
+start_addr: 0x80402fe
+end_addr: 0x8040304
+type: cond
+instrs: 4
+successors: ['0x80402a2']
+adj_instr: 0x8040306
+-----
+ 
+Current node
+start_addr: 0x8040306
+end_addr: 0x8040316
+type: ret
+instrs: 7
+successors: []
+adj_instr: 0x8040320
+log_node.dest_addr: 0x804037e
+POP from shadow stack: 0x804037e
+ 
+Current node
+start_addr: 0x804037e
+end_addr: 0x80403a2
+type: ret
+instrs: 15
+successors: []
+adj_instr: 0x80403b8
+log_node.dest_addr: 0x8040378
+POP from shadow stack: 0x80403b2
 --------- VERIFICATION FAILED --------- 
 --------------------------------------- 

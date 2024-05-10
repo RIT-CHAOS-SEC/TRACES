@@ -28,7 +28,7 @@
 #define AHA_COMPRESS	15 ///
 
 
-#define APP_SEL 		COVER
+#define APP_SEL 		LIBBS
 
 #include "stdint.h"
 

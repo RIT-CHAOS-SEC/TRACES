@@ -240,6 +240,7 @@ def instrment_asm(directory, input_file, output_file):
 				# print(x, file=outfile)	
 				new_lines.append(x)
 		elif len(parsed) == 1:
+			
 			inst = ''
 			label = parsed[0].split(":")[0]
 			if label in forward_cond_dests:
@@ -376,8 +377,10 @@ def instrment_asm(directory, input_file, output_file):
 			else:
 				new_lines.append(x)
 				# print(x, file=outfile)	
+				# print(f"Adding {x}")
 		else:
 			new_lines.append(x)
+			# print(f"Adding {x}")
 			# print(x, file=outfile)	
 		i += 1
 	outfile = open(outfile_name, "w")

