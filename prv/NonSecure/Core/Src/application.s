@@ -10,12 +10,9 @@
 	.eabi_attribute 30, 6
 	.eabi_attribute 34, 1
 	.eabi_attribute 18, 4
-	.text
 	.section	.text.delay,"ax",%progbits
 	.align	1
 	.global	delay
-	.arch armv8-m.main
-	.arch_extension dsp
 	.syntax unified
 	.thumb
 	.thumb_func
@@ -30,7 +27,7 @@ delay:
 	add	r7, sp, #0
 	str	r0, [r7, #4]
 	adr	r10, .L3
-	ldr	r11,  [r7, #12]
+	ldr	r11,  [r7, #4]
 	bl	SECURE_log_loop_cond
 	movs	r3, #0
 	str	r3, [r7, #12]
@@ -40,10 +37,10 @@ delay:
 	adds	r3, r3, #1
 	str	r3, [r7, #12]
 .L2:
-	ldr	r3, [r7, #12]
-	ldr	r2, [r7, #4]
+	ldr	r2, [r7, #12]
+	ldr	r3, [r7, #4]
 	cmp	r2, r3
-	bhi	.L3
+	bcc	.L3
 	bl	SECURE_log_cond_br_not_taken
 	adds	r7, r7, #20
 	mov	sp, r7
@@ -170,4 +167,4 @@ application:
 	pop	{r7, lr}
 	b	SECURE_log_ret
 	.size	application, .-application
-	.ident	"GCC: (15:9-2019-q4-0ubuntu1) 9.2.1 20191025 (release) [ARM/arm-9-branch revision 277599]"
+	.ident	"GCC: (15:6.3.1+svn253039-1build1) 6.3.1 20170620"
