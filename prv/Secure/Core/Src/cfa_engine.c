@@ -703,10 +703,58 @@ void _software_reset(){
 	return;
 }
 
-
-void _heal_function(){
+void lock_device(){
 	while(1);
 }
 
+#define PAGE_SIZE 0x800 // 2 KB
+
+#define FLASH_ADDRESS 0x08040308
+#define BANK_START_ADDRESS 0x08040000
+
+#define FLASH_BANK             FLASH_BANK_2
+#define FLASH_PAGE_TO_ERASE    ((FLASH_ADDRESS - BANK_START_ADDRESS) / PAGE_SIZE)
+#define FLASH_DATA             0x1234567812345678   // Example data to write
+void wipe_app(){
+	FLASH_EraseInitTypeDef EraseInitStruct;
+	uint32_t PageError = 0;
+
+	// 1. Unlock the Flash memory
+	HAL_FLASH_Unlock();
+
+	// 2. Clear any previous flash errors
+	__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_ALL_ERRORS);
+
+	// 3. Configure the erase operation
+	EraseInitStruct.TypeErase = FLASH_TYPEERASE_PAGES_NS;
+	EraseInitStruct.Banks = FLASH_BANK;
+	EraseInitStruct.Page = FLASH_PAGE_TO_ERASE;
+	EraseInitStruct.NbPages = 1; // Number of pages to erase
+
+	// 4. Perform the page erase
+	if (HAL_FLASHEx_Erase(&EraseInitStruct, &PageError) != HAL_OK) {
+		// Error occurred while erasing, handle accordingly
+		HAL_FLASH_Lock();
+		return;
+	}
+
+	// 5. Program the Flash memory
+	if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_DOUBLEWORD, FLASH_ADDRESS, FLASH_DATA) != HAL_OK) {
+		// Error occurred while programming, handle accordingly
+		HAL_FLASH_Lock();
+		return;
+	}
+
+	// 6. Lock the Flash memory
+	HAL_FLASH_Lock();
+}
+
+void _heal_function(){
+	// Wipe App
+	wipe_app();
+
+	// Lock device
+	lock_device();
+}
 
 #endif /* __cfa_engine */
