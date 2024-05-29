@@ -710,7 +710,6 @@ void lock_device(){
 #define PAGE_SIZE 0x800 // 2 KB
 #define BANK_START_ADDRESS 0x08040000
 #define FLASH_BANK             FLASH_BANK_2
-
 void wipe_app(uint32_t FLASH_ADDRESS){
 	uint32_t FLASH_PAGE_TO_ERASE = ((FLASH_ADDRESS - BANK_START_ADDRESS) / PAGE_SIZE);
 
@@ -735,9 +734,35 @@ void wipe_app(uint32_t FLASH_ADDRESS){
 	HAL_FLASH_Lock();
 }
 
+void disable_app(){
+	// unlock NS-MPU via syscfg reg
+	SYSCFG->CNSLCKR &= ~(0x2);
+
+	MPU_Region_InitTypeDef MPU_InitStruct;
+
+	/* Reconfigure app region in NS-FLASH as read only (non-executable) */
+	MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+	MPU_InitStruct.BaseAddress = 0x08000000;
+	MPU_InitStruct.LimitAddress = 0x08080000;
+	MPU_InitStruct.AccessPermission = MPU_REGION_ALL_RO;
+	MPU_InitStruct.Number = MPU_REGION_NUMBER1;
+	MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE;
+	HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+
+	/* Enable MPU */
+	HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+
+	// Lock NS-MPU
+	SYSCFG->CNSLCKR |= 0x2;
+}
+
 void _heal_function(){
-	// Wipe App
-	wipe_app((uint32_t)(cfa_engine_conf.iac.app_start_address));
+//	// Wipe App
+//	wipe_app((uint32_t)(cfa_engine_conf.iac.app_start_address));
+
+//	// Disable App
+	disable_app();
 
 	// Lock device
 	lock_device();
