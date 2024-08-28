@@ -8,6 +8,7 @@ import time
 from parse_mem import *
 import threading
 import serial.tools.list_ports as slp
+import serial.tools.list_ports
 from ecdsa import SigningKey, NIST256p, VerifyingKey
 import hashlib
 import hmac
@@ -17,6 +18,30 @@ from ecdsa.util import sigdecode_der
 from ecdsa import BadSignatureError
 from verify import *
 from generate_cfg import *
+
+### INIT UTILS ###############
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+colors = bcolors()
+
+def printblue(message,end='\n'):
+    print(colors.OKBLUE+message+bcolors.ENDC,end=end)
+def printred(message,end='\n'):
+    print(colors.FAIL+message+bcolors.ENDC,end=end)
+def printgreen(message,end='\n'):
+    print(colors.OKGREEN+message+bcolors.ENDC,end=end)
+def printyellow(message,end='\n'):
+    print(colors.WARNING+message+bcolors.ENDC,end=end)
+def printcyan(message,end='\n'):
+    print(colors.OKCYAN+message+bcolors.ENDC,end=end)
 
 #### Serial Communication 
 def scan_for_STM32_device():
@@ -28,13 +53,22 @@ def scan_for_STM32_device():
             return port
     printred("ERROR :  STM32 device not found!!!!")
     return None
+
+def scan_for_STM32_device_linux():
+    ports = serial.tools.list_ports.comports()
+    for port in ports:
+        if port.description.startswith("STM32 STLink"):
+            print('STM32 STLink found at :',port.device)
+            return port.device
+    printred("ERROR :  STM32 device not found!!!!")
+    return None
     
 def open_serial():
     # Check variables
     if (os.name == 'nt'):
         dev = scan_for_STM32_device()
     elif (os.name == 'posix'):
-        dev = dev = '/dev/ttyACM0'
+        dev = scan_for_STM32_device_linux()
     baud = 921600
     ser = serial.Serial(dev, baud, timeout=10000000)
     return ser
@@ -112,30 +146,6 @@ class ProtocolMessages:
     END_OF_APPLICATION = 'F'
     BEGGINING_OF_CHAL = b'CHAL'
 
-
-### INIT UTILS ###############
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-colors = bcolors()
-
-def printblue(message,end='\n'):
-    print(colors.OKBLUE+message+bcolors.ENDC,end=end)
-def printred(message,end='\n'):
-    print(colors.FAIL+message+bcolors.ENDC,end=end)
-def printgreen(message,end='\n'):
-    print(colors.OKGREEN+message+bcolors.ENDC,end=end)
-def printyellow(message,end='\n'):
-    print(colors.WARNING+message+bcolors.ENDC,end=end)
-def printcyan(message,end='\n'):
-    print(colors.OKCYAN+message+bcolors.ENDC,end=end)
 
 def print_protocol_config():
     printcyan("\nProtocol Information:")
@@ -628,7 +638,7 @@ if __name__ == "__main__":
 
     # # build cfg
     if pconfig.mode == 'aud':
-        prv_file_path = "../../prv/NonSecure/Debug/TRACES_NonSecure.list"
+        prv_file_path = "../../prv/TRACES/NonSecure/Debug/TRACES_NonSecure.list"
         asm_lines = read_file(prv_file_path)
         cfg = create_cfg(set_arch("armv8-m33"), asm_lines)
         pconfig.app_start_addr = cfg.label_addr_map['application']

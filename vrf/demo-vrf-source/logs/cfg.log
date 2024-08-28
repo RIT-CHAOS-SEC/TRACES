@@ -1,28 +1,14 @@
 start_addr: 0x80401f8
-end_addr: 0x8040206
-type: uncond
-instrs: 8
-successors: ['0x804020a']
-adj_instr: 0x804020a
----------------------------
-start_addr: 0x804020a
 end_addr: 0x804020e
 type: ret
-instrs: 3
+instrs: 10
 successors: []
 adj_instr: None
 ---------------------------
 start_addr: 0x804021c
-end_addr: 0x8040226
-type: uncond
-instrs: 6
-successors: ['0x804022a']
-adj_instr: 0x804022a
----------------------------
-start_addr: 0x804022a
 end_addr: 0x804022a
 type: ret
-instrs: 1
+instrs: 6
 successors: []
 adj_instr: None
 ---------------------------
@@ -464,7 +450,7 @@ start_addr: 0x8040740
 end_addr: 0x8040762
 type: call
 instrs: 18
-successors: ['0x8041008']
+successors: ['0x8041010']
 adj_instr: 0x8040766
 ---------------------------
 start_addr: 0x8040766
@@ -1251,69 +1237,6 @@ instrs: 5
 successors: []
 adj_instr: None
 ---------------------------
-start_addr: 0x8040ff8
-end_addr: 0x8041000
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8041008
-end_addr: 0x8041010
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8041018
-end_addr: 0x8041020
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8041028
-end_addr: 0x8041030
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8041038
-end_addr: 0x8041040
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8041048
-end_addr: 0x8041050
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8041058
-end_addr: 0x8041060
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8041068
-end_addr: 0x8041070
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
-start_addr: 0x8041078
-end_addr: 0x8041080
-type: ret
-instrs: 5
-successors: []
-adj_instr: None
----------------------------
 start_addr: 0x8040258
 end_addr: 0x804025e
 type: cond
@@ -1395,7 +1318,7 @@ start_addr: 0x8040754
 end_addr: 0x8040762
 type: call
 instrs: 8
-successors: ['0x8041008']
+successors: ['0x8041010']
 adj_instr: 0x8040766
 ---------------------------
 start_addr: 0x80408b4

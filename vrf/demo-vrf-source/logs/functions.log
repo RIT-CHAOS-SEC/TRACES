@@ -107,38 +107,6 @@ Start Address: 0x8040fec End Address: 0x8040ff6
 
 ---------------------------
 0x8040ff8 : 
-Start Address: 0x8040ff8 End Address: 0x8041000
-
----------------------------
-0x8041008 : 
-Start Address: 0x8041008 End Address: 0x8041010
-
----------------------------
-0x8041018 : 
-Start Address: 0x8041018 End Address: 0x8041020
-
----------------------------
-0x8041028 : 
-Start Address: 0x8041028 End Address: 0x8041030
-
----------------------------
-0x8041038 : 
-Start Address: 0x8041038 End Address: 0x8041040
-
----------------------------
-0x8041048 : 
-Start Address: 0x8041048 End Address: 0x8041050
-
----------------------------
-0x8041058 : 
-Start Address: 0x8041058 End Address: 0x8041060
-
----------------------------
-0x8041068 : 
-Start Address: 0x8041068 End Address: 0x8041070
-
----------------------------
-0x8041078 : 
-Start Address: 0x8041078 End Address: 0x8041080
+Start Address: 0x8040ff8 End Address: 0x8041038
 
 ---------------------------

@@ -1,0 +1,11 @@
+../Core/Src/secure_nsc.c:54:20:SECURE_RegisterCallback	6
+../Core/Src/secure_nsc.c:75:20:SECURE_RunCallback	1
+../Core/Src/secure_nsc.c:80:20:SECURE_Initialize_CFA_engine	1
+../Core/Src/secure_nsc.c:85:20:SECURE_Initialize_Attestation	1
+../Core/Src/secure_nsc.c:90:42:SECURE_log_ret	1
+../Core/Src/secure_nsc.c:142:42:SECURE_log_call	1
+../Core/Src/secure_nsc.c:189:42:SECURE_log_cond_br_taken	1
+../Core/Src/secure_nsc.c:242:42:SECURE_log_cond_br_not_taken	1
+../Core/Src/secure_nsc.c:295:42:SECURE_log_loop_cond	1
+../Core/Src/secure_nsc.c:355:21:SECURE_run_attestation_wait_mode	1
+../Core/Src/secure_nsc.c:360:20:SECURE_record_output_data	1
