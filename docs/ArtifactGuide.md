@@ -1,5 +1,10 @@
 # TRACES: TEE-based Runtime Auditing for Commodity Embedded Systems
 
+Authors : Adam Caulfield¹, Antonio Joia Neto¹, Norrathep Rattanavipanon², Ivan De Oliveira Nunes¹
+
+Rochester Institute of Technology¹,  Prince of Songkla University²
+
+
 ## Repository Description
 This is the public repository for the prototype of TRACES: TEE-based Runtime Auditing for Commodity Embedded Systems. The [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html) is used for development, and TRACES is deployed on an [STM32 Nucleo-144 development board](https://www.st.com/en/evaluation-tools/nucleo-l552ze-q.html#overview) with STM32L552ZE MCU
 

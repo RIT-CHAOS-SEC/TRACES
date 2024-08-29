@@ -16,7 +16,7 @@
 #define HAMMING			78
 #define ATTACK			79
 #define MOUSE			710
-#define APP_SEL 		ATTACK
+#define APP_SEL ULT
 
 #include "stdint.h"
 

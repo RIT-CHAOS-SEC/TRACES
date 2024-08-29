@@ -99,41 +99,6 @@ During this execution, the MAC is determined to be valid. But, the contents of t
 9) During execution, Vrf will save CFLogs sent to Prv in the `vrf/cflog` directory.
 
 
-# Step-by-Step Guide on Evaluating Attack and Benign Behavior
+# Artifact Evaluation Guide
 
-### 1. Select the Mode (Benign/Malicious)
-
-Navigate to the `Traces/vrf/demo-vrf-source/` directory and run one of the following commands depending on the desired behavior mode:
-
-```bash
-# For benign behavior
-./updatemem.sh -mode benign
-
-# For malicious behavior
-./updatemem.sh -mode malicious
-```
-
-### 2. Compile the Code
-
-Open the STM32IDE and compile the code, building both projects.
-
-### 3. Generate the Control Flow Graph and Update Memory Range
-
-While still in the `Traces/vrf/demo-vrf-source/` directory, run the following command to obtain the control flow graph of the binary and update the memory range of the Non-Secure Code:
-
-```bash
-./readmem.sh
-```
-
-### 4. Recompile the Code
-
-Open the STM32IDE and recompile the code, building both projects.
-
-
-### 5. Run the application
-
-In STM32CubeIDE, right-click TRACES_Secure. Then click "Run As" followed by "STM32 Cortex M C/C++ Application". Prv is now running and waiting for a request to run the application from Vrf
-
----
-
-This structure helps clarify each step and makes the instructions easier to follow.
+See [here](docs/ArtifactGuide.md) the artifact evaluation document.

@@ -1,13 +1,4 @@
-application.c:1483:6:delay	24	static
-application.c:1490:6:read_data	16	static
-application.c:1536:10:get_temperature	16	static
-application.c:1545:10:get_humidity	16	static
-application.c:1554:10:pulseIn	16	static
-application.c:1565:6:getUltrasonicReading	16	static
-application.c:1586:6:run_ultrasonic	24	static
-application.c:1596:6:run_temperature	24	static
-application.c:1606:6:run_humidity	24	static
-application.c:1617:6:read_command	16	static
-application.c:1633:6:process_command	32	static
-application.c:1662:5:record_output_data	16	static
-application.c:1667:6:application	8	static
+application.c:1401:6:delay	24	static
+application.c:1408:10:pulseIn	16	static
+application.c:1419:10:getUltrasonicReading	16	static
+application.c:1440:6:application	16	static

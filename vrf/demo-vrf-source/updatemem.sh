@@ -43,26 +43,112 @@ then
         exit 0
     fi
     MODE=$2
-    echo "Mode: $2"
 fi
 
-# if MODE==''
-if [ -z "$MODE" ]
+
+# if argument 1 is == mode, print help
+if [ "$CMD" == "-app" ]
+then
+# test if argument 2 is provided
+    if [ -z "$2" ]
+    then
+        echo "Please provide a mode argument"
+        exit 0
+    fi
+    APP=$2
+fi
+
+# if MODE=='' or APP=='' then exit
+if [ -z "$MODE" ] && [ -z "$APP" ]
 then
     echo "No command found!"
     exit 0
 fi
 
-# if mode ==  benign
-if [ "$MODE" == "benign" ]; then
-    # replace the application.s file with the benign.s file
-    cp "$BENIGNFILE" "$APPLICATIONASM"
-    echo "Copying $BENIGNFILE to $APPLICATIONASM"
-elif [ "$MODE" == "malicious" ]; then
-    # replace the application.s file with the malicious.s file
-    cp "$MALIGNFILE" "$APPLICATIONASM"
-    echo "Copying $MALIGNFILE to $APPLICATIONASM"
-else
-    echo "Invalid mode"
-    exit 1
+
+if [ "$MODE" != "" ]
+then
+    # if mode ==  benign
+    if [ "$MODE" == "benign" ]; then
+        # replace the application.s file with the benign.s file
+        cp "$BENIGNFILE" "$APPLICATIONASM"
+        echo "Copying $BENIGNFILE to $APPLICATIONASM"
+    elif [ "$MODE" == "malicious" ]; then
+        # replace the application.s file with the malicious.s file
+        cp "$MALIGNFILE" "$APPLICATIONASM"
+        echo "Copying $MALIGNFILE to $APPLICATIONASM"
+    else
+        echo "Invalid mode"
+        exit 1
+    fi
 fi
+
+
+printAvailableApps(){
+echo "Available applications:
+    - BASIC
+    - ULT
+    - TEMP
+    - SYRINGE
+    - GEIGER
+    - GPS
+    - SEARCH
+    - CRC32
+    - DUFF
+    - PRIME
+    - DIJKSTRA
+    - HAMMING
+    - ATTACK
+    - MOUSE
+"
+}
+
+applist=("BASIC" "ULT" "TEMP" "SYRINGE" "GEIGER" "GPS" "SEARCH" "CRC32" "DUFF" "PRIME" "DIJKSTRA" "HAMMING" "ATTACK" "MOUSE")
+
+
+replaceApp(){
+    # replace the application.s file with the malicious.s file
+    echo $1
+    echo $(pwd)
+
+    python updateApp.py $1 application.h
+    ./pre-process.sh application
+#     cd $PATH_TO_TRACES_CODE/NonSecure/Debug
+#     make clean
+#     cd $PATH_TO_TRACES_CODE/Secure/Debug
+#     make clean
+# 
+}
+
+if [ "$APP" != "" ]
+then
+    # save current directory
+
+    # change directory to the TRACES directory
+    
+
+    # if app == help
+    if [ "$APP" == "help" ]
+    then
+        printAvailableApps
+        exit 0
+    fi
+
+    # Check if value is in the list
+    if [[ " ${applist[@]} " =~ " ${APP} " ]]; then
+        echo "$APP is in the list."
+        replaceApp $APP
+    else
+        echo "$APP is not in the list. Note that APP is case sensitive."
+        exit 0
+    fi
+
+fi
+
+
+
+
+
+
+
+
