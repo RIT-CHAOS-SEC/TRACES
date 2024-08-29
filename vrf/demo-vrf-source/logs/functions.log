@@ -7,138 +7,122 @@ Start Address: 0x804021c End Address: 0x804022a
 
 ---------------------------
 0x8040238 : 
-Start Address: 0x8040238 End Address: 0x804084a
+Start Address: 0x8040238 End Address: 0x8040260
 
 ---------------------------
-0x8040858 : 
-Start Address: 0x8040858 End Address: 0x804086e
+0x8040264 : 
+Start Address: 0x8040264 End Address: 0x804029e
 
 ---------------------------
-0x8040874 : 
-Start Address: 0x8040874 End Address: 0x804088a
+0x80402a4 : 
+Start Address: 0x80402a4 End Address: 0x80402dc
 
 ---------------------------
-0x8040890 : 
-Start Address: 0x8040890 End Address: 0x8040914
+0x80402e4 : 
+Start Address: 0x80402e4 End Address: 0x8040300
 
 ---------------------------
-0x804091c : 
-Start Address: 0x804091c End Address: 0x8040934
+0x8040304 : 
+Start Address: 0x8040304 End Address: 0x80403ba
 
 ---------------------------
-0x8040936 : 
-Start Address: 0x8040936 End Address: 0x8040942
+0x80403c8 : 
+Start Address: 0x80403c8 End Address: 0x80403de
 
 ---------------------------
-0x8040944 : 
-Start Address: 0x8040944 End Address: 0x804094e
+0x80403e4 : 
+Start Address: 0x80403e4 End Address: 0x80403fa
 
 ---------------------------
-0x8040950 : 
-Start Address: 0x8040950 End Address: 0x804095c
+0x8040400 : 
+Start Address: 0x8040400 End Address: 0x8040484
 
 ---------------------------
-0x8040960 : 
-Start Address: 0x8040960 End Address: 0x8040970
+0x804048c : 
+Start Address: 0x804048c End Address: 0x80404a4
 
 ---------------------------
-0x8040978 : 
-Start Address: 0x8040978 End Address: 0x80409fc
+0x80404a6 : 
+Start Address: 0x80404a6 End Address: 0x80404b2
 
 ---------------------------
-0x8040a00 : 
-Start Address: 0x8040a00 End Address: 0x8040a68
+0x80404b4 : 
+Start Address: 0x80404b4 End Address: 0x80404be
 
 ---------------------------
-0x8040a78 : 
-Start Address: 0x8040a78 End Address: 0x8040a94
+0x80404c0 : 
+Start Address: 0x80404c0 End Address: 0x80404cc
 
 ---------------------------
-0x8040aa0 : 
-Start Address: 0x8040aa0 End Address: 0x8040ae2
+0x80404d0 : 
+Start Address: 0x80404d0 End Address: 0x80404e0
 
 ---------------------------
-0x8040ae8 : 
-Start Address: 0x8040ae8 End Address: 0x8040afe
+0x80404e8 : 
+Start Address: 0x80404e8 End Address: 0x804056c
 
 ---------------------------
-0x8040b04 : 
-Start Address: 0x8040b04 End Address: 0x8040b4e
+0x8040570 : 
+Start Address: 0x8040570 End Address: 0x80405d8
 
 ---------------------------
-0x8040b58 : 
-Start Address: 0x8040b58 End Address: 0x8040bbc
+0x80405e8 : 
+Start Address: 0x80405e8 End Address: 0x8040604
 
 ---------------------------
-0x8040bc0 : 
-Start Address: 0x8040bc0 End Address: 0x8040bfc
+0x8040610 : 
+Start Address: 0x8040610 End Address: 0x8040652
 
 ---------------------------
-0x8040c04 : 
-Start Address: 0x8040c04 End Address: 0x8040c18
+0x8040658 : 
+Start Address: 0x8040658 End Address: 0x804066e
 
 ---------------------------
-0x8040c1a : 
-Start Address: 0x8040c1a End Address: 0x8040c4c
+0x8040674 : 
+Start Address: 0x8040674 End Address: 0x80406be
 
 ---------------------------
-0x8040c4e : 
-Start Address: 0x8040c4e End Address: 0x8040c64
+0x80406c8 : 
+Start Address: 0x80406c8 End Address: 0x804072c
 
 ---------------------------
-0x8040c68 : 
-Start Address: 0x8040c68 End Address: 0x8040f46
+0x8040730 : 
+Start Address: 0x8040730 End Address: 0x804076c
 
 ---------------------------
-0x8040f68 : 
-Start Address: 0x8040f68 End Address: 0x8040f96
+0x8040774 : 
+Start Address: 0x8040774 End Address: 0x8040788
 
 ---------------------------
-0x8040f98 : 
-Start Address: 0x8040f98 End Address: 0x8040fba
+0x804078a : 
+Start Address: 0x804078a End Address: 0x80407bc
 
 ---------------------------
-0x8040fbc : 
-Start Address: 0x8040fbc End Address: 0x8040fea
+0x80407be : 
+Start Address: 0x80407be End Address: 0x80407d4
 
 ---------------------------
-0x8040fec : 
-Start Address: 0x8040fec End Address: 0x8040ff6
+0x80407d8 : 
+Start Address: 0x80407d8 End Address: 0x8040ab6
 
 ---------------------------
-0x8040ff8 : 
-Start Address: 0x8040ff8 End Address: 0x8041000
+0x8040ad8 : 
+Start Address: 0x8040ad8 End Address: 0x8040b06
 
 ---------------------------
-0x8041008 : 
-Start Address: 0x8041008 End Address: 0x8041010
+0x8040b08 : 
+Start Address: 0x8040b08 End Address: 0x8040b2a
 
 ---------------------------
-0x8041018 : 
-Start Address: 0x8041018 End Address: 0x8041020
+0x8040b2c : 
+Start Address: 0x8040b2c End Address: 0x8040b5a
 
 ---------------------------
-0x8041028 : 
-Start Address: 0x8041028 End Address: 0x8041030
+0x8040b5c : 
+Start Address: 0x8040b5c End Address: 0x8040b66
 
 ---------------------------
-0x8041038 : 
-Start Address: 0x8041038 End Address: 0x8041040
-
----------------------------
-0x8041048 : 
-Start Address: 0x8041048 End Address: 0x8041050
-
----------------------------
-0x8041058 : 
-Start Address: 0x8041058 End Address: 0x8041060
-
----------------------------
-0x8041068 : 
-Start Address: 0x8041068 End Address: 0x8041070
-
----------------------------
-0x8041078 : 
-Start Address: 0x8041078 End Address: 0x8041080
+0x8040b68 : 
+Start Address: 0x8040b68 End Address: 0x8040b80
 
 ---------------------------

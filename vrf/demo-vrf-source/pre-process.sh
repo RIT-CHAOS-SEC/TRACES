@@ -6,14 +6,14 @@ filename="$1"
 
 # --------------- PATH TO NonSecure directory within STM Project ----------------------
 # HOME=../../tmp/STM32L5_HAL_TRUSTZONE/NonSecure/ # windows
-PROJ=../../prv/
+PROJ=../../prv/TRACES/
 HOME=$PROJ"NonSecure/" # ubuntu
 
 APP_SOURCE_PATH=$HOME"Core/Src/"
 echo "APP_SOURCE_PATH=" $APP_SOURCE_PATH
 echo "    "
 
-DRIVER_SOURCE_PATH=$HOME"Drivers/STM32L5xx_HAL_Driver/Src/"
+DRIVER_SOURCE_PATH=$PROJ"Drivers/STM32L5xx_HAL_Driver/Src/"
 echo "DRIVER_SOURCE_PATH=" $DRIVER_SOURCE_PATH
 echo "    "
 

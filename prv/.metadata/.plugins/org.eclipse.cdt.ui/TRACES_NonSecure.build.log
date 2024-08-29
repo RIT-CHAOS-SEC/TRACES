@@ -1,0 +1,16 @@
+22:51:11 **** Incremental Build of configuration Debug for project TRACES_NonSecure ****
+make -j16 all 
+arm-none-eabi-gcc -o "TRACES_NonSecure.elf" @"objects.list" D:/Workspace/Git/TRACES/prv/TRACES/Secure/Debug/secure_nsclib.o  -mcpu=cortex-m33 -T"D:\Workspace\Git\TRACES\prv\TRACES\NonSecure\STM32L552ZETXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="TRACES_NonSecure.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: TRACES_NonSecure.elf
+ 
+arm-none-eabi-size   TRACES_NonSecure.elf 
+arm-none-eabi-objdump -h -S  TRACES_NonSecure.elf  > "TRACES_NonSecure.list"
+   text	   data	    bss	    dec	    hex	filename
+   2948	     20	   1572	   4540	   11bc	TRACES_NonSecure.elf
+Finished building: default.size.stdout
+ 
+Finished building: TRACES_NonSecure.list
+ 
+
+22:51:12 Build Finished. 0 errors, 0 warnings. (took 717ms)
+
