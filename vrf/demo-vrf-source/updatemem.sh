@@ -1,3 +1,4 @@
+#!/bin/bash
 
 PATH_TO_TRACES_CODE="../../prv/TRACES/"
 MODE=""
